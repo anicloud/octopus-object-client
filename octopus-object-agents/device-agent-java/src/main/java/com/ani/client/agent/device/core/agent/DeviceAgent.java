@@ -1,5 +1,6 @@
 package com.ani.client.agent.device.core.agent;
 
+import com.ani.bus.device.core.domain.account.Account;
 import com.ani.bus.device.core.domain.device.*;
 import com.ani.bus.device.core.domain.message.*;
 
@@ -15,7 +16,7 @@ import java.util.Random;
 /**
  * Created by huangbin on 10/22/15.
  */
-public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
+public class DeviceAgent implements Invokable, InvokeHandler {
     private static Logger LOG = Logger.getLogger(DeviceAgent.class);
 
     private Map<Long, FunctionInstance> instanceMap = new HashMap<Long, FunctionInstance>();
@@ -23,11 +24,12 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
     private DeviceController controller;
     private DeviceMaster deviceMaster;
 
+    private MessageHandler messageHandler;
     private IoHandler ioHandler;
     private State state;
     private Error error;
 
-    public enum Error {
+    private enum Error {
         ERROR_NONE,
         ERROR_CONNECT,
         ERROR_REGISTER,
@@ -38,7 +40,7 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
         ERROR_UNKNOWN
     }
 
-    public enum State {
+    private enum State {
         STATE_INIT,
         STATE_CONNECTING,
         STATE_CONNECTED,
@@ -53,10 +55,50 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
         STATE_IDLE,
         STATE_ERROR
     }
+    /*
+    *
+    *  Implements of MessageHandler
+    *
+    * */
+    private class MessageHandlerImpl implements MessageHandler {
+
+        public void onMessage(Message message) {
+            switch (message.type) {
+                case REGISTER_RESPONSE:
+                    onRegisterResponse(message);
+                    break;
+                case AUTH_RESPONSE:
+                    onAuthResponse(message);
+                    break;
+                case UPDATE_RESPONSE:
+                    onUpdateResponse(message);
+                    break;
+                case INVOKE_REQUEST:
+                    onInvokeRequest(message);
+                    break;
+                case INVOKE_RESPONSE:
+                    onInvokeResponse(message);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void onConnect() {
+            state = State.STATE_CONNECTED;
+            onStateChanged();
+        }
+
+        public void onClose() {
+            state = State.STATE_CLOSED;
+            onStateChanged();
+        }
+    }
 
     public DeviceAgent(DeviceController controller) {
+        this.messageHandler = new MessageHandlerImpl();
         this.ioHandler = new IoHandler(new TcpClient());
-        this.ioHandler.setMessageHandler(this);
+        this.ioHandler.setMessageHandler(this.messageHandler);
         this.controller = controller;
         this.state = State.STATE_INIT;
         this.error = Error.ERROR_NONE;
@@ -100,43 +142,6 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
 
     /*
     *
-    *  Implements of MessageHandler
-    *
-    * */
-    public void onMessage(Message message) {
-        switch (message.type) {
-            case REGISTER_RESPONSE:
-                onRegisterResponse(message);
-                break;
-            case AUTH_RESPONSE:
-                onAuthResponse(message);
-                break;
-            case UPDATE_RESPONSE:
-                onUpdateResponse(message);
-                break;
-            case INVOKE_REQUEST:
-                onInvokeRequest(message);
-                break;
-            case INVOKE_RESPONSE:
-                onInvokeResponse(message);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void onConnect() {
-        state = State.STATE_CONNECTED;
-        onStateChanged();
-    }
-
-    public void onClose() {
-        state = State.STATE_CLOSED;
-        onStateChanged();
-    }
-
-    /*
-    *
     *   Implements of Invokable
     *
     * */
@@ -153,7 +158,7 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
         }
     }
 
-    public void invokeMethodAsync(FunctionInstance instance, InvokeHandler callback) throws Exception {
+    public void invokeMethodAsync(FunctionInstance instance) throws Exception {
         Long startTime = System.currentTimeMillis();
         instance.setStartTime(startTime);
         ContentInvokeRequest content = new ContentInvokeRequest(instance);
@@ -175,11 +180,11 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
         sendMessage(messageResponse);
     }
 
-    public FunctionInstance createFunctionInstance(Function function, List<Argument> inputArgValues, List<Argument> outputArgValues) {
+    public FunctionInstance createFunctionInstance(Function function, List<Account>accounts, List<Argument> inputArgValues, List<Argument> outputArgValues) {
         Random random = new Random();
         Long createTime = System.currentTimeMillis();
         Long id = createTime + function.getId() + random.nextLong();
-        FunctionInstance instance = new FunctionInstance(id, deviceMaster.getDeviceId(), createTime, function, inputArgValues, outputArgValues);
+        FunctionInstance instance = new FunctionInstance(id, deviceMaster.getDeviceId(), createTime, function, accounts, inputArgValues, outputArgValues);
         return instance;
     }
 
@@ -308,6 +313,7 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
     private void onInvokeRequest(Message message)  {
         ContentInvokeRequest content = (ContentInvokeRequest) message.content;
         FunctionInstance instance = content.instance;
+        instance.setInvokeHandler(this);
         try {
             if (instance.getFunction().getType() == FunctionType.SYNC) {
                 controller.invokeMethodSync(instance, (long) 5000);
@@ -315,7 +321,7 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
                 Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
                 sendMessage(messageResponse);
             } else {
-                controller.invokeMethodAsync(instance, this);
+                controller.invokeMethodAsync(instance);
             }
         } catch (Exception e) {
             e.printStackTrace();
