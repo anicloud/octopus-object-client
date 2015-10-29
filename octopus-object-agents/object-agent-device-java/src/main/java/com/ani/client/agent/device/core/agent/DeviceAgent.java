@@ -5,6 +5,7 @@ import com.ani.bus.device.core.domain.message.*;
 
 import com.ani.client.agent.device.core.socket.IoHandler;
 import com.ani.client.agent.device.core.socket.TcpClient;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Random;
  * Created by huangbin on 10/22/15.
  */
 public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
+    private static Logger LOG = Logger.getLogger(DeviceAgent.class);
+
     private Map<Long, FunctionInstance> instanceMap = new HashMap<Long, FunctionInstance>();
 
     private DeviceController controller;
@@ -55,9 +58,10 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
         this.ioHandler = new IoHandler(new TcpClient());
         this.ioHandler.setMessageHandler(this);
         this.controller = controller;
-        this.deviceMaster = controller.getDeviceInfo();
         this.state = State.STATE_INIT;
         this.error = Error.ERROR_NONE;
+        Device device = this.controller.getDeviceInfo();
+        deviceMaster = new DeviceMaster(device.getInfo(), device.getFunctions(), null);
     }
 
     /*
@@ -68,12 +72,11 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
 
     public void connect() {
         try {
+            state = State.STATE_CONNECTING;
             String host = "localhost";
             Integer port = 1222;
             ioHandler.getClient().connect(host, port);
             ioHandler.getClient().startLoop();
-            state = State.STATE_CONNECTING;
-            onStateChanged();
         } catch (Exception e) {
             error = Error.ERROR_CONNECT;
             state = State.STATE_ERROR;
@@ -193,21 +196,25 @@ public class DeviceAgent implements MessageHandler, Invokable, InvokeHandler {
             case STATE_CONNECTING:
                 break;
             case STATE_CONNECTED:
+                LOG.info("device connection ok");
                 register();
                 break;
             case STATE_REGISTERING:
                 break;
             case STATE_REGISTERED:
+                LOG.info("device registry ok");
                 auth();
                 break;
             case STATE_AUTHING:
                 break;
             case STATE_AUTHED:
+                LOG.info("device auth ok");
                 update();
                 break;
             case STATE_UPDATING:
                 break;
             case STATE_UPDATED:
+                LOG.info("device update ok");
                 state = State.STATE_IDLE;
                 controller.onReady();
                 break;

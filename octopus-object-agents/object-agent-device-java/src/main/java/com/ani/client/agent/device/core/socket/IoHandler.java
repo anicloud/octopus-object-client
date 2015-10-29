@@ -34,10 +34,12 @@ public class IoHandler implements SocketEventHandler {
 
     public void onConnectEvent(SocketChannel channel) throws Exception {
         LOG.info("connect event");
+        messageHandler.onConnect();
     }
 
     public void onCloseEvent(SocketChannel channel) throws Exception {
         LOG.info("close event");
+        messageHandler.onClose();
     }
 
     public void onReadEvent(SocketChannel channel) throws Exception {

@@ -40,8 +40,8 @@ public class TcpClient {
     }
 
     public void startLoop() throws Exception {
-        while (!isStarted) {
-            isStarted = true;
+        isStarted = true;
+        while (isStarted) {
             selector.select();
             Iterator it = selector.selectedKeys().iterator();
             while (it.hasNext()) {
