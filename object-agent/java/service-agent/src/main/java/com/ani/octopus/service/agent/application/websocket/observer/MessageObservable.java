@@ -23,6 +23,10 @@ public class MessageObservable {
         }
     }
 
+    public void setObs(Vector<MessageObserver> obs) {
+        this.obs = obs;
+    }
+
     public synchronized void deleteObserver(MessageObserver observer) {
         obs.removeElement(observer);
     }
@@ -38,10 +42,12 @@ public class MessageObservable {
         }
         for (int i = arrLocal.length-1; i>=0; i--) {
             MessageObserver observer = (MessageObserver)arrLocal[i];
-            if (messageType == MessageType.CALL_ANI_OBJECT && (observer instanceof AniObjectCallMessageObserver)) {
+            if (messageType == MessageType.CALL_ANI_OBJECT
+                    && (observer instanceof AniObjectCallMessageObserver)) {
                 observer.update(this, object);
             }
-            if (messageType == MessageType.CALL_SYSTEM && (observer instanceof AniFunctionCallMessageObserver)) {
+            if (messageType == MessageType.CALL_SYSTEM
+                    && (observer instanceof AniFunctionCallMessageObserver)) {
                 observer.update(this, object);
             }
         }
