@@ -1,20 +1,16 @@
 package com.ani.client.agent.device.core.agent;
 
-
-import com.ani.client.agent.device.core.account.Account;
-import com.ani.client.agent.device.core.device.Device;
 import com.ani.client.agent.device.core.device.DeviceInfo;
 import com.ani.client.agent.device.core.device.DeviceMaster;
 import com.ani.client.agent.device.core.device.FunctionInstance;
-
-import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * Created by huangbin on 10/29/15.
  */
 public class XinwoDeviceController extends DeviceController {
+    public static final Logger LOG = Logger.getLogger(XinwoDeviceController.class);
 
-    @Override
     public DeviceMaster getDeviceMaster() {
         DeviceInfo info = new DeviceInfo("xinwo", "id-1234", "adress-abcd", "xinwo device");
         DeviceMaster master = new DeviceMaster(info, null, null);
@@ -28,17 +24,17 @@ public class XinwoDeviceController extends DeviceController {
 
     @Override
     public void onReady() {
-
+        LOG.info("agent ready");
     }
 
     @Override
     public void onClose() {
-
+        LOG.info("agent close");
     }
 
     @Override
     public void onUpdate(DeviceMaster master) {
-
+        LOG.info("agent update");
     }
 
     @Override

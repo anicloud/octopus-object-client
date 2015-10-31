@@ -226,8 +226,8 @@ public class DeviceAgent implements Invokable, InvokeHandler {
             case STATE_UPDATED:
                 LOG.info("device update ok");
                 state = State.STATE_IDLE;
-                controller.onUpdate(deviceMaster);
-                controller.onReady();
+                break;
+            case STATE_IDLE:
                 break;
             case STATE_ERROR:
                 controller.onError();
@@ -312,6 +312,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
             DeviceMaster deviceMasterUpdated = content.deviceMaster;
 //            TODO: check and update the consistence between local and remote device master info.
             controller.onUpdate(this.deviceMaster);
+            controller.onReady();
             state = State.STATE_UPDATED;
         }
         onStateChanged();
