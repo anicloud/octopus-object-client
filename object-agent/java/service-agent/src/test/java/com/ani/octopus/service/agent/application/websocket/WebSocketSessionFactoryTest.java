@@ -22,18 +22,26 @@ public class WebSocketSessionFactoryTest {
 
     @Test
     public void testSessionFactory() {
+        // you need to implements the Invokable interface and register into
+        // WebSocketClient for anicloud platform to call back
         Invokable invokable = new ClientInvokerImpl();
         WebSocketClient socketClient = new WebSocketClient(invokable);
 
+        // you need to implements yourself observer and register on socketClient
+        // to receive the message from anicloud platform
         Vector<MessageObserver> messageObservers = new Vector<>();
         messageObservers.add(new AniObjectCallMessageObserver());
         messageObservers.add(new AniFunctionCallMessageObserver());
         socketClient.setObs(messageObservers);
 
+        // inject your WebSocketClient instance and anicloud socket destination url to factory
+        // and than use factory to get the session, than you can use the session to communication
+        // with anicloud platform
         WebSocketSessionFactory sessionFactory =
                 new WebSocketSessionFactory(aniCloudSocketUri, socketClient);
         Session session = sessionFactory.getWebSocketSession();
 
+        // call use AniInvokerImpl
         Invokable clientInvoke = new AniInvokerImpl(session);
         AniStub aniStub = new AniStub();
         aniStub.setObjectId(123L);
