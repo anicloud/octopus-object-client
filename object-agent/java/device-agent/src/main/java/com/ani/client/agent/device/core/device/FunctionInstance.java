@@ -29,7 +29,7 @@ public class FunctionInstance implements ByteSerializable {
     *  Fields not to be serialized.
     * */
     private ResultType result;
-    private InvokeHandler invokeHandler;
+    private InvokeCallback invokeCallback;
 
     public FunctionInstance() {
     }
@@ -159,12 +159,12 @@ public class FunctionInstance implements ByteSerializable {
         this.outputValues = outputValues;
     }
 
-    public InvokeHandler getInvokeHandler() {
-        return invokeHandler;
+    public InvokeCallback getInvokeCallback() {
+        return invokeCallback;
     }
 
-    public void setInvokeHandler(InvokeHandler invokeHandler) {
-        this.invokeHandler = invokeHandler;
+    public void setInvokeCallback(InvokeCallback invokeCallback) {
+        this.invokeCallback = invokeCallback;
     }
 
     public List<Account> getAccounts() {

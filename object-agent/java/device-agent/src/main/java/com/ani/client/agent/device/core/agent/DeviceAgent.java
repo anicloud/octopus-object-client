@@ -16,7 +16,7 @@ import java.util.Random;
 /**
  * Created by huangbin on 10/22/15.
  */
-public class DeviceAgent implements Invokable, InvokeHandler {
+public class DeviceAgent implements Invokable, InvokeCallback {
     private static Logger LOG = Logger.getLogger(DeviceAgent.class);
 
     private Map<Long, FunctionInstance> instanceMap = new HashMap<Long, FunctionInstance>();
@@ -57,11 +57,87 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         STATE_IDLE,
         STATE_ERROR
     }
+
+    public DeviceAgent(DeviceController controller) {
+        this.messageHandler = new MessageHandlerImpl();
+        this.ioHandler = new IoHandler(new TcpClient());
+        this.ioHandler.setMessageHandler(this.messageHandler);
+        this.controller = controller;
+        this.state = State.STATE_INIT;
+        this.error = Error.ERROR_NONE;
+        deviceMaster = controller.getDeviceMaster();
+    }
+
     /*
     *
-    *  Implements of MessageHandler
+    *   APIs of DeviceAgent
     *
     * */
+
+    /**
+     *  Connect to server.
+     */
+    public void connect() {
+        try {
+            state = State.STATE_CONNECTING;
+            String host = "localhost";
+            Integer port = 1222;
+            ioHandler.getClient().connect(host, port);
+            ioHandler.getClient().startLoop();
+        } catch (Exception e) {
+            error = Error.ERROR_CONNECT;
+            state = State.STATE_ERROR;
+            onStateChanged();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  Close connection.
+     */
+    public void close() {
+        try {
+            ioHandler.getClient().close();
+            state = State.STATE_CLOSING;
+            onStateChanged();
+        } catch (Exception e) {
+            error = Error.ERROR_CLOSE;
+            state = State.STATE_ERROR;
+            onStateChanged();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  Update device master.
+     * @param master
+     */
+    public void update(DeviceMaster master) {
+        this.deviceMaster = master;
+        update();
+    }
+
+    /**
+     *  Create a FunctionInstance.
+     * @param function
+     * @param accounts
+     * @param inputArgValues
+     * @param outputArgValues
+     * @return
+     */
+    public FunctionInstance createFunctionInstance(Function function, List<Account>accounts, List<Argument> inputArgValues, List<Argument> outputArgValues) {
+        Random random = new Random();
+        Long createTime = System.currentTimeMillis();
+        Long id = createTime + function.getId() + random.nextLong();
+        FunctionInstance instance = new FunctionInstance(id, deviceMaster.getDeviceId(), createTime, function, accounts, inputArgValues, outputArgValues);
+        return instance;
+    }
+
+    /**
+     *
+     *  Implements of MessageHandler
+     *
+     */
     private class MessageHandlerImpl implements MessageHandler {
 
         public void onMessage(Message message) {
@@ -95,55 +171,6 @@ public class DeviceAgent implements Invokable, InvokeHandler {
             state = State.STATE_CLOSED;
             onStateChanged();
         }
-    }
-
-    public DeviceAgent(DeviceController controller) {
-        this.messageHandler = new MessageHandlerImpl();
-        this.ioHandler = new IoHandler(new TcpClient());
-        this.ioHandler.setMessageHandler(this.messageHandler);
-        this.controller = controller;
-        this.state = State.STATE_INIT;
-        this.error = Error.ERROR_NONE;
-        deviceMaster = controller.getDeviceMaster();
-    }
-
-    /*
-    *
-    *   APIs of DeviceAgent
-    *
-    * */
-
-    public void connect() {
-        try {
-            state = State.STATE_CONNECTING;
-            String host = "localhost";
-            Integer port = 1222;
-            ioHandler.getClient().connect(host, port);
-            ioHandler.getClient().startLoop();
-        } catch (Exception e) {
-            error = Error.ERROR_CONNECT;
-            state = State.STATE_ERROR;
-            onStateChanged();
-            e.printStackTrace();
-        }
-    }
-
-    public void close() {
-        try {
-            ioHandler.getClient().close();
-            state = State.STATE_CLOSING;
-            onStateChanged();
-        } catch (Exception e) {
-            error = Error.ERROR_CLOSE;
-            state = State.STATE_ERROR;
-            onStateChanged();
-            e.printStackTrace();
-        }
-    }
-
-    public void update(DeviceMaster master) {
-        this.deviceMaster = master;
-        update();
     }
 
     /*
@@ -183,14 +210,6 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         ContentInvokeResponse contentResponse = new ContentInvokeResponse(instance.getResult(), instance);
         Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
         sendMessage(messageResponse);
-    }
-
-    public FunctionInstance createFunctionInstance(Function function, List<Account>accounts, List<Argument> inputArgValues, List<Argument> outputArgValues) {
-        Random random = new Random();
-        Long createTime = System.currentTimeMillis();
-        Long id = createTime + function.getId() + random.nextLong();
-        FunctionInstance instance = new FunctionInstance(id, deviceMaster.getDeviceId(), createTime, function, accounts, inputArgValues, outputArgValues);
-        return instance;
     }
 
     /*
@@ -321,7 +340,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
     private void onInvokeRequest(Message message)  {
         ContentInvokeRequest content = (ContentInvokeRequest) message.content;
         FunctionInstance instance = content.instance;
-        instance.setInvokeHandler(this);
+        instance.setInvokeCallback(this);
         try {
             if (instance.getFunction().getType() == FunctionType.SYNC) {
                 controller.invokeSync(instance, (long) 5000);
@@ -348,7 +367,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
                     if (instanceUpdated.getFunction().getType() == FunctionType.SYNC) {
                         instanceLocal.notify();
                     } else if (instanceUpdated.getFunction().getType() == FunctionType.ASYNC) {
-                        instanceLocal.getInvokeHandler().onInvokeDone(instanceLocal);
+                        instanceLocal.getInvokeCallback().onInvokeDone(instanceLocal);
                     }
                 }
             }
