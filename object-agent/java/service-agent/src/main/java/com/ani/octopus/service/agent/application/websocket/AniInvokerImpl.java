@@ -11,6 +11,8 @@ import javax.websocket.Session;
 import java.io.IOException;
 
 /**
+ * The implementation of AniInvoker for the third party service to call.
+ *
  * Created by zhaoyu on 15-10-30.
  */
 public class AniInvokerImpl implements AniInvoker {

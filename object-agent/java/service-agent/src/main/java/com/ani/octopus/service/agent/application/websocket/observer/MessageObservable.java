@@ -5,6 +5,7 @@ import com.ani.octopus.service.agent.domain.websocket.message.MessageType;
 import java.util.Vector;
 
 /**
+ * The class is the Subject of Observer pattern.
  * Created by zhaoyu on 15-10-30.
  */
 public class MessageObservable {
@@ -35,6 +36,11 @@ public class MessageObservable {
         notifyObservers(null);
     }
 
+    /**
+     * notify the observers with the specified messageType.
+     * @param object the cite of Subject.
+     * @param messageType the enum message type.
+     */
     public void notifyObservers(Object object, MessageType messageType) {
         Object[] arrLocal;
         synchronized (this) {

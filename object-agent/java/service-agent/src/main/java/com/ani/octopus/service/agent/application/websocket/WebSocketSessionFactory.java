@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
+ * The web socket session factory.
  * Created by zhaoyu on 15-10-29.
  */
 public class WebSocketSessionFactory {
@@ -26,6 +27,10 @@ public class WebSocketSessionFactory {
         this.webSocketClient = webSocketClient;
     }
 
+    /**
+     * get the singleton web socket session instance.
+     * @return
+     */
     public synchronized  Session getWebSocketSession() {
         if (this.webSocketClient == null) {
             throw new NullPointerException("webSocketClient is null.");
