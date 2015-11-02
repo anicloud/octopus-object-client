@@ -15,12 +15,6 @@
         <version>1.0</version>
     </parent>
     <dependencies>
-        <dependency>
-            <groupId>com.ani.bus.device</groupId>
-            <artifactId>device-bus</artifactId>
-            <version>1.0</version>
-        </dependency>
-
         <!-- junit-->
         <dependency>
             <groupId>junit</groupId>

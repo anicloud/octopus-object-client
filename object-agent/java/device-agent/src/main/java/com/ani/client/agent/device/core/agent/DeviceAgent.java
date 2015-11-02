@@ -1,9 +1,9 @@
 package com.ani.client.agent.device.core.agent;
 
-import com.ani.bus.device.core.domain.account.Account;
-import com.ani.bus.device.core.domain.device.*;
-import com.ani.bus.device.core.domain.message.*;
 
+import com.ani.client.agent.device.core.account.Account;
+import com.ani.client.agent.device.core.device.*;
+import com.ani.client.agent.device.core.message.*;
 import com.ani.client.agent.device.core.socket.IoHandler;
 import com.ani.client.agent.device.core.socket.TcpClient;
 import org.apache.log4j.Logger;
@@ -16,16 +16,18 @@ import java.util.Random;
 /**
  * Created by huangbin on 10/22/15.
  */
-public class DeviceAgent implements Invokable, InvokeHandler {
+public class DeviceAgent implements Invokable, InvokeCallback {
     private static Logger LOG = Logger.getLogger(DeviceAgent.class);
 
     private Map<Long, FunctionInstance> instanceMap = new HashMap<Long, FunctionInstance>();
 
     private DeviceController controller;
     private DeviceMaster deviceMaster;
+    private byte[] token;
 
     private MessageHandler messageHandler;
     private IoHandler ioHandler;
+
     private State state;
     private Error error;
 
@@ -55,11 +57,87 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         STATE_IDLE,
         STATE_ERROR
     }
+
+    public DeviceAgent(DeviceController controller) {
+        this.messageHandler = new MessageHandlerImpl();
+        this.ioHandler = new IoHandler(new TcpClient());
+        this.ioHandler.setMessageHandler(this.messageHandler);
+        this.controller = controller;
+        this.state = State.STATE_INIT;
+        this.error = Error.ERROR_NONE;
+        deviceMaster = controller.getDeviceMaster();
+    }
+
     /*
     *
-    *  Implements of MessageHandler
+    *   APIs of DeviceAgent
     *
     * */
+
+    /**
+     *  Connect to server.
+     */
+    public void connect() {
+        try {
+            state = State.STATE_CONNECTING;
+            String host = "localhost";
+            Integer port = 1222;
+            ioHandler.getClient().connect(host, port);
+            ioHandler.getClient().startLoop();
+        } catch (Exception e) {
+            error = Error.ERROR_CONNECT;
+            state = State.STATE_ERROR;
+            onStateChanged();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  Close connection.
+     */
+    public void close() {
+        try {
+            ioHandler.getClient().close();
+            state = State.STATE_CLOSING;
+            onStateChanged();
+        } catch (Exception e) {
+            error = Error.ERROR_CLOSE;
+            state = State.STATE_ERROR;
+            onStateChanged();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  Update device master.
+     * @param master
+     */
+    public void update(DeviceMaster master) {
+        this.deviceMaster = master;
+        update();
+    }
+
+    /**
+     *  Create a FunctionInstance.
+     * @param function
+     * @param accounts
+     * @param inputArgValues
+     * @param outputArgValues
+     * @return
+     */
+    public FunctionInstance createFunctionInstance(Function function, List<Account>accounts, List<Argument> inputArgValues, List<Argument> outputArgValues) {
+        Random random = new Random();
+        Long createTime = System.currentTimeMillis();
+        Long id = createTime + function.getId() + random.nextLong();
+        FunctionInstance instance = new FunctionInstance(id, deviceMaster.getDeviceId(), createTime, function, accounts, inputArgValues, outputArgValues);
+        return instance;
+    }
+
+    /**
+     *
+     *  Implements of MessageHandler
+     *
+     */
     private class MessageHandlerImpl implements MessageHandler {
 
         public void onMessage(Message message) {
@@ -95,58 +173,12 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         }
     }
 
-    public DeviceAgent(DeviceController controller) {
-        this.messageHandler = new MessageHandlerImpl();
-        this.ioHandler = new IoHandler(new TcpClient());
-        this.ioHandler.setMessageHandler(this.messageHandler);
-        this.controller = controller;
-        this.state = State.STATE_INIT;
-        this.error = Error.ERROR_NONE;
-        Device device = this.controller.getDeviceInfo();
-        deviceMaster = new DeviceMaster(device.getInfo(), device.getFunctions(), null);
-    }
-
-    /*
-    *
-    *   APIs of DeviceAgent
-    *
-    * */
-
-    public void connect() {
-        try {
-            state = State.STATE_CONNECTING;
-            String host = "localhost";
-            Integer port = 1222;
-            ioHandler.getClient().connect(host, port);
-            ioHandler.getClient().startLoop();
-        } catch (Exception e) {
-            error = Error.ERROR_CONNECT;
-            state = State.STATE_ERROR;
-            onStateChanged();
-            e.printStackTrace();
-        }
-    }
-
-    public void close() {
-        try {
-            ioHandler.getClient().close();
-            state = State.STATE_CLOSING;
-            onStateChanged();
-        } catch (Exception e) {
-            error = Error.ERROR_CLOSE;
-            state = State.STATE_ERROR;
-            onStateChanged();
-            e.printStackTrace();
-        }
-    }
-
     /*
     *
     *   Implements of Invokable
     *
     * */
-
-    public void invokeMethodSync(FunctionInstance instance, Long timeout) throws Exception {
+    public void invokeSync(FunctionInstance instance, Long timeout) throws Exception {
         Long startTime = System.currentTimeMillis();
         instance.setStartTime(startTime);
         ContentInvokeRequest content = new ContentInvokeRequest(instance);
@@ -158,7 +190,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         }
     }
 
-    public void invokeMethodAsync(FunctionInstance instance) throws Exception {
+    public void invokeAsync(FunctionInstance instance) throws Exception {
         Long startTime = System.currentTimeMillis();
         instance.setStartTime(startTime);
         ContentInvokeRequest content = new ContentInvokeRequest(instance);
@@ -178,14 +210,6 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         ContentInvokeResponse contentResponse = new ContentInvokeResponse(instance.getResult(), instance);
         Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
         sendMessage(messageResponse);
-    }
-
-    public FunctionInstance createFunctionInstance(Function function, List<Account>accounts, List<Argument> inputArgValues, List<Argument> outputArgValues) {
-        Random random = new Random();
-        Long createTime = System.currentTimeMillis();
-        Long id = createTime + function.getId() + random.nextLong();
-        FunctionInstance instance = new FunctionInstance(id, deviceMaster.getDeviceId(), createTime, function, accounts, inputArgValues, outputArgValues);
-        return instance;
     }
 
     /*
@@ -221,7 +245,8 @@ public class DeviceAgent implements Invokable, InvokeHandler {
             case STATE_UPDATED:
                 LOG.info("device update ok");
                 state = State.STATE_IDLE;
-                controller.onReady();
+                break;
+            case STATE_IDLE:
                 break;
             case STATE_ERROR:
                 controller.onError();
@@ -257,7 +282,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
             state = State.STATE_ERROR;
         } else if (content.result == ResultType.SUCCESS) {
             deviceMaster.setDeviceId(content.deviceId);
-            deviceMaster.setToken(content.token);
+            token = content.token;
             state = State.STATE_REGISTERED;
         }
         onStateChanged();
@@ -271,7 +296,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
 
     private void auth() {
         Long timestamp = System.currentTimeMillis();
-        String sign = signature(deviceMaster.getDeviceId(), timestamp, deviceMaster.getToken());
+        String sign = signature(deviceMaster.getDeviceId(), timestamp, token);
         MessageContent content = new ContentAuthRequest(deviceMaster.getDeviceId(), timestamp, sign);
         Message message = new Message(MessageType.AUTH_REQUEST, content);
         sendMessage(message);
@@ -305,6 +330,8 @@ public class DeviceAgent implements Invokable, InvokeHandler {
         } else if (content.result == ResultType.SUCCESS) {
             DeviceMaster deviceMasterUpdated = content.deviceMaster;
 //            TODO: check and update the consistence between local and remote device master info.
+            controller.onUpdate(this.deviceMaster);
+            controller.onReady();
             state = State.STATE_UPDATED;
         }
         onStateChanged();
@@ -313,15 +340,15 @@ public class DeviceAgent implements Invokable, InvokeHandler {
     private void onInvokeRequest(Message message)  {
         ContentInvokeRequest content = (ContentInvokeRequest) message.content;
         FunctionInstance instance = content.instance;
-        instance.setInvokeHandler(this);
+        instance.setInvokeCallback(this);
         try {
             if (instance.getFunction().getType() == FunctionType.SYNC) {
-                controller.invokeMethodSync(instance, (long) 5000);
+                controller.invokeSync(instance, (long) 5000);
                 ContentInvokeResponse contentResponse = new ContentInvokeResponse(instance.getResult(), instance);
                 Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
                 sendMessage(messageResponse);
             } else {
-                controller.invokeMethodAsync(instance);
+                controller.invokeAsync(instance);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -340,7 +367,7 @@ public class DeviceAgent implements Invokable, InvokeHandler {
                     if (instanceUpdated.getFunction().getType() == FunctionType.SYNC) {
                         instanceLocal.notify();
                     } else if (instanceUpdated.getFunction().getType() == FunctionType.ASYNC) {
-                        instanceLocal.getInvokeHandler().onInvokeDone(instanceLocal);
+                        instanceLocal.getInvokeCallback().onInvokeDone(instanceLocal);
                     }
                 }
             }
