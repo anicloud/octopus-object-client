@@ -1,17 +1,15 @@
-package com.ani.octopus.service.agent.application.websocket;
+package com.ani.octopus.service.agent.test;
 
+import com.ani.octopus.service.agent.application.oauth.AniOAuthService;
+import com.ani.octopus.service.agent.application.oauth.AniOAuthServiceImpl;
+import com.ani.octopus.service.agent.application.websocket.*;
 import com.ani.octopus.service.agent.application.websocket.observer.AniFunctionCallMessageObserver;
 import com.ani.octopus.service.agent.application.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.application.websocket.observer.MessageObserver;
 import com.ani.octopus.service.agent.domain.websocket.AniStub;
-import org.junit.Test;
 
-import javax.websocket.EncodeException;
 import javax.websocket.Session;
-import java.io.IOException;
 import java.util.Vector;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by zhaoyu on 15-10-30.
@@ -45,6 +43,9 @@ public class WebSocketSessionFactoryTest {
         AniStub aniStub = new AniStub();
         aniStub.setObjectId(123L);
         aniStub.setStubId(456L);
+
+        AniOAuthService service = new AniOAuthServiceImpl();
+        service.getOAuth2AccessToken(null, null);
 
         try {
             clientInvoke.invokeAniObjectSync(aniStub);
