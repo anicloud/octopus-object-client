@@ -11,14 +11,29 @@ import java.util.List;
  * Created by huangbin on 10/26/15.
  */
 public class DeviceMaster extends Device {
-    private List<Device> slaves;
+
+    /**
+     * Master auth token
+     * NotNull
+     */
+    private byte[] token;
+
+    /**
+     * Slave devices.
+     * Nullable
+     */
+    private List<DeviceSlave> slaves;
 
     public DeviceMaster() {
-        this.slaves = null;
     }
 
-    public DeviceMaster(DeviceInfo info, List<Function> functions, List<Device> slaves) {
-        super(info, functions);
+    public DeviceMaster(byte[] token, List<DeviceSlave> slaves) {
+        this.token = token;
+        this.slaves = slaves;
+    }
+
+    public DeviceMaster(String name, String physicalId, String physicalAddress, String description, List<Function> functions, List<DeviceSlave> slaves) {
+        super(name, physicalId, physicalAddress, description, functions);
         this.slaves = slaves;
     }
 
@@ -40,29 +55,28 @@ public class DeviceMaster extends Device {
         super.unserializeByte(dis);
         int slaveSize = dis.readInt();
         if (slaveSize > 0) {
-            slaves = new ArrayList<Device>();
+            slaves = new ArrayList<DeviceSlave>();
             for (int i=0; i<slaveSize; i++) {
-                Device device = new Device();
-                device.unserializeByte(dis);
-                slaves.add(device);
+                DeviceSlave slave = new DeviceSlave(this);
+                slave.unserializeByte(dis);
+                slaves.add(slave);
             }
         }
     }
 
-    public Long getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(Long deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public List<Device> getSlaves() {
+    public List<DeviceSlave> getSlaves() {
         return slaves;
     }
 
-    public void setSlaves(List<Device> slaves) {
+    public void setSlaves(List<DeviceSlave> slaves) {
         this.slaves = slaves;
     }
 
+    public byte[] getToken() {
+        return token;
+    }
+
+    public void setToken(byte[] token) {
+        this.token = token;
+    }
 }

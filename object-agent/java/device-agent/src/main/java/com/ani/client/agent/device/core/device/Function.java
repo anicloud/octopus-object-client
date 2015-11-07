@@ -9,26 +9,39 @@ import java.io.DataOutputStream;
  * Created by huangbin on 10/22/15.
  */
 public class Function implements ByteSerializable {
+      /**
+     * Function id provided by Anicloud.
+     */
     private Integer id;
-    private Integer groupId;
-    private FunctionType type;
+
+    /**
+     * Function group id provided by Anicloud.
+     */
+    private Long groupId;
+
+    private ConnType type;
 
     public Function() {
+    }
+
+    public Function(Integer id, Long groupId, ConnType type) {
+        this.id = id;
+        this.groupId = groupId;
+        this.type = type;
     }
 
     @Override
     public void serializeByte(DataOutputStream dos) throws Exception {
         dos.writeInt(id);
-        dos.writeInt(groupId);
-        dos.writeInt(type.getValue());
+        dos.writeLong(groupId);
+        dos.writeByte(type.getValue());
     }
 
     @Override
     public void unserializeByte(DataInputStream dis) throws Exception {
         id = dis.readInt();
-        groupId = dis.readInt();
-        type = FunctionType.getType(dis.readInt());
-        int argSize = dis.readInt();
+        groupId = dis.readLong();
+        type = ConnType.getType((int) dis.readByte());
     }
 
     public Integer getId() {
@@ -39,19 +52,19 @@ public class Function implements ByteSerializable {
         this.id = id;
     }
 
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
-    public FunctionType getType() {
+    public ConnType getType() {
         return type;
     }
 
-    public void setType(FunctionType type) {
+    public void setType(ConnType type) {
         this.type = type;
     }
 

@@ -2,6 +2,7 @@ package com.ani.client.agent.device.core.device;
 
 import com.ani.client.agent.device.core.account.Account;
 import com.ani.client.agent.device.core.message.ByteSerializable;
+import com.ani.client.agent.device.core.message.MessageUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,32 +14,76 @@ import java.util.List;
  */
 public class Device implements ByteSerializable {
 
-    protected DeviceInfo info;
+    /**
+     * Device custom name, a human readable name.
+     * Nullable
+     */
+    protected String name;
+
+    /**
+     * Device custom id, used to distinguish different devices have the same MAC.
+     * NotNull
+     */
+    protected String physicalId;
+
+    /**
+     * Device MAC address.
+     * NotNull
+     */
+    protected String physicalAddress;
+
+    /**
+     * Device custom description, describes device details.
+     * Nullable
+     */
+    protected String description;
+    
+    /**
+     * Device functions list provided by device manufactures.
+     */
     protected List<Function> functions;
 
+    /**
+     * Unique device identified id provided by Anicloud.
+     */
     protected Long deviceId;
+
+    /**
+     * Owner account provided by Anicloud.
+     */
     protected Account owner;
+
+    /**
+     * related accounts provided by Anicloud.
+     */
     protected List<Account> accounts;
 
     public Device() {
-        this.info = null;
-        this.functions = null;
-        this.deviceId = -1l;
-        this.owner = null;
-        this.accounts = null;
-    }
-
-    public Device(DeviceInfo info, List<Function> functions) {
-        this.info = info;
-        this.functions = functions;
         this.deviceId = -1l;
         this.owner = new Account();
-        this.accounts = null;
+        this.accounts = new ArrayList<>();
     }
+
+    public Device(String name, String physicalId, String physicalAddress, String description, List<Function> functions) {
+        this.name = name;
+        this.physicalId = physicalId;
+        this.physicalAddress = physicalAddress;
+        this.description = description;
+        this.functions = functions;
+
+        this.deviceId = -1l;
+        this.owner = new Account();
+        this.accounts = new ArrayList<>();
+    }
+
+
 
     @Override
     public void serializeByte(DataOutputStream dos) throws Exception {
-        info.serializeByte(dos);
+        MessageUtils.writeString(dos, name);
+        MessageUtils.writeString(dos, physicalId);
+        MessageUtils.writeString(dos, physicalAddress);
+        MessageUtils.writeString(dos, description);
         if (functions == null) {
             dos.writeInt(0);
         } else {
@@ -61,11 +106,13 @@ public class Device implements ByteSerializable {
 
     @Override
     public void unserializeByte(DataInputStream dis) throws Exception {
-        info = new DeviceInfo();
-        info.unserializeByte(dis);
+        name = MessageUtils.readString(dis);
+        physicalId = MessageUtils.readString(dis);
+        physicalAddress = MessageUtils.readString(dis);
+        description = MessageUtils.readString(dis);
         int size = dis.readInt();
         if (size > 0) {
-            functions = new ArrayList<>();
+            functions = new ArrayList<Function>();
             for (int i = 0; i < size; i++) {
                 Function function = new Function();
                 function.unserializeByte(dis);
@@ -77,7 +124,7 @@ public class Device implements ByteSerializable {
         owner.unserializeByte(dis);
         size = dis.readInt();
         if (size > 0) {
-            accounts = new ArrayList<>();
+            accounts = new ArrayList<Account>();
             for (int i=0; i<size; i++) {
                 Account account = new Account();
                 account.unserializeByte(dis);
@@ -86,12 +133,36 @@ public class Device implements ByteSerializable {
         }
     }
 
-    public DeviceInfo getInfo() {
-        return info;
+    public String getName() {
+        return name;
     }
 
-    public void setInfo(DeviceInfo info) {
-        this.info = info;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhysicalId() {
+        return physicalId;
+    }
+
+    public void setPhysicalId(String physicalId) {
+        this.physicalId = physicalId;
+    }
+
+    public String getPhysicalAddress() {
+        return physicalAddress;
+    }
+
+    public void setPhysicalAddress(String physicalAddress) {
+        this.physicalAddress = physicalAddress;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Function> getFunctions() {

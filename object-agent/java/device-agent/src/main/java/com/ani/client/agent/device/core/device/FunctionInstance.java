@@ -11,10 +11,11 @@ import java.util.List;
 /**
  * Created by huangbin on 10/22/15.
  */
+
+/**
+ * Function invocation context.
+ */
 public class FunctionInstance implements ByteSerializable {
-    /*
-    *  Fields to be serialized.
-    * */
     private Long instanceId;
     private Long createTime;
     private Long startTime;
@@ -44,7 +45,6 @@ public class FunctionInstance implements ByteSerializable {
         this.outputValues = outputValues;
         this.result = ResultType.SUCCESS;
     }
-
     @Override
     public void serializeByte(DataOutputStream dos) throws Exception {
         dos.writeLong(instanceId);
