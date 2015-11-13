@@ -13,9 +13,9 @@ import java.util.concurrent.Semaphore;
  * Created by huangbin on 10/21/15.
  */
 public class IoHandler implements SocketEventHandler {
-
     private static final Logger LOG = Logger.getLogger(IoHandler.class);
-    public static final int BUFFER_SIZE = 40960;
+
+    private static final int BUFFER_SIZE = 0x10000; // 64kB
     private ByteBuffer inBuffer;
     private ByteBuffer outBuffer;
 
@@ -32,43 +32,51 @@ public class IoHandler implements SocketEventHandler {
         this.client.setEventHandler(this);
     }
 
+    @Override
     public void onConnectEvent(SocketChannel channel) throws Exception {
-        LOG.info("connect event");
+      //  LOG.info("connect event");
         messageHandler.onConnect();
     }
 
+    @Override
     public void onCloseEvent(SocketChannel channel) throws Exception {
-        LOG.info("close event");
+      //  LOG.info("close event");
         messageHandler.onClose();
     }
 
+    @Override
     public void onReadEvent(SocketChannel channel) throws Exception {
-        LOG.info("read event");
-        channel.read(inBuffer);
+      //  LOG.info("read event");
+        if (channel.read(inBuffer) == -1) {
+            LOG.info("socket closed, read -1 bytes");
+            client.close();
+        } else {
+            ByteBuffer viewBuffer = inBuffer.asReadOnlyBuffer();
+            viewBuffer.flip();
 
-        ByteBuffer viewBuffer = inBuffer.asReadOnlyBuffer();
-        viewBuffer.flip();
+            int length = viewBuffer.getInt();
+            int actualLength = viewBuffer.limit();
 
-        int length = viewBuffer.getInt();
-        int actualLength = viewBuffer.limit();
-
-        if (actualLength >= length) {
-            byte[] inBytes = new byte[length];
-            inBuffer.flip();
-            inBuffer.getInt(); // remove the LENGTH head
-            inBuffer.get(inBytes, 0, length);
-            inBuffer.compact();
-            messageHandler.onMessage(MessageUtils.decodeMessage(inBytes));
+            if (actualLength >= length) {
+                byte[] inBytes = new byte[length];
+                inBuffer.flip();
+                inBuffer.getInt(); // remove the LENGTH head
+                inBuffer.get(inBytes, 0, length);
+                inBuffer.compact();
+                messageHandler.onMessage(MessageUtils.decodeMessage(inBytes));
+            }
         }
     }
 
+    @Override
     public void onWriteEvent(SocketChannel channel) throws Exception {
-        LOG.info("write event");
+       // LOG.info("write event");
         outBuffer.flip();
         channel.write(outBuffer);
         outBuffer.clear();
         writeSemaphore.release();
     }
+
 
     private void write(byte [] out) throws Exception {
         writeSemaphore.acquire();

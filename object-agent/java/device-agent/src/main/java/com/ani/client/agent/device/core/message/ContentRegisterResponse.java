@@ -29,15 +29,22 @@ public class ContentRegisterResponse extends MessageContent {
     @Override
     public void serializeByte(DataOutputStream dos) throws Exception {
         dos.writeByte(result.getValue());
-        dos.writeLong(deviceId);
-        dos.write(token, 0, 128);
+        if (result == ResultType.SUCCESS) {
+            dos.writeLong(deviceId);
+            dos.write(token, 0, 128);
+        }
     }
 
     @Override
     public void unserializeByte(DataInputStream dis) throws Exception {
         result = ResultType.getType((int) dis.readByte());
-        deviceId = dis.readLong();
-        token = new byte[128];
-        dis.read(token, 0, 128);
+        if (result == ResultType.SUCCESS) {
+            deviceId = dis.readLong();
+            token = new byte[128];
+            dis.read(token, 0, 128);
+        } else {
+            deviceId = -1l;
+            token = null;
+        }
     }
 }

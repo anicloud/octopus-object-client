@@ -17,8 +17,19 @@ import java.util.List;
  * Argument arg = new(ArgumentType.INTEGER, 2);
  */
 public class Argument implements ByteSerializable {
+    /**
+     * Argument type.
+     */
     private ArgumentType type;
+
+    /**
+     * Argument list size.
+     */
     private Integer size;
+
+    /**
+     * Argument value.
+     */
     private List value;
 
     public Argument() {
@@ -83,7 +94,7 @@ public class Argument implements ByteSerializable {
     public void unserializeByte(DataInputStream dis) throws Exception {
         type = ArgumentType.getType((int) dis.readByte());
         size = dis.readInt();
-        value = new ArrayList<>(size);
+        value = new ArrayList<Argument>(size);
         switch (type) {
             case BOOLEAN:
                 for (int i=0; i<size; i++) {
@@ -144,5 +155,13 @@ public class Argument implements ByteSerializable {
 
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    public List getValue() {
+        return value;
+    }
+
+    public void setValue(List value) {
+        this.value = value;
     }
 }

@@ -26,5 +26,7 @@ public class ContentUpdateRequest extends MessageContent {
 
     @Override
     public void unserializeByte(DataInputStream dis) throws Exception {
+        deviceMaster = new DeviceMaster();
+        deviceMaster.unserializeByte(dis);
     }
 }

@@ -25,13 +25,17 @@ public class ContentUpdateResponse extends MessageContent {
     @Override
     public void serializeByte(DataOutputStream dos) throws Exception {
         dos.writeByte(result.getValue());
-        deviceMaster.serializeByte(dos);
+        if (result == ResultType.SUCCESS) {
+            deviceMaster.serializeByte(dos);
+        }
     }
 
     @Override
     public void unserializeByte(DataInputStream dis) throws Exception {
         result = ResultType.getType((int) dis.readByte());
-        deviceMaster = new DeviceMaster();
-        deviceMaster.unserializeByte(dis);
+        if (result == ResultType.SUCCESS) {
+            deviceMaster = new DeviceMaster();
+            deviceMaster.unserializeByte(dis);
+        }
     }
 }

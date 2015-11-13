@@ -3,13 +3,13 @@ package com.ani.client.agent.device.core.device;
 /**
  * Created by huangbin on 10/26/15.
  */
-public enum FunctionType {
+public enum ConnType {
     SYNC(0),
     ASYNC(1);
 
     private final Integer value;
 
-    FunctionType(Integer value) {
+    ConnType(Integer value) {
         this.value = value;
     }
 
@@ -17,7 +17,7 @@ public enum FunctionType {
         return this.value;
     }
 
-    public static FunctionType getType(Integer value) {
+    public static ConnType getType(Integer value) {
         switch (value) {
             case 0:
                 return SYNC;

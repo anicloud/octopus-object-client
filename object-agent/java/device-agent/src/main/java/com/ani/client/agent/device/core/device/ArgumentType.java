@@ -4,24 +4,35 @@ package com.ani.client.agent.device.core.device;
  * Created by huangbin on 10/26/15.
  */
 public enum ArgumentType {
-    BOOLEAN(0),
-    BYTE(1),
-    SHORT(2),
-    INTEGER(3),
-    LONG(4),
-    FLOAT(5),
-    DOUBLE(6),
-    STRING(7),
-    OBJECT(8);
+    BOOLEAN(0, "Boolean", Boolean.class),
+    BYTE(1, "Byte", Byte.class),
+    SHORT(2, "Short", Short.class),
+    INTEGER(3, "Integer", Integer.class),
+    LONG(4, "Long", Long.class),
+    FLOAT(5, "Float", Float.class),
+    DOUBLE(6, "Double", Double.class),
+    STRING(7, "String", String.class);
 
     private final Integer value;
+    private final String name;
+    private final Class typeClass;
 
-    ArgumentType(Integer value) {
+    ArgumentType(Integer value, String name, Class typeClass) {
         this.value = value;
+        this.name = name;
+        this.typeClass = typeClass;
     }
 
     public Integer getValue() {
         return value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Class getTypeClass() {
+        return typeClass;
     }
 
     public static ArgumentType getType(Integer value) {
@@ -41,10 +52,8 @@ public enum ArgumentType {
             case 6:
                 return DOUBLE;
             case 7:
-                return STRING;
-            case 8:
             default:
-                return OBJECT;
+                return STRING;
         }
     }
 }

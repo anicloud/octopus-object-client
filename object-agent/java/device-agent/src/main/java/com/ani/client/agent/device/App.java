@@ -14,8 +14,25 @@ public class App
     public static void main( String[] args )
     {
         try {
+            /**
+             * Instantiate a device controller object here.
+             */
             XinwoDeviceController controller = new XinwoDeviceController();
-            DeviceAgent agent = new DeviceAgent(controller);
+
+            /**
+             * Instantiate a device agent with a device controller.
+             */
+            DeviceAgent agent = new DeviceAgent(controller, controller.getDeviceMaster());
+
+            /**
+             * Set device agent to device controller.
+             */
+            controller.setAgent(agent);
+
+            /**
+             * Start the agent connection.
+             *
+             */
             agent.connect();
         } catch (Exception e) {
             e.printStackTrace();

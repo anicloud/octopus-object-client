@@ -9,30 +9,28 @@ import com.ani.client.agent.device.core.device.InvokeCallback;
  * Created by huangbin on 10/25/15.
  */
 public abstract class DeviceController implements Invokable, InvokeCallback {
-    /**
-     *  Called during the DeviceAgent.connect() method
-     *  It shall provide a DeviceMaster that describes device hardware information.
-     * @return
-     */
-    public abstract DeviceMaster getDeviceMaster();
-
+    public enum AgentError {
+        AGENT_ERROR_CONNECT,
+        AGENT_ERROR_UPDATE
+    }
     /**
      *  Handle the agent error event.
+     * @param agentError
      */
-    public abstract void onError();
+    public abstract void onError(AgentError agentError);
 
     /**
-     *  Handle the agent ready event, which means the device authentication and update are completed.
+     *  Handle the agent ready event and begin business logic procedure.
      */
     public abstract void onReady();
 
     /**
-     *  Handle the agent close event, triggered either by network errors or by the Agent.Close() call.
+     *  Handle the agent close event, triggered either by network errors or by the DeviceAgent.Close().
      */
     public abstract void onClose();
 
     /**
-     *  Handle the agent update event, triggered first time before OnReady() and then after the Agent.update() call,
+     *  Handle the agent update event, triggered before the DeviceAgent::onReady() and after the DeviceAgent.update(),
      * @param master
      */
     public abstract void onUpdate(DeviceMaster master);

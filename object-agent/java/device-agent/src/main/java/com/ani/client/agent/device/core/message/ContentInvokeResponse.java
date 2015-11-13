@@ -1,7 +1,5 @@
 package com.ani.client.agent.device.core.message;
 
-
-
 import com.ani.client.agent.device.core.device.FunctionInstance;
 import com.ani.client.agent.device.core.device.ResultType;
 

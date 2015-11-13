@@ -14,7 +14,7 @@ public interface Invokable {
     public void invokeSync(FunctionInstance instance, Long timeout) throws Exception;
 
     /**
-     * Invoke remote Functions in a asynchronous way.
+     * Invoke remote Functions in an asynchronous way.
      * @param instance
      * @throws Exception
      */
