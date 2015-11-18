@@ -1,13 +1,20 @@
 package com.ani.octopus.service.agent.service.aniservice.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhaoyu on 15-11-12.
  */
 public class AniServiceRegisterDto implements Serializable {
     private static final long serialVersionUID = -1271450263429504186L;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public String aniServiceId;
     //public Long objectId;
@@ -32,19 +39,95 @@ public class AniServiceRegisterDto implements Serializable {
     public List<AniServiceEntranceDto> entranceList;
     public AniServiceInfoDto aniServiceInfo;
 
+    /**
+     * key is stub group id, value is stub id list
+     */
+    private Map<Long, List<Integer>> stubMap;
+
+    private String stubMapStr;
+
     public AniServiceRegisterDto() {
+        this.stubMap = new HashMap<>();
     }
 
     public AniServiceRegisterDto(String serviceName, String version,
                                  String webServerRedirectUri, Long accountId,
                                  List<AniServiceEntranceDto> entranceList,
-                                 AniServiceInfoDto aniServiceInfo) {
+                                 AniServiceInfoDto aniServiceInfo,
+                                 Map<Long, List<Integer>> stubMap) {
         this.serviceName = serviceName;
         this.version = version;
         this.webServerRedirectUri = webServerRedirectUri;
         this.accountId = accountId;
         this.entranceList = entranceList;
         this.aniServiceInfo = aniServiceInfo;
+        this.stubMap = stubMap;
+
+        setStubMapStr();
+    }
+
+    private void setStubMapStr() {
+        try {
+            if (this.stubMap != null) {
+                this.stubMapStr = objectMapper.writeValueAsString(this.stubMap);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setStubMap(Map<Long, List<Integer>> stubMap) {
+        if (this.stubMap == null) {
+            this.stubMap = new HashMap<>();
+        }
+        stubMap.putAll(stubMap);
+        setStubMapStr();
+    }
+
+    public void addStub(Long groupId, Integer stubId) {
+        if (this.stubMap == null) {
+            this.stubMap = new HashMap<>();
+        }
+        List<Integer> stubIdList = this.stubMap.get(groupId);
+        if (stubIdList == null) {
+            stubIdList = new ArrayList<>();
+        }
+        stubIdList.add(stubId);
+        this.stubMap.put(groupId, stubIdList);
+
+        setStubMapStr();
+    }
+
+    public void setAniServiceEntranceList(List<AniServiceEntranceDto> entranceList) {
+        if (this.entranceList == null) {
+            this.entranceList = new ArrayList<>();
+        }
+        this.entranceList.addAll(entranceList);
+    }
+
+    public void addAniServiceEntrance(AniServiceEntranceDto entranceDto) {
+        if (this.entranceList == null) {
+            this.entranceList = new ArrayList<>();
+        }
+        this.entranceList.add(entranceDto);
+    }
+
+    public String getStubMapStr() {
+        return stubMapStr;
+    }
+
+    @Override
+    public String toString() {
+        return "AniServiceRegisterDto{" +
+                "aniServiceId='" + aniServiceId + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", version='" + version + '\'' +
+                ", webServerRedirectUri='" + webServerRedirectUri + '\'' +
+                ", accountId=" + accountId +
+                ", entranceList=" + entranceList +
+                ", aniServiceInfo=" + aniServiceInfo +
+                ", stubMap=" + stubMap +
+                '}';
     }
 
     public static AniServiceDto toAniServiceDto(AniServiceRegisterDto registerDto) {

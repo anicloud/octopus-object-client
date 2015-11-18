@@ -26,8 +26,8 @@ public class MessageDecoder implements Decoder.Text<Message> {
             if (s != null && s.contains(MessageType.CALL_ANI_OBJECT.toString())) {
                 message = objectMapper.readValue(s, AniObjectCallMessage.class);
             }
-            if (s != null && s.contains(MessageType.CALL_SYSTEM.toString())) {
-                message = objectMapper.readValue(s, AniFunctionCallMessage.class);
+            if (s != null && s.contains(MessageType.CALL_ANI_ACCOUNT.toString())) {
+                message = objectMapper.readValue(s, AniAccountCallMessage.class);
             }
         } catch (IOException e) {
             e.printStackTrace();

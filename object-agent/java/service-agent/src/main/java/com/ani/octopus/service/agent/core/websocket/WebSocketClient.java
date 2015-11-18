@@ -41,11 +41,12 @@ public class WebSocketClient extends MessageObservable {
             AniObjectCallMessage msg = (AniObjectCallMessage) message;
             notifyObservers(msg, MessageType.CALL_ANI_OBJECT);
         }
-        if (message instanceof AniFunctionCallMessage) {
-            notifyObservers(message, MessageType.CALL_SYSTEM);
+        if (message instanceof AniAccountCallMessage) {
+            notifyObservers(message, MessageType.CALL_ANI_ACCOUNT);
         }
         if (message instanceof AniServiceCallMessage) {
             // TODO
+            // call client method
             try {
                 clientInvoker.invokeAniObjectSync(null);
             } catch (IOException |EncodeException e) {

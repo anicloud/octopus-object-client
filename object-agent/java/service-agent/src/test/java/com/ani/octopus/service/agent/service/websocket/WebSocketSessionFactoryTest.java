@@ -1,11 +1,13 @@
 package com.ani.octopus.service.agent.service.websocket;
 
+import com.ani.octopus.service.agent.core.AnicelMeta;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
-import com.ani.octopus.service.agent.service.websocket.observer.AniFunctionCallMessageObserver;
+import com.ani.octopus.service.agent.service.websocket.observer.AniAccountCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
+import org.junit.Test;
 
 import javax.websocket.Session;
 import java.util.Vector;
@@ -15,8 +17,7 @@ import java.util.Vector;
  */
 public class WebSocketSessionFactoryTest {
 
-    private static final String aniCloudSocketUri = "ws://localhost:8080/service-bus/websocket/123";
-
+    @Test
     public void testSessionFactory() {
         // you need to implement the Invokable interface and register on
         // WebSocketClient for anicloud platform to callback
@@ -27,25 +28,28 @@ public class WebSocketSessionFactoryTest {
         // to receive the message from anicloud platform
         Vector<MessageObserver> messageObservers = new Vector<>();
         messageObservers.add(new AniObjectCallMessageObserver());
-        messageObservers.add(new AniFunctionCallMessageObserver());
+        messageObservers.add(new AniAccountCallMessageObserver());
         socketClient.setObs(messageObservers);
 
         // inject your WebSocketClient instance and anicloud socket destination url to factory
         // and use factory to get the session, than you can use the session to communicate
         // with anicloud platform
+        AnicelMeta anicelMeta = new AnicelMeta();
         WebSocketSessionFactory sessionFactory =
-                new WebSocketSessionFactory(aniCloudSocketUri, socketClient);
+                new WebSocketSessionFactory(socketClient, anicelMeta, "123456", "clientSecret");
         Session session = sessionFactory.getWebSocketSession();
 
         // use AniInvokerImpl service to call platform
-        Invokable clientInvoke = new AniInvokerImpl(session);
+        Invokable aniInvoker = new AniInvokerImpl(session);
         AniStub aniStub = new AniStub();
         aniStub.setObjectId(123L);
         aniStub.setStubId(456L);
 
         try {
-            clientInvoke.invokeAniObjectSync(aniStub);
-            Thread.sleep(2000);
+            aniInvoker.invokeAniObjectSync(aniStub);
+            System.out.println("here");
+            Thread.sleep(4000);
+            System.out.println("wsws");
         } catch (Exception e) {
             e.printStackTrace();
         }

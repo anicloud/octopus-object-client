@@ -1,5 +1,8 @@
 package com.ani.octopus.service.agent.core.websocket;
 
+import com.ani.octopus.service.agent.core.AnicelMeta;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
@@ -12,17 +15,28 @@ import java.net.URI;
  * Created by zhaoyu on 15-10-29.
  */
 public class WebSocketSessionFactory {
+    private static final String ANI_SERVICE_ID = "aniServiceId";
+    private static final String CLIENT_SECRET = "clientSecret";
 
-    private String aniCloudSocketUri = "ws://localhost:8080/service-bus/websocket/123";
     private static Session session;
+
     private WebSocketClient webSocketClient;
+    private AnicelMeta anicelMeta;
+
+    private String aniServiceId;
+    private String clientSecret;
 
     public WebSocketSessionFactory() {
     }
 
-    public WebSocketSessionFactory(String aniCloudSocketUri, WebSocketClient webSocketClient) {
-        this.aniCloudSocketUri = aniCloudSocketUri;
+    public WebSocketSessionFactory(WebSocketClient webSocketClient,
+                                   AnicelMeta anicelMeta,
+                                   String aniServiceId,
+                                   String clientSecret) {
         this.webSocketClient = webSocketClient;
+        this.anicelMeta = anicelMeta;
+        this.aniServiceId = aniServiceId;
+        this.clientSecret = clientSecret;
     }
 
     /**
@@ -30,13 +44,21 @@ public class WebSocketSessionFactory {
      * @return
      */
     public synchronized  Session getWebSocketSession() {
-        if (this.webSocketClient == null) {
-            throw new NullPointerException("webSocketClient is null.");
+        if (this.webSocketClient == null || aniServiceId == null || clientSecret == null) {
+            throw new NullPointerException("some parameter is null.");
         }
         if (session == null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(this.anicelMeta.getServiceBusWebSocketUrl())
+                    .append("/")
+                    .append(this.aniServiceId)
+                    .append("/")
+                    .append(this.clientSecret);
+
+            System.out.println(stringBuilder.toString());
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             try {
-                session = container.connectToServer(this.webSocketClient, URI.create(aniCloudSocketUri));
+                session = container.connectToServer(this.webSocketClient, URI.create(stringBuilder.toString()));
             } catch (DeploymentException | IOException e) {
                 e.printStackTrace();
             }
@@ -44,11 +66,19 @@ public class WebSocketSessionFactory {
         return session;
     }
 
-    public void setAniCloudSocketUri(String aniCloudSocketUri) {
-        this.aniCloudSocketUri = aniCloudSocketUri;
-    }
-
     public void setWebSocketClient(WebSocketClient webSocketClient) {
         this.webSocketClient = webSocketClient;
+    }
+
+    public void setAnicelMeta(AnicelMeta anicelMeta) {
+        this.anicelMeta = anicelMeta;
+    }
+
+    public void setAniServiceId(String aniServiceId) {
+        this.aniServiceId = aniServiceId;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }
