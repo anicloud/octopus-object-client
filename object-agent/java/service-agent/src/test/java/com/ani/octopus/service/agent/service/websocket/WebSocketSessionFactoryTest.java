@@ -4,13 +4,11 @@ import com.ani.octopus.service.agent.core.AnicelMeta;
 import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
-import com.ani.octopus.service.agent.service.websocket.observer.AniAccountCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 import org.junit.Test;
 
-import javax.websocket.Session;
 import java.util.Vector;
 
 /**
@@ -29,7 +27,6 @@ public class WebSocketSessionFactoryTest {
         // to receive the message from anicloud platform
         Vector<MessageObserver> messageObservers = new Vector<>();
         messageObservers.add(new AniObjectCallMessageObserver());
-        messageObservers.add(new AniAccountCallMessageObserver());
         socketClient.setObs(messageObservers);
 
         // inject your WebSocketClient instance and anicloud socket destination url to factory
@@ -43,7 +40,6 @@ public class WebSocketSessionFactoryTest {
         // use AniInvokerImpl service to call platform
         Invokable aniInvoker = new AniInvokerImpl(session);
         AniStub aniStub = new AniStub();
-        aniStub.setObjectId(123L);
         aniStub.setStubId(456);
 
         try {

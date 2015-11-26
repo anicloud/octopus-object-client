@@ -36,6 +36,14 @@ public class Message implements Serializable {
         this.resultType = resultType;
     }
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return "Message{" +

@@ -13,7 +13,8 @@ public class AniStub implements Serializable {
 
     private String keyId = generateKeyId(); // for every times call, unique key
 
-    private Long objectId;
+    private Long targetObjectId;
+    private Long accountId;
     private Integer stubId;
     private Long groupId;
     private AniStubConnType stubConnType;
@@ -26,20 +27,24 @@ public class AniStub implements Serializable {
     public AniStub() {
     }
 
-    public AniStub(Long objectId, Integer stubId, Long groupId, AniStubConnType stubConnType, List<Argument> inputValues) {
-        this.objectId = objectId;
+    public AniStub(Long targetObjectId, Long accountId,
+                   Integer stubId, Long groupId,
+                   AniStubConnType stubConnType,
+                   List<Argument> inputValues) {
+        this.targetObjectId = targetObjectId;
+        this.accountId = accountId;
         this.stubId = stubId;
         this.groupId = groupId;
         this.stubConnType = stubConnType;
         this.inputValues = inputValues;
     }
 
-    public Long getObjectId() {
-        return objectId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Integer getStubId() {
@@ -102,11 +107,19 @@ public class AniStub implements Serializable {
         return keyId;
     }
 
+    public Long getTargetObjectId() {
+        return targetObjectId;
+    }
+
+    public void setTargetObjectId(Long targetObjectId) {
+        this.targetObjectId = targetObjectId;
+    }
+
     @Override
     public String toString() {
         return "AniStub{" +
                 "keyId='" + keyId + '\'' +
-                ", objectId=" + objectId +
+                ", accountId=" + accountId +
                 ", stubId=" + stubId +
                 ", groupId=" + groupId +
                 ", stubConnType=" + stubConnType +

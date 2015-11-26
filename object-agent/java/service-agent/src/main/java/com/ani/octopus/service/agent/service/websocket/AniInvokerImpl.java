@@ -58,7 +58,6 @@ public class AniInvokerImpl implements AniInvokable, AccountInvoker {
         }
         resultValues = stub.getOutputValues();
         session.delete(stub);
-
         return resultValues;
     }
 
