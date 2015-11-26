@@ -1,50 +1,78 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 
+import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObjectCallType;
 import com.ani.octopus.service.agent.service.websocket.account.AniObjectState;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
+import com.ani.octopus.service.agent.service.websocket.dto.Argument;
 import com.ani.octopus.service.agent.service.websocket.dto.message.AniAccountCallMessage;
 import com.ani.octopus.service.agent.service.websocket.dto.message.AniObjectCallMessage;
+import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The implementation of AniInvoker for the third party service to call.
  *
  * Created by zhaoyu on 15-10-30.
  */
-public class AniInvokerImpl implements Invokable, AccountInvoker {
+public class AniInvokerImpl implements AniInvokable, AccountInvoker {
 
-    private Session session;
+    private AniServiceSession session;
 
-    public AniInvokerImpl(Session session) {
+    public AniInvokerImpl() {
+    }
+
+    public AniInvokerImpl(AniServiceSession session) {
         this.session = session;
     }
 
     @Override
-    public synchronized void invokeAniObjectSync(AniStub stub) throws IOException, EncodeException {
+    public synchronized List<Argument> invokeAniObjectSync(AniStub stub) throws IOException, EncodeException {
+        List<Argument> resultValues;
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
-        AniObjectCallMessage message = new AniObjectCallMessage(stub);
-        session.getBasicRemote().sendObject(message);
+        AniObjectCallMessage message = new AniObjectCallMessage(stub, AniStubConnType.SYNC);
+        session.put(stub);
+        session.getSession().getBasicRemote().sendObject(message);
+
+        synchronized (stub) {
+            try {
+                stub.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        stub = session.getAniStub(stub.getKeyId());
+        if (stub == null) {
+            throw new NullPointerException("Stub is null.");
+        }
+        resultValues = stub.getOutputValues();
+        session.delete(stub);
+
+        return resultValues;
     }
 
     @Override
-    public synchronized void invokeAniObjectAsync(AniStub stub) {
+    public void invokeAniObjectAsyn(AniStub stub) throws IOException, EncodeException {
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
-        AniObjectCallMessage message = new AniObjectCallMessage(stub);
-        session.getAsyncRemote().sendObject(message);
+        AniObjectCallMessage message = new AniObjectCallMessage(stub, AniStubConnType.ASYNC);
+        session.getSession().getBasicRemote().sendObject(message);
     }
 
     @Override
-    public void registerAndLogin(AccountObject accountObject) throws IOException, EncodeException {
+    public Message registerAndLogin(AccountObject accountObject) throws IOException, EncodeException {
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -52,11 +80,26 @@ public class AniInvokerImpl implements Invokable, AccountInvoker {
                 accountObject,
                 AccountObjectCallType.REGISTER_AND_LOGIN
         );
-        session.getBasicRemote().sendObject(message);
+        session.put(accountObject);
+        session.getSession().getBasicRemote().sendObject(message);
+        synchronized (accountObject) {
+            try {
+                accountObject.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        accountObject = session.getAccountObject(accountObject.getKeyId());
+        if (accountObject == null) {
+            throw new NullPointerException("AccountObject is null.");
+        }
+        session.delete(accountObject);
+        return accountObject.getResult();
     }
 
     @Override
-    public void login(AccountObject accountObject) throws IOException, EncodeException {
+    public Message login(AccountObject accountObject) throws IOException, EncodeException {
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -64,11 +107,25 @@ public class AniInvokerImpl implements Invokable, AccountInvoker {
                 accountObject,
                 AccountObjectCallType.LOGIN
         );
-        session.getBasicRemote().sendObject(message);
+        session.put(accountObject);
+        session.getSession().getBasicRemote().sendObject(message);
+        synchronized (accountObject) {
+            try {
+                accountObject.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        accountObject = session.getAccountObject(accountObject.getKeyId());
+        if (accountObject == null) {
+            throw new NullPointerException("AccountObject is null.");
+        }
+        session.delete(accountObject);
+        return accountObject.getResult();
     }
 
     @Override
-    public void logout(AccountObject accountObject) throws IOException, EncodeException {
+    public Message logout(AccountObject accountObject) throws IOException, EncodeException {
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -76,11 +133,26 @@ public class AniInvokerImpl implements Invokable, AccountInvoker {
                 accountObject,
                 AccountObjectCallType.LOGOUT
         );
-        session.getBasicRemote().sendObject(message);
+
+        session.put(accountObject);
+        session.getSession().getBasicRemote().sendObject(message);
+        synchronized (accountObject) {
+            try {
+                accountObject.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        accountObject = session.getAccountObject(accountObject.getKeyId());
+        if (accountObject == null) {
+            throw new NullPointerException("AccountObject is null.");
+        }
+        session.delete(accountObject);
+        return accountObject.getResult();
     }
 
     @Override
-    public void remove(AccountObject accountObject) throws IOException, EncodeException {
+    public Message remove(AccountObject accountObject) throws IOException, EncodeException {
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -88,11 +160,25 @@ public class AniInvokerImpl implements Invokable, AccountInvoker {
                 accountObject,
                 AccountObjectCallType.REMOVE
         );
-        session.getBasicRemote().sendObject(message);
+        session.put(accountObject);
+        session.getSession().getBasicRemote().sendObject(message);
+        synchronized (accountObject) {
+            try {
+                accountObject.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        accountObject = session.getAccountObject(accountObject.getKeyId());
+        if (accountObject == null) {
+            throw new NullPointerException("AccountObject is null.");
+        }
+        session.delete(accountObject);
+        return accountObject.getResult();
     }
 
     @Override
-    public void UpdateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException {
+    public Message updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException {
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -100,6 +186,20 @@ public class AniInvokerImpl implements Invokable, AccountInvoker {
                 accountObject,
                 AccountObjectCallType.UPDATE_STUB_LIST
         );
-        session.getBasicRemote().sendObject(message);
+        session.put(accountObject);
+        session.getSession().getBasicRemote().sendObject(message);
+        synchronized (accountObject) {
+            try {
+                accountObject.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        accountObject = session.getAccountObject(accountObject.getKeyId());
+        if (accountObject == null) {
+            throw new NullPointerException("AccountObject is null.");
+        }
+        session.delete(accountObject);
+        return accountObject.getResult();
     }
 }

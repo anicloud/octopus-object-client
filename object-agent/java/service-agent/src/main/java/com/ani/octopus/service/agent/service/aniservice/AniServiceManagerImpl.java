@@ -43,7 +43,6 @@ public class AniServiceManagerImpl extends AbstractBaseService implements AniSer
 
         AniServiceDto aniServiceDto = restTemplateFactory.getRestTemplate(new Class[]{AniServiceDto.class})
                 .postForObject(uriComponentsBuilder.toUriString(), requestEntity, AniServiceDto.class);
-        System.out.println(aniServiceDto.toString());
         return aniServiceDto;
     }
 }

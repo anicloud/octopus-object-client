@@ -1,9 +1,12 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
+import com.ani.octopus.service.agent.service.websocket.dto.Argument;
 
 import javax.websocket.EncodeException;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The basic interface for the third service to call anicloud platform.
@@ -18,11 +21,5 @@ public interface Invokable {
      * @throws IOException
      * @throws EncodeException
      */
-    void invokeAniObjectSync(AniStub stub) throws IOException, EncodeException;
-
-    /**
-     * the async method for aniObject call.
-     * @param stub
-     */
-    void invokeAniObjectAsync(AniStub stub);
+    List<Argument> invokeAniObjectSync(AniStub stub) throws IOException, EncodeException;
 }

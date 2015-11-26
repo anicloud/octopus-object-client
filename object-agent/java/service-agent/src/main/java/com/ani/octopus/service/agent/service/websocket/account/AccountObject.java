@@ -1,13 +1,11 @@
 package com.ani.octopus.service.agent.service.websocket.account;
 
+import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhaoyu on 15-11-14.
@@ -16,12 +14,17 @@ public class AccountObject implements Serializable {
     private static final long serialVersionUID = 7187234248824052204L;
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    private String keyId = generateKeyId();
+
     private Long accountId;
     private Map<Long, List<Integer>> stubMap;
     private String stubMapStr;
     private AniObjectState objectState;
 
+    private Message result;
+
     public AccountObject() {
+        this.keyId = generateKeyId();
     }
 
     public AccountObject(Long accountId, Map<Long, List<Integer>> stubMap, AniObjectState objectState) {
@@ -93,6 +96,18 @@ public class AccountObject implements Serializable {
         return stubMapStr;
     }
 
+    public String getKeyId() {
+        return keyId;
+    }
+
+    public Message getResult() {
+        return result;
+    }
+
+    public void setResult(Message result) {
+        this.result = result;
+    }
+
     @Override
     public String toString() {
         return "AccountObject{" +
@@ -101,5 +116,9 @@ public class AccountObject implements Serializable {
                 ", stubMapStr='" + stubMapStr + '\'' +
                 ", objectState=" + objectState +
                 '}';
+    }
+
+    public static String generateKeyId() {
+        return UUID.randomUUID().toString();
     }
 }

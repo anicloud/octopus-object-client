@@ -2,12 +2,13 @@ package com.ani.octopus.service.agent.service.websocket.dto.message;
 
 
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.ResultType;
 
 /**
  * Created by zhaoyu on 15-10-30.
  */
-public class AniServiceCallMessage extends Message<AniServiceCallMessage> {
+public class AniServiceCallMessage extends Message {
 
     private AniStub aniStub;
 

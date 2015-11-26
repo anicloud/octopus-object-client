@@ -1,6 +1,10 @@
 package com.ani.octopus.service.agent.core.websocket;
 
 import com.ani.octopus.service.agent.service.websocket.Invokable;
+import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
+import com.ani.octopus.service.agent.service.websocket.dto.Argument;
 import com.ani.octopus.service.agent.service.websocket.dto.message.*;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObservable;
 import org.slf4j.Logger;
@@ -8,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -21,6 +26,7 @@ public class WebSocketClient extends MessageObservable {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketClient.class);
 
     private Invokable clientInvoker;
+    private AniServiceSession aniServiceSession;
 
     public WebSocketClient() {
     }
@@ -39,16 +45,41 @@ public class WebSocketClient extends MessageObservable {
         LOGGER.info("onMessage, session id {}, message {}", session.getId(), message);
         if (message instanceof AniObjectCallMessage) {
             AniObjectCallMessage msg = (AniObjectCallMessage) message;
-            notifyObservers(msg, MessageType.CALL_ANI_OBJECT);
+            if (msg.getConnType() == AniStubConnType.ASYNC) {
+                notifyObservers(msg, MessageType.CALL_ANI_OBJECT);
+            }
+            if (msg.getConnType() == AniStubConnType.SYNC) {
+                AniStub aniStub = aniServiceSession.getAniStub(msg.getAniStub().getKeyId());
+                if (aniStub == null) {
+                    throw new NullPointerException("AniStub is Null.");
+                }
+                aniStub.setOutputValues(msg.getAniStub().getOutputValues());
+                synchronized (aniStub) {
+                    aniStub.notify();
+                }
+            }
+
         }
         if (message instanceof AniAccountCallMessage) {
-            notifyObservers(message, MessageType.CALL_ANI_ACCOUNT);
+            AniAccountCallMessage msg = (AniAccountCallMessage) message;
+            AccountObject accountObject = aniServiceSession.getAccountObject(msg.getAccountObject().getKeyId());
+            if (accountObject == null) {
+                throw new NullPointerException("AniStub is Null.");
+            }
+            accountObject.setResult(msg);
+            synchronized (accountObject) {
+                accountObject.notify();
+            }
+
         }
         if (message instanceof AniServiceCallMessage) {
-            // TODO
-            // call client method
+            LOGGER.info("AniService call from anicloud.");
+            AniServiceCallMessage msg = (AniServiceCallMessage) message;
             try {
-                clientInvoker.invokeAniObjectSync(null);
+                AniStub aniStub = msg.getAniStub();
+                List<Argument> outputValues = clientInvoker.invokeAniObjectSync(aniStub);
+                aniStub.setOutputValues(outputValues);
+                session.getBasicRemote().sendObject(msg);
             } catch (IOException |EncodeException e) {
                 e.printStackTrace();
             }
@@ -68,5 +99,9 @@ public class WebSocketClient extends MessageObservable {
 
     public void setClientInvoker(Invokable clientInvoker) {
         this.clientInvoker = clientInvoker;
+    }
+
+    public void setAniServiceSession(AniServiceSession aniServiceSession) {
+        this.aniServiceSession = aniServiceSession;
     }
 }

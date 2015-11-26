@@ -1,6 +1,7 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 import com.ani.octopus.service.agent.core.AnicelMeta;
+import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
 import com.ani.octopus.service.agent.service.websocket.observer.AniAccountCallMessageObserver;
@@ -36,14 +37,14 @@ public class WebSocketSessionFactoryTest {
         // with anicloud platform
         AnicelMeta anicelMeta = new AnicelMeta();
         WebSocketSessionFactory sessionFactory =
-                new WebSocketSessionFactory(socketClient, anicelMeta, "123456", "clientSecret");
-        Session session = sessionFactory.getWebSocketSession();
+                new WebSocketSessionFactory(socketClient, anicelMeta, "926168327152741609", "f818a4974030cad047b64b01629a02dc");
+        AniServiceSession session = sessionFactory.getAniServiceSession();
 
         // use AniInvokerImpl service to call platform
         Invokable aniInvoker = new AniInvokerImpl(session);
         AniStub aniStub = new AniStub();
         aniStub.setObjectId(123L);
-        aniStub.setStubId(456L);
+        aniStub.setStubId(456);
 
         try {
             aniInvoker.invokeAniObjectSync(aniStub);

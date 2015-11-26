@@ -18,7 +18,7 @@ public class WebSocketSessionFactory {
     private static final String ANI_SERVICE_ID = "aniServiceId";
     private static final String CLIENT_SECRET = "clientSecret";
 
-    private static Session session;
+    private AniServiceSession aniServiceSession;
 
     private WebSocketClient webSocketClient;
     private AnicelMeta anicelMeta;
@@ -43,11 +43,11 @@ public class WebSocketSessionFactory {
      * get the singleton web socket session instance.
      * @return
      */
-    public synchronized  Session getWebSocketSession() {
+    public synchronized  AniServiceSession getAniServiceSession() {
         if (this.webSocketClient == null || aniServiceId == null || clientSecret == null) {
             throw new NullPointerException("some parameter is null.");
         }
-        if (session == null) {
+        if (aniServiceSession == null) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(this.anicelMeta.getServiceBusWebSocketUrl())
                     .append("/")
@@ -58,12 +58,14 @@ public class WebSocketSessionFactory {
             System.out.println(stringBuilder.toString());
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             try {
-                session = container.connectToServer(this.webSocketClient, URI.create(stringBuilder.toString()));
+                Session session = container.connectToServer(this.webSocketClient, URI.create(stringBuilder.toString()));
+                aniServiceSession = new AniServiceSession(session);
+                this.webSocketClient.setAniServiceSession(aniServiceSession);
             } catch (DeploymentException | IOException e) {
                 e.printStackTrace();
             }
         }
-        return session;
+        return aniServiceSession;
     }
 
     public void setWebSocketClient(WebSocketClient webSocketClient) {

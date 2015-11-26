@@ -2,6 +2,8 @@ package com.ani.octopus.service.agent.service.websocket.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by zhaoyu on 15-10-29.
@@ -9,8 +11,10 @@ import java.util.List;
 public class AniStub implements Serializable {
     private static final long serialVersionUID = 3790604372796535245L;
 
+    private String keyId = generateKeyId(); // for every times call, unique key
+
     private Long objectId;
-    private Long stubId;
+    private Integer stubId;
     private Long groupId;
     private AniStubConnType stubConnType;
 
@@ -22,17 +26,12 @@ public class AniStub implements Serializable {
     public AniStub() {
     }
 
-    public AniStub(Long objectId, Long stubId, Long groupId, AniStubConnType stubConnType, List<Argument> inputValues, List<Argument> outputValues) {
+    public AniStub(Long objectId, Integer stubId, Long groupId, AniStubConnType stubConnType, List<Argument> inputValues) {
         this.objectId = objectId;
         this.stubId = stubId;
         this.groupId = groupId;
         this.stubConnType = stubConnType;
         this.inputValues = inputValues;
-        this.outputValues = outputValues;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Long getObjectId() {
@@ -43,11 +42,11 @@ public class AniStub implements Serializable {
         this.objectId = objectId;
     }
 
-    public Long getStubId() {
+    public Integer getStubId() {
         return stubId;
     }
 
-    public void setStubId(Long stubId) {
+    public void setStubId(Integer stubId) {
         this.stubId = stubId;
     }
 
@@ -99,16 +98,26 @@ public class AniStub implements Serializable {
         this.result = result;
     }
 
+    public String getKeyId() {
+        return keyId;
+    }
+
     @Override
     public String toString() {
         return "AniStub{" +
-                "objectId=" + objectId +
+                "keyId='" + keyId + '\'' +
+                ", objectId=" + objectId +
                 ", stubId=" + stubId +
                 ", groupId=" + groupId +
                 ", stubConnType=" + stubConnType +
                 ", resultType=" + resultType +
+                ", result='" + result + '\'' +
                 ", inputValues=" + inputValues +
                 ", outputValues=" + outputValues +
                 '}';
+    }
+
+    public static String generateKeyId() {
+        return UUID.randomUUID().toString();
     }
 }

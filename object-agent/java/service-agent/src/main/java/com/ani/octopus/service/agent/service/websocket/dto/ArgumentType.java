@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by zhaoyu on 15-10-29.
  */
-public enum DataType {
+public enum ArgumentType {
     INTEGER(Integer.class),
     PERCENTAGE(Short.class),
     FLOAT(Float.class),
@@ -18,7 +18,7 @@ public enum DataType {
 
     private final Class dataClass;
 
-    DataType(Class dataClass) {
+    ArgumentType(Class dataClass) {
         this.dataClass = dataClass;
     }
 

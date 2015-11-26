@@ -3,12 +3,13 @@ package com.ani.octopus.service.agent.service.websocket.dto.message;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObjectCallType;
 import com.ani.octopus.service.agent.service.websocket.account.AniObjectState;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.ResultType;
 
 /**
  * Created by zhaoyu on 15-11-16.
  */
-public class AniAccountCallMessage extends Message<AniAccountCallMessage> {
+public class AniAccountCallMessage extends Message {
     private static final long serialVersionUID = 5686024362447262789L;
 
     private AccountObject accountObject;

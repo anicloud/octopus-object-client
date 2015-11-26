@@ -1,5 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket.dto.message;
 
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.ResultType;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by zhaoyu on 15-10-30.
  */
-public abstract class Message<T> implements Serializable {
+public class Message implements Serializable {
     private static final long serialVersionUID = 2242277563485901805L;
 
     public MessageType messageType;
