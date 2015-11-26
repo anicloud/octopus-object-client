@@ -52,10 +52,6 @@ public class MessageObservable {
                     && (observer instanceof AniObjectCallMessageObserver)) {
                 observer.update(this, object);
             }
-            if (messageType == MessageType.CALL_ANI_ACCOUNT
-                    && (observer instanceof AniAccountCallMessageObserver)) {
-                observer.update(this, object);
-            }
         }
 
     }
