@@ -15,6 +15,10 @@ public class AniAccountCallMessage extends Message {
     private AccountObject accountObject;
     private AccountObjectCallType accountObjectCallType;
 
+    public AniAccountCallMessage() {
+        super();
+    }
+
     public AniAccountCallMessage(AccountObject accountObject,
                                  AccountObjectCallType accountObjectCallType) {
         super(MessageType.CALL_ANI_ACCOUNT);

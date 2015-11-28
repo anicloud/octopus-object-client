@@ -4,25 +4,29 @@ import com.ani.octopus.service.agent.core.AnicelMeta;
 import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
-import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
+import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
+import com.ani.octopus.service.agent.service.websocket.account.AniObjectState;
 import com.ani.octopus.service.agent.service.websocket.dto.Argument;
+import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
 import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
-import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
-/**
- * Created by zhaoyu on 15-10-30.
- */
-public class WebSocketSessionFactoryTest {
+import static org.junit.Assert.*;
 
-    @Ignore
-    public void testSessionFactory() {
+/**
+ * Created by zhaoyu on 15-11-28.
+ */
+public class AniInvokerImplTest {
+
+    private AniServiceSession serviceSession;
+
+    @Before
+    public void before() {
         // you need to implement the Invokable interface and register on
         // WebSocketClient for anicloud platform to callback
         Invokable invokable = new ClientInvokerImpl();
@@ -40,27 +44,50 @@ public class WebSocketSessionFactoryTest {
         AnicelMeta anicelMeta = new AnicelMeta();
         WebSocketSessionFactory sessionFactory =
                 new WebSocketSessionFactory(socketClient, anicelMeta, "926168327152741609", "f818a4974030cad047b64b01629a02dc");
-        AniServiceSession session = sessionFactory.getAniServiceSession();
+        serviceSession = sessionFactory.getAniServiceSession();
+    }
 
+    @Test
+    public void testInvokeAniObjectSync() throws Exception {
+
+    }
+
+    @Test
+    public void testInvokeAniObjectAsyn() throws Exception {
+
+    }
+
+    @Test
+    public void testRegisterAndLogin() throws Exception {
         // use AniInvokerImpl service to call platform
-        Invokable aniInvoker = new AniInvokerImpl(session);
-        List<Argument> argumentList = new ArrayList<>();
-        AniStub aniStub = new AniStub(
-                102L,
+        AccountInvoker accountInvoker = new AniInvokerImpl(serviceSession);
+        AccountObject accountObject = new AccountObject(
                 1707593791689932096L,
-                1,
-                1L,
-                AniStubConnType.SYNC,
-                argumentList
+                AniObjectState.ACTIVE
         );
+        accountObject.addStub(1L, 1);
 
-        try {
-            List<Argument> result = aniInvoker.invokeAniObjectSync(aniStub);
-            System.out.println("here");
-            Thread.sleep(4000);
-            System.out.println("wsws");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Message message = accountInvoker.registerAndLogin(accountObject);
+        System.out.println(message);
+    }
+
+    @Test
+    public void testLogin() throws Exception {
+
+    }
+
+    @Test
+    public void testLogout() throws Exception {
+
+    }
+
+    @Test
+    public void testRemove() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateAccountObjectStubList() throws Exception {
+
     }
 }

@@ -1,7 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
-import com.ani.octopus.service.agent.service.websocket.account.AniObjectState;
 import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
 
 import javax.websocket.EncodeException;

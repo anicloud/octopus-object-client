@@ -14,17 +14,13 @@ public class Argument implements Serializable {
     private ArgumentType argumentType;
     private List<Object> value;
 
-    private Integer size;
-
     public Argument() {
     }
 
-    public Argument(String name, ArgumentType argumentType,
-                    List<Object> value, Integer size) {
+    public Argument(String name, ArgumentType argumentType, List<Object> value) {
         this.name = name;
         this.argumentType = argumentType;
         this.value = value;
-        this.size = size;
     }
 
     public String getName() {
@@ -51,14 +47,6 @@ public class Argument implements Serializable {
         this.value = value;
     }
 
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,12 +54,12 @@ public class Argument implements Serializable {
         Argument argument = (Argument) o;
         return Objects.equals(name, argument.name) &&
                 Objects.equals(argumentType, argument.argumentType) &&
-                Objects.equals(size, argument.size);
+                Objects.equals(value, argument.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, argumentType, size);
+        return Objects.hash(name, argumentType, value);
     }
 
     @Override
@@ -80,7 +68,6 @@ public class Argument implements Serializable {
                 "name='" + name + '\'' +
                 ", argumentType=" + argumentType +
                 ", value=" + value +
-                ", size=" + size +
                 '}';
     }
 }

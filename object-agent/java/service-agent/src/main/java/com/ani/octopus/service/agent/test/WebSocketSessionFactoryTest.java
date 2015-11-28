@@ -5,17 +5,22 @@ import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
 import com.ani.octopus.service.agent.service.websocket.*;
+import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
+import com.ani.octopus.service.agent.service.websocket.dto.Argument;
 import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 
 import javax.websocket.Session;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
  * Created by zhaoyu on 15-10-30.
  */
 public class WebSocketSessionFactoryTest {
+
 
     public void testSessionFactory() {
         // you need to implement the Invokable interface and register on
@@ -39,8 +44,15 @@ public class WebSocketSessionFactoryTest {
 
         // use AniInvokerImpl service to call platform
         Invokable aniInvoker = new AniInvokerImpl(session);
-        AniStub aniStub = new AniStub();
-        aniStub.setStubId(456);
+        List<Argument> argumentList = new ArrayList<>();
+        AniStub aniStub = new AniStub(
+                102L,
+                1707593791689932096L,
+                1,
+                1L,
+                AniStubConnType.SYNC,
+                argumentList
+        );
 
 
         try {

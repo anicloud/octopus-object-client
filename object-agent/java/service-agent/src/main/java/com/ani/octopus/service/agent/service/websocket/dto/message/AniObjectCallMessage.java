@@ -12,6 +12,10 @@ public class AniObjectCallMessage extends Message {
     private AniStub aniStub;
     private AniStubConnType connType;
 
+    public AniObjectCallMessage() {
+        super();
+    }
+
     public AniObjectCallMessage(AniStub aniStub, AniStubConnType connType) {
         super(MessageType.CALL_ANI_OBJECT);
         this.aniStub = aniStub;
