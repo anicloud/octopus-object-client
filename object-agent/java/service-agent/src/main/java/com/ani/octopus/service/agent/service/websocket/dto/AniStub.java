@@ -15,9 +15,8 @@ public class AniStub implements Serializable {
 
     private Long targetObjectId;
     private Long accountId;
-    private Integer stubId;
     private Long groupId;
-    private AniStubConnType stubConnType;
+    private Integer stubId;
 
     private ResultType resultType;
     private String result;
@@ -27,15 +26,12 @@ public class AniStub implements Serializable {
     public AniStub() {
     }
 
-    public AniStub(Long targetObjectId, Long accountId,
-                   Integer stubId, Long groupId,
-                   AniStubConnType stubConnType,
-                   List<Argument> inputValues) {
+    public AniStub(Long targetObjectId, Long accountId, Long groupId,
+                   Integer stubId, List<Argument> inputValues) {
         this.targetObjectId = targetObjectId;
         this.accountId = accountId;
-        this.stubId = stubId;
         this.groupId = groupId;
-        this.stubConnType = stubConnType;
+        this.stubId = stubId;
         this.inputValues = inputValues;
     }
 
@@ -61,14 +57,6 @@ public class AniStub implements Serializable {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
-    }
-
-    public AniStubConnType getStubConnType() {
-        return stubConnType;
-    }
-
-    public void setStubConnType(AniStubConnType stubConnType) {
-        this.stubConnType = stubConnType;
     }
 
     public ResultType getResultType() {
@@ -122,7 +110,6 @@ public class AniStub implements Serializable {
                 ", accountId=" + accountId +
                 ", stubId=" + stubId +
                 ", groupId=" + groupId +
-                ", stubConnType=" + stubConnType +
                 ", resultType=" + resultType +
                 ", result='" + result + '\'' +
                 ", inputValues=" + inputValues +

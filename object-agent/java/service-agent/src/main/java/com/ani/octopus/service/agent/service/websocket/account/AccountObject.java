@@ -1,6 +1,7 @@
 package com.ani.octopus.service.agent.service.websocket.account;
 
 import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,6 +36,10 @@ public class AccountObject implements Serializable {
         setStubMapStr();
     }
 
+    public AccountObject(Long accountId) {
+        this.accountId = accountId;
+    }
+
     public AccountObject(Long accountId, AniObjectState objectState) {
         this.accountId = accountId;
         this.objectState = objectState;
@@ -58,8 +63,10 @@ public class AccountObject implements Serializable {
         if (this.stubMap == null) {
             this.stubMap = new HashMap<>();
         }
-        this.stubMap.putAll(stubMap);
-        setStubMapStr();
+        if (stubMap != null) {
+            this.stubMap.putAll(stubMap);
+            setStubMapStr();
+        }
     }
 
     public void addStub(Long groupId, Integer stubId) {

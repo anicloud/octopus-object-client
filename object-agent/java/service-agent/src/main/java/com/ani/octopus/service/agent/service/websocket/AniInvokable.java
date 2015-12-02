@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by zhaoyu on 15-11-26.
  */
-public interface AniInvokable extends Invokable {
+public interface AniInvokable extends Invokable, AccountInvoker {
     /**
      * Asynchronous call, but you should register your observer to get the return messsage
      * @param stub

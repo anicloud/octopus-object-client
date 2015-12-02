@@ -28,6 +28,14 @@ public class Message implements Serializable {
         this.msg = msg;
     }
 
+    public MessageType getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
+    }
+
     public ResultType getResultType() {
         return resultType;
     }

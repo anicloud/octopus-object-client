@@ -22,7 +22,7 @@ import java.util.List;
  *
  * Created by zhaoyu on 15-10-30.
  */
-public class AniInvokerImpl implements AniInvokable, AccountInvoker {
+public class AniInvokerImpl implements AniInvokable {
 
     private AniServiceSession session;
 
