@@ -48,9 +48,8 @@ public class WebSocketSessionFactoryTest {
         AniStub aniStub = new AniStub(
                 102L,
                 1707593791689932096L,
-                1,
                 1L,
-                AniStubConnType.SYNC,
+                1,
                 argumentList
         );
 
