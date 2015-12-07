@@ -30,7 +30,7 @@ public class AniInvokerImplTest {
     public void before() {
         // you need to implement the Invokable interface and register on
         // WebSocketClient for anicloud platform to callback
-        Invokable invokable = new ClientInvokerImpl();
+        ClientInvokable invokable = new ClientInvokerImpl();
         WebSocketClient socketClient = new WebSocketClient(invokable);
 
         // you need to implement your own observer and register on socketClient
