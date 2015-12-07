@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -15,8 +16,10 @@ public class AccountObject implements Serializable {
     private static final long serialVersionUID = 7187234248824052204L;
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    @NotNull
     private String keyId = generateKeyId();
 
+    @NotNull
     private Long accountId;
     private Map<Long, List<Integer>> stubMap;
     private String stubMapStr;
@@ -28,10 +31,9 @@ public class AccountObject implements Serializable {
         this.keyId = generateKeyId();
     }
 
-    public AccountObject(Long accountId, Map<Long, List<Integer>> stubMap, AniObjectState objectState) {
+    public AccountObject(Long accountId, Map<Long, List<Integer>> stubMap) {
         this.accountId = accountId;
         this.stubMap = stubMap;
-        this.objectState = objectState;
 
         setStubMapStr();
     }

@@ -1,5 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket.dto;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +11,9 @@ import java.util.Objects;
 public class Argument implements Serializable {
     private static final long serialVersionUID = -135305841275262624L;
 
+    @NotNull
     private String name;
+    @NotNull
     private ArgumentType argumentType;
     private List<Object> value;
 

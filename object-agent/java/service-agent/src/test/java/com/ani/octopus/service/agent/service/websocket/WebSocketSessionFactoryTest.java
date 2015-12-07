@@ -25,7 +25,7 @@ public class WebSocketSessionFactoryTest {
     public void testSessionFactory() {
         // you need to implement the Invokable interface and register on
         // WebSocketClient for anicloud platform to callback
-        Invokable invokable = new ClientInvokerImpl();
+        ClientInvokable invokable = new ClientInvokerImpl();
         WebSocketClient socketClient = new WebSocketClient(invokable);
 
         // you need to implement your own observer and register on socketClient
@@ -43,7 +43,7 @@ public class WebSocketSessionFactoryTest {
         AniServiceSession session = sessionFactory.getAniServiceSession();
 
         // use AniInvokerImpl service to call platform
-        Invokable aniInvoker = new AniInvokerImpl(session);
+        AniInvokable aniInvoker = new AniInvokerImpl(session);
         List<Argument> argumentList = new ArrayList<>();
         AniStub aniStub = new AniStub(
                 102L,

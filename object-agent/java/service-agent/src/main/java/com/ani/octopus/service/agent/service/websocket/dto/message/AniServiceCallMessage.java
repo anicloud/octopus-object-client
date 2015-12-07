@@ -12,6 +12,10 @@ public class AniServiceCallMessage extends Message {
 
     private AniStub aniStub;
 
+    public AniServiceCallMessage() {
+        super();
+    }
+
     public AniServiceCallMessage(AniStub aniStub) {
         super(MessageType.CALL_ANI_SERVICE);
         this.aniStub = aniStub;
