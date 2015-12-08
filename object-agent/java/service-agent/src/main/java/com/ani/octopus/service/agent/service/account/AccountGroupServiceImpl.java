@@ -3,6 +3,7 @@ package com.ani.octopus.service.agent.service.account;
 import com.ani.octopus.service.agent.core.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.service.account.dto.GroupType;
 import com.ani.octopus.service.agent.service.account.dto.AccountDto;
 import com.ani.octopus.service.agent.service.account.dto.AccountGroupDto;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +35,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
     @Override
     public AccountGroupDto save(GroupFormDto accountGroup) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountGroup)) {
+            throw new ValidationException("Invalid GroupFormDto Instance.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -52,6 +58,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
     @Override
     public AccountGroupDto modify(GroupFormDto accountGroup) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountGroup)) {
+            throw new ValidationException("Invalid GroupFormDto Instance.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -71,6 +81,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
     @Override
     public Message remove(Long accountId, Long groupId) {
+        if (accountId == null || groupId == null) {
+            throw new NullPointerException("AccountId or GroupId is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getGroupDeleteUrl())
@@ -91,6 +105,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
     @Override
     public AccountGroupDto getById(Long groupId) {
+        if (groupId == null) {
+            throw new NullPointerException("GroupId is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getGroupById())
@@ -107,6 +125,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
     @Override
     public Collection<AccountGroupDto> getByAccountAndGroupType(Long accountId, GroupType groupType) {
+        if (accountId == null || groupType == null) {
+            throw new NullPointerException("GroupId is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getGroupByAccountIdAndType())
@@ -126,6 +148,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
     @Override
     public Collection<AccountDto> getAccountsInGroup(Long groupId) {
+        if (groupId == null || groupId == null) {
+            throw new NullPointerException("GroupId is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getGroupAccountsIn())

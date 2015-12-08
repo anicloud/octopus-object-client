@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -29,7 +30,7 @@ public class AniInvokerImplTest {
     public void before() {
         // you need to implement the Invokable interface and register on
         // WebSocketClient for anicloud platform to callback
-        Invokable invokable = new ClientInvokerImpl();
+        ClientInvokable invokable = new ClientInvokerImpl();
         WebSocketClient socketClient = new WebSocketClient(invokable);
 
         // you need to implement your own observer and register on socketClient
@@ -47,21 +48,20 @@ public class AniInvokerImplTest {
         serviceSession = sessionFactory.getAniServiceSession();
     }
 
-    @Ignore
+    @Test
     public void testInvokeAniObjectSync() throws Exception {
         AniInvokable aniInvokable = new AniInvokerImpl(serviceSession);
-        AccountObject accountObject = new AccountObject(1707593791689932096L);
-        Message message = aniInvokable.login(accountObject);
-        System.out.println(message);
 
+        List<Argument> inputValues = new ArrayList<>();
         AniStub aniStub = new AniStub(
-                2174747981244009086L,
+                6233851390026698963L,
                 1707593791689932096L,
                 1L,
                 2,
-                null
+                inputValues
         );
         List<Argument> result = aniInvokable.invokeAniObjectSync(aniStub);
+        System.out.println(result);
     }
 
     @Test

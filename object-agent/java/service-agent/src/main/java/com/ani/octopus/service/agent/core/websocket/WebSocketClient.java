@@ -1,6 +1,6 @@
 package com.ani.octopus.service.agent.core.websocket;
 
-import com.ani.octopus.service.agent.service.websocket.Invokable;
+import com.ani.octopus.service.agent.service.websocket.ClientInvokable;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
@@ -25,13 +25,13 @@ import java.util.List;
 public class WebSocketClient extends MessageObservable {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketClient.class);
 
-    private Invokable clientInvoker;
+    private ClientInvokable clientInvoker;
     private AniServiceSession aniServiceSession;
 
     public WebSocketClient() {
     }
 
-    public WebSocketClient(Invokable clientInvoker) {
+    public WebSocketClient(ClientInvokable clientInvoker) {
         this.clientInvoker = clientInvoker;
     }
 
@@ -87,17 +87,18 @@ public class WebSocketClient extends MessageObservable {
     }
 
     @OnError
-    public void onError(Throwable throwable) {
+    public void onError(Session session, Throwable throwable) {
         LOGGER.info("onError, {}.", throwable.getCause());
-        throwable.printStackTrace();
+        clientInvoker.sessionOnError(session.getId(), throwable);
     }
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         LOGGER.info("onClose, session id {}.", session.getId());
+        clientInvoker.sessionOnClose(session.getId(), closeReason);
     }
 
-    public void setClientInvoker(Invokable clientInvoker) {
+    public void setClientInvoker(ClientInvokable clientInvoker) {
         this.clientInvoker = clientInvoker;
     }
 

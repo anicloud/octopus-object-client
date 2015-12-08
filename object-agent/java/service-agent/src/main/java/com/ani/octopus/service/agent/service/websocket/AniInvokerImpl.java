@@ -1,10 +1,10 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 
+import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObjectCallType;
-import com.ani.octopus.service.agent.service.websocket.account.AniObjectState;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.Argument;
@@ -12,10 +12,12 @@ import com.ani.octopus.service.agent.service.websocket.dto.message.AniAccountCal
 import com.ani.octopus.service.agent.service.websocket.dto.message.AniObjectCallMessage;
 import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
 
+import javax.validation.ValidationException;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The implementation of AniInvoker for the third party service to call.
@@ -35,6 +37,9 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public synchronized List<Argument> invokeAniObjectSync(AniStub stub) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(stub)) {
+            throw new ValidationException("Invalid AniStub Instance.");
+        }
         List<Argument> resultValues;
 
         if (this.session == null) {
@@ -63,6 +68,10 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public void invokeAniObjectAsyn(AniStub stub) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(stub)) {
+            throw new ValidationException("Invalid AniStub Instance.");
+        }
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -72,6 +81,10 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message registerAndLogin(AccountObject accountObject) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
+            throw new ValidationException("Invalid Account Object Instance.");
+        }
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -99,6 +112,10 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message login(AccountObject accountObject) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
+            throw new ValidationException("Invalid Account Object Instance.");
+        }
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -125,6 +142,10 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message logout(AccountObject accountObject) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
+            throw new ValidationException("Invalid Account Object Instance.");
+        }
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -152,6 +173,10 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message remove(AccountObject accountObject) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
+            throw new ValidationException("Invalid Account Object Instance.");
+        }
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }
@@ -178,6 +203,10 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
+            throw new ValidationException("Invalid Account Object Instance.");
+        }
+
         if (this.session == null) {
             throw new NullPointerException("webSocket session is null.");
         }

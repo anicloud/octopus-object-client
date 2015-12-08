@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  */
 public class AniServiceManagerTest {
 
-    @Ignore
+    @Test
     public void testAniServiceRegister() {
         AnicelMeta anicelMeta = new AnicelMeta();
         RestTemplateFactory templateFactory = new RestTemplateFactory();

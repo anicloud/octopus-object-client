@@ -1,5 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket.dto;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
@@ -11,11 +12,16 @@ import java.util.UUID;
 public class AniStub implements Serializable {
     private static final long serialVersionUID = 3790604372796535245L;
 
+    @NotNull
     private String keyId = generateKeyId(); // for every times call, unique key
 
+    @NotNull
     private Long targetObjectId;
+    @NotNull
     private Long accountId;
+    @NotNull
     private Long groupId;
+    @NotNull
     private Integer stubId;
 
     private ResultType resultType;
