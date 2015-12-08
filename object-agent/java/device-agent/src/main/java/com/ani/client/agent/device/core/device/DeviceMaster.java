@@ -4,6 +4,7 @@ import com.ani.client.agent.device.core.account.Account;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class DeviceMaster extends Device {
     }
 
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         super.serializeByte(dos);
         if (slaves == null) {
             dos.writeInt(0);
@@ -51,7 +52,7 @@ public class DeviceMaster extends Device {
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         super.unserializeByte(dis);
         int slaveSize = dis.readInt();
         if (slaveSize > 0) {

@@ -4,6 +4,7 @@ import com.ani.client.agent.device.core.message.ByteSerializable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Created by huangbin on 10/22/15.
@@ -31,14 +32,14 @@ public class Function implements ByteSerializable {
     }
 
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         dos.writeInt(id);
         dos.writeLong(groupId);
         dos.writeByte(type.getValue());
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         id = dis.readInt();
         groupId = dis.readLong();
         type = ConnType.getType((int) dis.readByte());

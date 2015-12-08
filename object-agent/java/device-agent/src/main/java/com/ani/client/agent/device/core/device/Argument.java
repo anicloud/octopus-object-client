@@ -6,162 +6,205 @@ package com.ani.client.agent.device.core.device;
 
 import com.ani.client.agent.device.core.message.ByteSerializable;
 import com.ani.client.agent.device.core.message.MessageUtils;
+import com.sun.corba.se.impl.naming.cosnaming.NamingUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Integer[] arg = new Integer(2) results in:
  * Argument arg = new(ArgumentType.INTEGER, 2);
  */
 public class Argument implements ByteSerializable {
-    /**
-     * Argument type.
-     */
-    private ArgumentType type;
+    private Class declaredClass;
+    private Object instance;
 
-    /**
-     * Argument list size.
-     */
-    private Integer size;
+    private static final Map<Character, Class> PRIMITIVE_NAMES = new HashMap<>();
 
-    /**
-     * Argument value.
-     */
-    private List value;
+    static {
+        PRIMITIVE_NAMES.put('N', Null.class);
+        PRIMITIVE_NAMES.put('V', Void.class);
+        PRIMITIVE_NAMES.put('T', Boolean.TYPE);
+        PRIMITIVE_NAMES.put('B', Byte.TYPE);
+        PRIMITIVE_NAMES.put('C', Character.TYPE);
+        PRIMITIVE_NAMES.put('S', Short.TYPE);
+        PRIMITIVE_NAMES.put('I', Integer.TYPE);
+        PRIMITIVE_NAMES.put('L', Long.TYPE);
+        PRIMITIVE_NAMES.put('F', Float.TYPE);
+        PRIMITIVE_NAMES.put('D', Double.TYPE);
+    }
+
+    private static class Null {
+        private Class declaredClass;
+
+        public Null() {
+        }
+
+        public Null(Class declaredClass) {
+            this.declaredClass = declaredClass;
+        }
+
+    }
 
     public Argument() {
     }
 
-    public Argument(ArgumentType type, Integer size) {
-        this.type = type;
-        this.size = size;
+    public Argument(Class declaredClass, Object instance) {
+        this.declaredClass = declaredClass;
+        this.instance = instance;
     }
 
-    public void serializeByte(DataOutputStream dos) throws Exception {
-        dos.writeByte(type.getValue());
-        if (value == null) {
-            dos.writeInt(0);
-        } else {
-            dos.writeInt(size);
-            switch (type) {
-                case BOOLEAN:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeBoolean((Boolean) value.get(i));
-                    }
-                    break;
-                case SHORT:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeShort((Short) value.get(i));
-                    }
-                    break;
-                case INTEGER:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeInt((Integer) value.get(i));
-                    }
-                    break;
-                case LONG:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeLong((Long) value.get(i));
-                    }
-                    break;
-                case FLOAT:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeFloat((Float) value.get(i));
-                    }
-                    break;
-                case DOUBLE:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeDouble((Double) value.get(i));
-                    }
-                    break;
-                case BYTE:
-                    for (int i = 0; i < size; i++) {
-                        dos.writeByte((Byte) value.get(i));
-                    }
-                    break;
-                case STRING:
-                    MessageUtils.writeString(dos, (String) value.get(0));
-                    break;
-                default:
-                    break;
-            }
+    public Object get() {
+        return instance;
+    }
+
+
+    public Class getDeclaredClass() {
+        return declaredClass;
+    }
+
+    public void serializeByte(DataOutputStream dos) throws IOException {
+        writeObject(dos, instance, declaredClass);
+    }
+
+    public void unserializeByte(DataInputStream dis) throws IOException {
+        instance = readObject(dis);
+        if (instance != null) {
+            declaredClass = instance.getClass();
         }
     }
 
-    public void unserializeByte(DataInputStream dis) throws Exception {
-        type = ArgumentType.getType((int) dis.readByte());
-        size = dis.readInt();
-        value = new ArrayList<Argument>(size);
-        switch (type) {
-            case BOOLEAN:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readBoolean());
+    private Object readObject(DataInputStream dis) throws IOException {
+        Object value;
+        switch (dis.readChar()) {
+            case '[': // array
+                int len = dis.readInt();
+                Object[] components;
+                if (len > 0) {
+                    components = new Object[len];
+                    for (int i = 0; i < len; i++) {
+                        components[i] = readObject(dis);
+                        if (components[i] == null) { // An array's all elements are supposed to be primitive.
+                            components = null;
+                            break;
+                        }
+                    }
+                    if (components != null) {
+                        value = Array.newInstance(components[0].getClass(), len);
+                        for (int i = 0; i < len; i++) {
+                            Array.set(value, i, components[i]);
+                        }
+                    } else {
+                        value = null;
+                    }
+                } else {
+                    value = null;
                 }
                 break;
-            case SHORT:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readShort());
-                }
+            case 'T': // boolean
+                value = Boolean.valueOf(dis.readBoolean());
                 break;
-            case INTEGER:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readInt());
-                }
+            case 'B': // byte
+                value = Byte.valueOf(dis.readByte());
                 break;
-            case LONG:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readLong());
-                }
+            case 'C': // char
+                value = Character.valueOf(dis.readChar());
                 break;
-            case FLOAT:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readFloat());
-                }
+            case 'S': // short
+                value = Short.valueOf(dis.readShort());
                 break;
-            case DOUBLE:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readDouble());
-                }
+            case 'I': // int
+                value = Integer.valueOf(dis.readInt());
                 break;
-            case BYTE:
-                for (int i=0; i<size; i++) {
-                    value.add(dis.readByte());
-                }
+            case 'L': // long
+                value = Long.valueOf(dis.readLong());
                 break;
-            case STRING:
-                byte[] bytes = new byte[size];
-                dis.read(bytes, 0, size);
-                value.add(new String(bytes));
+            case 'F': // float
+                value = Float.valueOf(dis.readFloat());
                 break;
-            default:
+            case 'D': // double
+                value = Double.valueOf(dis.readDouble());
                 break;
+            case 'N': // null
+            default: // unknown
+                value = null;
         }
-    }
-
-    public ArgumentType getType() {
-        return type;
-    }
-
-    public void setType(ArgumentType type) {
-        this.type = type;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
-    public List getValue() {
         return value;
     }
 
-    public void setValue(List value) {
-        this.value = value;
+    private void writeObject(DataOutputStream dos, Object instance, Class declaredClass) throws IOException {
+        if (instance == null) {
+            declaredClass = Null.class;
+        }
+
+        if (declaredClass.isArray()) { // array
+            dos.writeChar('[');
+            int len = Array.getLength(instance);
+            dos.writeInt(len);
+            for (int i = 0; i < len; i++) {
+                writeObject(dos, Array.get(instance, i), declaredClass.getComponentType());
+            }
+        } else if (declaredClass == Boolean.class || declaredClass == boolean.class) {
+            dos.writeChar('T');
+            dos.writeBoolean(((Boolean) instance).booleanValue());
+        } else if (declaredClass == Character.class || declaredClass == char.class) {
+            dos.writeChar('C');
+            dos.writeChar(((Character) instance).charValue());
+        } else if (declaredClass == Byte.class || declaredClass == byte.class) {
+            dos.writeChar('B');
+            dos.writeByte(((Byte) instance).byteValue());
+        } else if (declaredClass == Short.class || declaredClass == short.class) {
+            dos.writeChar('S');
+            dos.writeShort(((Short) instance).shortValue());
+        } else if (declaredClass == Integer.class || declaredClass == int.class) {
+            dos.writeChar('I');
+            dos.writeInt(((Integer) instance).intValue());
+        } else if (declaredClass == Long.class || declaredClass == long.class) {
+            dos.writeChar('L');
+            dos.writeLong(((Long) instance).longValue());
+        } else if (declaredClass == Float.class || declaredClass == float.class) {
+            dos.writeChar('F');
+            dos.writeFloat(((Float) instance).floatValue());
+        } else if (declaredClass == Double.class || declaredClass == double.class) {
+            dos.writeChar('D');
+            dos.writeDouble(((Double) instance).doubleValue());
+        } else if (declaredClass == Null.class) { // null
+            dos.writeChar('N');
+        } else {
+            throw new IOException("cannot write the object type: " + declaredClass.getCanonicalName());
+        }
+
     }
+
+    private void writeObjectType(StringBuffer ss, Class declaredClass) throws IOException {
+        if (declaredClass.isArray()) {
+            ss.append('[');
+            writeObjectType(ss, declaredClass.getComponentType());
+        } else if (declaredClass == Boolean.class) {
+            ss.append('T');
+        } else if (declaredClass == Character.class) {
+            ss.append('C');
+        } else if (declaredClass == Byte.class) {
+            ss.append('B');
+        } else if (declaredClass == Short.class) {
+            ss.append('S');
+        } else if (declaredClass == Integer.class) {
+            ss.append('I');
+        } else if (declaredClass == Long.class) {
+            ss.append('L');
+        } else if (declaredClass == Float.class) {
+            ss.append('F');
+        } else if (declaredClass == Double.class) {
+            ss.append('D');
+        } else if (declaredClass == Null.class) {
+            ss.append('N');
+        } else {
+            throw new IOException("cannot write object type: " + declaredClass.getName());
+        }
+    }
+
 }

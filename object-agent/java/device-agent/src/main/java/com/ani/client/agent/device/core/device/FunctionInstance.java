@@ -5,6 +5,7 @@ import com.ani.client.agent.device.core.message.ByteSerializable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +44,10 @@ public class FunctionInstance implements ByteSerializable {
         this.accounts = accounts;
         this.inputValues = inputValues;
         this.outputValues = outputValues;
-        this.result = ResultType.SUCCESS;
+        this.result = ResultType.ERROR;
     }
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         dos.writeLong(instanceId);
         dos.writeLong(createTime);
         dos.writeLong(startTime);
@@ -79,7 +80,7 @@ public class FunctionInstance implements ByteSerializable {
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         instanceId = dis.readLong();
         createTime = dis.readLong();
         startTime = dis.readLong();

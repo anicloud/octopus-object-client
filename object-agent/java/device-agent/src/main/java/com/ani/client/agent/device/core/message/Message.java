@@ -18,13 +18,13 @@ public class Message implements ByteSerializable {
     }
 
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         dos.writeShort(type.getValue());
         content.serializeByte(dos);
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         type = MessageType.getType((int) dis.readShort());
         switch (type) {
             case REGISTER_REQUEST:
@@ -52,7 +52,7 @@ public class Message implements ByteSerializable {
                 content = new ContentInvokeResponse();
                 break;
             default:
-                throw new Exception();
+                throw new IOException();
         }
         content.unserializeByte(dis);
     }

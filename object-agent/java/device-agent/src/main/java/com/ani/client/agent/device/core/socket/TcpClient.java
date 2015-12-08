@@ -2,9 +2,11 @@ package com.ani.client.agent.device.core.socket;
 
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -26,10 +28,8 @@ public class TcpClient {
         this.isStarted = false;
     }
 
-    public void connect(String host, int port) throws Exception {
-        if (isStarted) {
-            close();
-        }
+    public void connect(String host, int port) throws IOException {
+        clear();
         selector = Selector.open();
         socketChannel = SocketChannel.open();
         socketChannel.configureBlocking(false);
@@ -39,10 +39,12 @@ public class TcpClient {
         startLoop();
     }
 
-    public void close() throws Exception {
-        if (!isStarted) {
-            return;
-        }
+    public void close() throws IOException {
+        clear();
+        eventHandler.onCloseEvent(socketChannel);
+    }
+
+    private void clear() throws IOException {
         if (selectionKey != null) {
             selectionKey.cancel();
         }
@@ -52,12 +54,10 @@ public class TcpClient {
         if (socketChannel != null && socketChannel.isOpen()) {
             socketChannel.close();
         }
-        isStarted = false;
-        eventHandler.onCloseEvent(socketChannel);
     }
 
-    private void startLoop() throws Exception {
-        while (true && selector.isOpen()) {
+    private void startLoop() throws IOException {
+        while (selector.isOpen()) {
             selector.select();
             Iterator it = selector.selectedKeys().iterator();
             while (it.hasNext()) {
@@ -67,11 +67,7 @@ public class TcpClient {
 
                 if (key.isValid() && key.isConnectable()) {
                     while (channel.isConnectionPending() || !channel.isConnected()) {
-                        try {
-                            channel.finishConnect();
-                        } catch (ConnectException e) {
-                            close();
-                        }
+                        channel.finishConnect();
                     }
                     key.interestOps(SelectionKey.OP_READ);
                     eventHandler.onConnectEvent(channel);
@@ -81,17 +77,18 @@ public class TcpClient {
                     eventHandler.onReadEvent(channel);
                 }
 
-                if (key.isValid() && key.isWritable()) {
-                    // Unregister the OP_WRITE because it is always ready.
-                    key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
-                    eventHandler.onWriteEvent(channel);
-                }
+//                if (key.isValid() && key.isWritable()) {
+//                    // Unregister the OP_WRITE because it is always ready.
+//                    key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
+//                    eventHandler.onWriteEvent(channel);
+//                }
             }
         }
     }
 
-    public void onWriteRequest() {
-        selectionKey.interestOps(selectionKey.interestOps() | SelectionKey.OP_WRITE);
+    public void onWriteRequest() throws IOException {
+//        selectionKey.interestOps(selectionKey.interestOps() | SelectionKey.OP_WRITE);
+        eventHandler.onWriteEvent(socketChannel);
     }
 
     public void setEventHandler(SocketEventHandler eventHandler) {

@@ -11,7 +11,10 @@ import com.ani.client.agent.device.core.device.InvokeCallback;
 public abstract class DeviceController implements Invokable, InvokeCallback {
     public enum AgentError {
         AGENT_ERROR_CONNECT,
-        AGENT_ERROR_UPDATE
+        AGENT_ERROR_REGISTER,
+        AGENT_ERROR_AUTH,
+        AGENT_ERROR_UPDATE,
+        AGENT_ERROR_INVOKE
     }
     /**
      *  Handle the agent error event.
@@ -31,7 +34,7 @@ public abstract class DeviceController implements Invokable, InvokeCallback {
 
     /**
      *  Handle the agent update event, triggered before the DeviceAgent::onReady() and after the DeviceAgent.update(),
-     * @param master
      */
-    public abstract void onUpdate(DeviceMaster master);
+    public abstract void onUpdate();
+
 }

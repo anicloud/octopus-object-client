@@ -5,6 +5,7 @@ import com.ani.client.agent.device.core.message.MessageHandler;
 import com.ani.client.agent.device.core.message.MessageUtils;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.Semaphore;
@@ -33,20 +34,20 @@ public class IoHandler implements SocketEventHandler {
     }
 
     @Override
-    public void onConnectEvent(SocketChannel channel) throws Exception {
+    public void onConnectEvent(SocketChannel channel) throws IOException {
       //  LOG.info("connect event");
         messageHandler.onConnect();
     }
 
     @Override
-    public void onCloseEvent(SocketChannel channel) throws Exception {
+    public void onCloseEvent(SocketChannel channel) throws IOException {
       //  LOG.info("close event");
         messageHandler.onClose();
     }
 
     @Override
-    public void onReadEvent(SocketChannel channel) throws Exception {
-      //  LOG.info("read event");
+    public void onReadEvent(SocketChannel channel) throws IOException {
+        // LOG.info("read event");
         if (channel.read(inBuffer) == -1) {
             LOG.info("socket closed, read -1 bytes");
             client.close();
@@ -69,23 +70,30 @@ public class IoHandler implements SocketEventHandler {
     }
 
     @Override
-    public void onWriteEvent(SocketChannel channel) throws Exception {
-       // LOG.info("write event");
+    public void onWriteEvent(SocketChannel channel) throws IOException {
+        // LOG.info("write event");
         outBuffer.flip();
-        channel.write(outBuffer);
+        while (outBuffer.remaining() > 0) {
+            // LOG.info(channel.write(outBuffer));
+            channel.write(outBuffer);
+        }
         outBuffer.clear();
         writeSemaphore.release();
     }
 
 
-    private void write(byte [] out) throws Exception {
-        writeSemaphore.acquire();
+    private void write(byte [] out) throws IOException {
+        try {
+            writeSemaphore.acquire();
+        } catch (InterruptedException e) {
+            throw new IOException(e.getCause());
+        }
         outBuffer.putInt(out.length); // add the LENGTH head
         outBuffer.put(out);
         client.onWriteRequest();
     }
 
-    public void sendMessage(Message message) throws Exception {
+    public void sendMessage(Message message) throws IOException {
         write(MessageUtils.encodeMessage(message));
     }
 

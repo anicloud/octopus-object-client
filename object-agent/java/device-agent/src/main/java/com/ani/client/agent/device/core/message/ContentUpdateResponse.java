@@ -5,6 +5,7 @@ import com.ani.client.agent.device.core.device.ResultType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Created by huangbin on 10/23/15.
@@ -23,7 +24,7 @@ public class ContentUpdateResponse extends MessageContent {
     }
 
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         dos.writeByte(result.getValue());
         if (result == ResultType.SUCCESS) {
             deviceMaster.serializeByte(dos);
@@ -31,7 +32,7 @@ public class ContentUpdateResponse extends MessageContent {
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         result = ResultType.getType((int) dis.readByte());
         if (result == ResultType.SUCCESS) {
             deviceMaster = new DeviceMaster();

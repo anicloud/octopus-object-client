@@ -6,6 +6,7 @@ import com.ani.client.agent.device.core.message.MessageUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class Device implements ByteSerializable {
 
 
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         MessageUtils.writeString(dos, name);
         MessageUtils.writeString(dos, physicalId);
         MessageUtils.writeString(dos, physicalAddress);
@@ -105,7 +106,7 @@ public class Device implements ByteSerializable {
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         name = MessageUtils.readString(dis);
         physicalId = MessageUtils.readString(dis);
         physicalAddress = MessageUtils.readString(dis);

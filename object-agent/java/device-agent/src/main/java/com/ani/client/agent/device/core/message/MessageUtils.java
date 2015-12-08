@@ -1,9 +1,6 @@
 package com.ani.client.agent.device.core.message;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,20 +15,20 @@ public class MessageUtils {
 
     }
 
-    public static void writeString(DataOutputStream dos, String in) throws Exception{
+    public static void writeString(DataOutputStream dos, String in) throws IOException {
         byte [] bytes = in.getBytes(charset);
         dos.writeInt(bytes.length);
         dos.write(bytes);
     }
 
-    public static String readString(DataInputStream dis) throws Exception {
+    public static String readString(DataInputStream dis) throws IOException {
         int length = dis.readInt();
         byte[] bytes = new byte[length];
         dis.read(bytes, 0, length);
         return new String(bytes);
     }
 
-    public static Message decodeMessage(byte[] in) throws Exception {
+    public static Message decodeMessage(byte[] in) throws IOException {
         ByteArrayInputStream bais = new ByteArrayInputStream(in);
         DataInputStream dis = new DataInputStream(bais);
         Message message = new Message();
@@ -39,7 +36,7 @@ public class MessageUtils {
         return message;
     }
 
-    public static byte[] encodeMessage(Message message) throws Exception {
+    public static byte[] encodeMessage(Message message) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
         message.serializeByte(dos);

@@ -2,6 +2,7 @@ package com.ani.client.agent.device.core.message;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Created by huangbin on 10/23/15.
@@ -26,7 +27,7 @@ public class ContentRegisterRequest extends MessageContent {
     }
 
     @Override
-    public void serializeByte(DataOutputStream dos) throws Exception {
+    public void serializeByte(DataOutputStream dos) throws IOException {
         MessageUtils.writeString(dos, name);
         MessageUtils.writeString(dos, physicalId);
         MessageUtils.writeString(dos, physicalAddress);
@@ -34,7 +35,7 @@ public class ContentRegisterRequest extends MessageContent {
     }
 
     @Override
-    public void unserializeByte(DataInputStream dis) throws Exception {
+    public void unserializeByte(DataInputStream dis) throws IOException {
         name = MessageUtils.readString(dis);
         physicalId = MessageUtils.readString(dis);
         physicalAddress = MessageUtils.readString(dis);
