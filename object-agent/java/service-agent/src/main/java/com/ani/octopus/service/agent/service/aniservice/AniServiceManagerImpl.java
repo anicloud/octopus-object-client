@@ -3,6 +3,7 @@ package com.ani.octopus.service.agent.service.aniservice;
 import com.ani.octopus.service.agent.core.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceDto;
 import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceRegisterDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -31,6 +33,10 @@ public class AniServiceManagerImpl extends AbstractBaseService implements AniSer
 
     @Override
     public AniServiceDto register(AniServiceRegisterDto registerDto) {
+        if (!DomainObjectValidator.isDomainObjectValid(registerDto)) {
+            throw new ValidationException("Invalid AniServiceRegisterDto Instance.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

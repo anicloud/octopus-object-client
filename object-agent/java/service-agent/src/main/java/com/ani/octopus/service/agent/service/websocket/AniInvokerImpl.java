@@ -1,12 +1,10 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 
-import com.ani.octopus.service.agent.core.validate.DomainValidationUtils;
-import com.ani.octopus.service.agent.core.validate.ValidateMessage;
+import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObjectCallType;
-import com.ani.octopus.service.agent.service.websocket.account.AniObjectState;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.Argument;
@@ -39,7 +37,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public synchronized List<Argument> invokeAniObjectSync(AniStub stub) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAniStubValid(stub)) {
+        if (!DomainObjectValidator.isDomainObjectValid(stub)) {
             throw new ValidationException("Invalid AniStub Instance.");
         }
         List<Argument> resultValues;
@@ -70,7 +68,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public void invokeAniObjectAsyn(AniStub stub) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAniStubValid(stub)) {
+        if (!DomainObjectValidator.isDomainObjectValid(stub)) {
             throw new ValidationException("Invalid AniStub Instance.");
         }
 
@@ -83,7 +81,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message registerAndLogin(AccountObject accountObject) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAccountObjectValid(accountObject)) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
 
@@ -114,7 +112,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message login(AccountObject accountObject) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAccountObjectValid(accountObject)) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
 
@@ -144,7 +142,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message logout(AccountObject accountObject) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAccountObjectValid(accountObject)) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
 
@@ -175,7 +173,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message remove(AccountObject accountObject) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAccountObjectValid(accountObject)) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
 
@@ -205,7 +203,7 @@ public class AniInvokerImpl implements AniInvokable {
 
     @Override
     public Message updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException {
-        if (DomainValidationUtils.isAccountObjectValid(accountObject)) {
+        if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
 

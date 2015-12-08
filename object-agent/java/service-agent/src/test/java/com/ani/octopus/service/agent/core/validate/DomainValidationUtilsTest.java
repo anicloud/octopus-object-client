@@ -15,9 +15,9 @@ public class DomainValidationUtilsTest {
     @Test
     public void testAniStubValidation() {
         AniStub aniStub = new AniStub();
-        Set<ValidateMessage> messageSet = DomainValidationUtils.validateAniStub(aniStub);
+        Set<ValidateMessage> messageSet = DomainObjectValidator.validateDomainObject(aniStub);
         System.out.println(messageSet);
-        System.out.println(DomainValidationUtils.isAniStubValid(aniStub));
+        System.out.println(DomainObjectValidator.isDomainObjectValid(aniStub));
     }
 
 }

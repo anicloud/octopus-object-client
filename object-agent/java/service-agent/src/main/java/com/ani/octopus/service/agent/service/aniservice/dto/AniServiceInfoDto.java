@@ -1,5 +1,7 @@
 package com.ani.octopus.service.agent.service.aniservice.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.EnumSet;
@@ -12,12 +14,21 @@ import java.util.Set;
 public class AniServiceInfoDto implements Serializable {
     private static final long serialVersionUID = 7605800320163634441L;
 
+    @NotNull
+    @Size(max = 150)
     public String serviceServerUrl;
+    @NotNull
+    @Size(max = 150)
     public String logoPath;
+    @NotNull
     public Set<LanguageEnum> languageSet;
+    @NotNull
     public Set<String> tagSet;
     public Double price;
+    @NotNull
     public Date onShelf;
+    @NotNull
+    @Size(max = 255)
     public String description;
 
     public AniServiceInfoDto() {

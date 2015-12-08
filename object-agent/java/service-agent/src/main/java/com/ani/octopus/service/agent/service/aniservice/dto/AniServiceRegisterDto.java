@@ -3,6 +3,9 @@ package com.ani.octopus.service.agent.service.aniservice.dto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +19,15 @@ public class AniServiceRegisterDto implements Serializable {
     private static final long serialVersionUID = -1271450263429504186L;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    @NotNull
+    @Size(max = 100)
     public String aniServiceId;
     //public Long objectId;
+    @NotNull
+    @Size(min = 4, max = 100)
     public String serviceName;
+    @NotNull
+    @Size(min = 1, max = 20)
     public String version;
 
     //public String clientSecret;
@@ -26,7 +35,8 @@ public class AniServiceRegisterDto implements Serializable {
     //public Set<String> scope;
     //public Set<String> authorizedGrantTypes;
     //public Collection<String> authorities;
-
+    @NotNull
+    @Size(max = 200)
     public String webServerRedirectUri;
     //public Integer accessTokenValidity;
     //public Integer refreshTokenValidity;
@@ -35,8 +45,12 @@ public class AniServiceRegisterDto implements Serializable {
     //public boolean archived;
     //public boolean trusted; //to set weather the client is trusted, the field is just for grant_type = authorization_code, if false, go
 
+    @NotNull
     public Long accountId;
+
+    @Valid
     public List<AniServiceEntranceDto> entranceList;
+    @Valid
     public AniServiceInfoDto aniServiceInfo;
 
     /**

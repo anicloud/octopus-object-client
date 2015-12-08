@@ -1,5 +1,7 @@
 package com.ani.octopus.service.agent.service.account.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -8,8 +10,12 @@ import java.io.Serializable;
 public class GroupFormDto implements Serializable {
     private static final long serialVersionUID = -2997915395832489663L;
 
+    @NotNull
+    @Size(min = 1, max = 100)
     public String groupName;
+    @NotNull
     public GroupType groupType;
+    @NotNull
     public Long accountId;
 
     public GroupFormDto() {

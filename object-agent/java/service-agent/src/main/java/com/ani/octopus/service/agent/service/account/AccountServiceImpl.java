@@ -2,6 +2,7 @@ package com.ani.octopus.service.agent.service.account;
 
 import com.ani.octopus.service.agent.core.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
+import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.service.account.dto.AccountDto;
 import com.ani.octopus.service.agent.service.account.dto.AccountModifyDto;
 import com.ani.octopus.service.agent.service.account.dto.AccountRegisterDto;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.xml.bind.ValidationException;
 import java.util.Collections;
 
 /**
@@ -23,7 +25,11 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
     }
 
     @Override
-    public AccountDto register(AccountRegisterDto account) {
+    public AccountDto register(AccountRegisterDto account) throws ValidationException {
+        if (!DomainObjectValidator.isDomainObjectValid(account)) {
+            throw new ValidationException("Invalid AccountRegisterDto Instance.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -41,7 +47,11 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
     }
 
     @Override
-    public AccountDto modify(AccountModifyDto account) {
+    public AccountDto modify(AccountModifyDto account) throws ValidationException {
+        if (!DomainObjectValidator.isDomainObjectValid(account)) {
+            throw new ValidationException("Invalid AccountModifyDto Instance.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -59,6 +69,10 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
     @Override
     public AccountDto getByAccountId(Long accountId) {
+        if (accountId == null) {
+            throw new NullPointerException("AccountId is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getAccountByAccountIdUrl())
@@ -76,6 +90,10 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
     @Override
     public AccountDto getByEmail(String email) {
+        if (email == null) {
+            throw new NullPointerException("Email is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getAccountByAccountIdUrl())
@@ -93,6 +111,10 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
     @Override
     public AccountDto getByPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null) {
+            throw new NullPointerException("PhoneNumber is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getAccountByAccountIdUrl())
@@ -109,6 +131,10 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
     @Override
     public AccountDto addAccountInGroup(Long accountId, Long groupId) {
+        if (accountId == null || groupId == null) {
+            throw new NullPointerException("AccountId or GroupId is Null.");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
                 .append(anicelMeta.getAccountByAccountIdUrl())

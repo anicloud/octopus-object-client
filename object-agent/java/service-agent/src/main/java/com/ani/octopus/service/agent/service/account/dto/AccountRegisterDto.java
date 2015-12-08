@@ -1,5 +1,9 @@
 package com.ani.octopus.service.agent.service.account.dto;
 
+import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -8,14 +12,26 @@ import java.io.Serializable;
 public class AccountRegisterDto implements Serializable {
     private static final long serialVersionUID = -5229370617948473689L;
 
+    @NotNull
+    @Size(min = 1, max = 100)
     public String screenName;
+    @NotNull
+    @Email
+    @Size(min = 1, max = 100)
     public String email;
+    @NotNull
+    @Size(min = 1, max = 100)
     public String password;
+    @NotNull
     public AccountType accountType;
 
+    @Size(min = 7, max = 15)
     public String phoneNumber;
+    @Size(min = 1, max = 100)
     public String address;
+    @Size(min = 1, max = 100)
     public String company;
+    @Size(min = 1, max = 200)
     public String photoPath;
 
     public AccountRegisterDto() {
