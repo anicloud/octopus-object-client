@@ -1,6 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket.observer;
 
-import com.ani.octopus.service.agent.service.websocket.dto.message.MessageType;
+import com.ani.octopus.service.agent.core.message.MessageType;
 
 import java.util.Vector;
 

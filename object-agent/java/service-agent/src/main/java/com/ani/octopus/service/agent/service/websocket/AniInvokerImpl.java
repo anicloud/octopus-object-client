@@ -10,14 +10,12 @@ import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.Argument;
 import com.ani.octopus.service.agent.service.websocket.dto.message.AniAccountCallMessage;
 import com.ani.octopus.service.agent.service.websocket.dto.message.AniObjectCallMessage;
-import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 
 import javax.validation.ValidationException;
 import javax.websocket.EncodeException;
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * The implementation of AniInvoker for the third party service to call.
@@ -25,7 +23,6 @@ import java.util.Set;
  * Created by zhaoyu on 15-10-30.
  */
 public class AniInvokerImpl implements AniInvokable {
-
     private AniServiceSession session;
 
     public AniInvokerImpl() {
@@ -80,7 +77,7 @@ public class AniInvokerImpl implements AniInvokable {
     }
 
     @Override
-    public Message registerAndLogin(AccountObject accountObject) throws IOException, EncodeException {
+    public SocketMessage registerAndLogin(AccountObject accountObject) throws IOException, EncodeException {
         if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
@@ -107,11 +104,11 @@ public class AniInvokerImpl implements AniInvokable {
             throw new NullPointerException("AccountObject is null.");
         }
         session.delete(accountObject);
-        return accountObject.getResult();
+        return accountObject.getResultMsg();
     }
 
     @Override
-    public Message login(AccountObject accountObject) throws IOException, EncodeException {
+    public SocketMessage login(AccountObject accountObject) throws IOException, EncodeException {
         if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
@@ -137,11 +134,11 @@ public class AniInvokerImpl implements AniInvokable {
             throw new NullPointerException("AccountObject is null.");
         }
         session.delete(accountObject);
-        return accountObject.getResult();
+        return accountObject.getResultMsg();
     }
 
     @Override
-    public Message logout(AccountObject accountObject) throws IOException, EncodeException {
+    public SocketMessage logout(AccountObject accountObject) throws IOException, EncodeException {
         if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
@@ -168,11 +165,11 @@ public class AniInvokerImpl implements AniInvokable {
             throw new NullPointerException("AccountObject is null.");
         }
         session.delete(accountObject);
-        return accountObject.getResult();
+        return accountObject.getResultMsg();
     }
 
     @Override
-    public Message remove(AccountObject accountObject) throws IOException, EncodeException {
+    public SocketMessage remove(AccountObject accountObject) throws IOException, EncodeException {
         if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
@@ -198,11 +195,11 @@ public class AniInvokerImpl implements AniInvokable {
             throw new NullPointerException("AccountObject is null.");
         }
         session.delete(accountObject);
-        return accountObject.getResult();
+        return accountObject.getResultMsg();
     }
 
     @Override
-    public Message updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException {
+    public SocketMessage updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException {
         if (!DomainObjectValidator.isDomainObjectValid(accountObject)) {
             throw new ValidationException("Invalid Account Object Instance.");
         }
@@ -228,6 +225,6 @@ public class AniInvokerImpl implements AniInvokable {
             throw new NullPointerException("AccountObject is null.");
         }
         session.delete(accountObject);
-        return accountObject.getResult();
+        return accountObject.getResultMsg();
     }
 }

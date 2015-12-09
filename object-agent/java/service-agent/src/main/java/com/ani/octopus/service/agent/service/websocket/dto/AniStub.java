@@ -1,9 +1,10 @@
 package com.ani.octopus.service.agent.service.websocket.dto;
 
+import com.ani.octopus.service.agent.core.message.SocketMessage;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -24,10 +25,10 @@ public class AniStub implements Serializable {
     @NotNull
     private Integer stubId;
 
-    private ResultType resultType;
-    private String result;
     private List<Argument> inputValues;
     private List<Argument> outputValues;
+
+    private SocketMessage resultMsg;
 
     public AniStub() {
     }
@@ -65,14 +66,6 @@ public class AniStub implements Serializable {
         this.groupId = groupId;
     }
 
-    public ResultType getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(ResultType resultType) {
-        this.resultType = resultType;
-    }
-
     public List<Argument> getInputValues() {
         return inputValues;
     }
@@ -89,14 +82,6 @@ public class AniStub implements Serializable {
         this.outputValues = outputValues;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
     public String getKeyId() {
         return keyId;
     }
@@ -109,6 +94,14 @@ public class AniStub implements Serializable {
         this.targetObjectId = targetObjectId;
     }
 
+    public SocketMessage getResultMsg() {
+        return resultMsg;
+    }
+
+    public void setResultMsg(SocketMessage resultMsg) {
+        this.resultMsg = resultMsg;
+    }
+
     @Override
     public String toString() {
         return "AniStub{" +
@@ -116,8 +109,6 @@ public class AniStub implements Serializable {
                 ", accountId=" + accountId +
                 ", stubId=" + stubId +
                 ", groupId=" + groupId +
-                ", resultType=" + resultType +
-                ", result='" + result + '\'' +
                 ", inputValues=" + inputValues +
                 ", outputValues=" + outputValues +
                 '}';

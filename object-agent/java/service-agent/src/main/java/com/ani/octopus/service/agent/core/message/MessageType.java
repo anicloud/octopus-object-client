@@ -1,4 +1,4 @@
-package com.ani.octopus.service.agent.service.websocket.dto.message;
+package com.ani.octopus.service.agent.core.message;
 
 /**
  * Created by zhaoyu on 15-10-30.

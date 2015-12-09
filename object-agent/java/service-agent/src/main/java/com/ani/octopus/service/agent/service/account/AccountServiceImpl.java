@@ -1,12 +1,14 @@
 package com.ani.octopus.service.agent.service.account;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
+import com.ani.octopus.service.agent.core.message.Message;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.service.account.dto.AccountDto;
 import com.ani.octopus.service.agent.service.account.dto.AccountModifyDto;
 import com.ani.octopus.service.agent.service.account.dto.AccountRegisterDto;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import com.ani.octopus.service.agent.core.message.HttpMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,12 +40,21 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
                 .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountRegisterUrl());
 
         HttpEntity<AccountRegisterDto> requestEntity = new HttpEntity<>(account, httpHeaders);
-        AccountDto accountDto = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class}).postForObject(
+        HttpMessage<AccountDto> result = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class}).postForObject(
                 uriComponentsBuilder.toUriString(),
                 requestEntity,
-                AccountDto.class
+                HttpMessage.class
         );
-        return accountDto;
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
+
     }
 
     @Override
@@ -61,10 +72,19 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
 
         HttpEntity<AccountModifyDto> requestEntity = new HttpEntity<>(account, httpHeaders);
-        AccountDto accountDto = restTemplateFactory
+        HttpMessage<AccountDto> result = restTemplateFactory
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
-                .postForObject(uriComponentsBuilder.toUriString(), requestEntity, AccountDto.class);
-        return accountDto;
+                .postForObject(uriComponentsBuilder.toUriString(), requestEntity, HttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
     }
 
     @Override
@@ -82,10 +102,19 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam("access_token", accessToken);
-        AccountDto accountDto = restTemplateFactory
+        HttpMessage<AccountDto> result = restTemplateFactory
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), AccountDto.class);
-        return accountDto;
+                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
     }
 
     @Override
@@ -103,10 +132,19 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam("access_token", accessToken);
-        AccountDto accountDto = restTemplateFactory
+        HttpMessage<AccountDto> result = restTemplateFactory
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), AccountDto.class);
-        return accountDto;
+                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
     }
 
     @Override
@@ -124,9 +162,18 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam("access_token", accessToken);
-        AccountDto accountDto = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), AccountDto.class);
-        return accountDto;
+        HttpMessage<AccountDto> result  = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
+                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
     }
 
     @Override
@@ -146,8 +193,17 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam("access_token", accessToken);
-        AccountDto accountDto = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), AccountDto.class);
-        return accountDto;
+        HttpMessage<AccountDto> result = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
+                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
     }
 }

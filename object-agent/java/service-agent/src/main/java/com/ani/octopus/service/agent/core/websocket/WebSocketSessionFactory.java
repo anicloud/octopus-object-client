@@ -1,7 +1,6 @@
 package com.ani.octopus.service.agent.core.websocket;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
-import org.springframework.web.util.UriComponentsBuilder;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;

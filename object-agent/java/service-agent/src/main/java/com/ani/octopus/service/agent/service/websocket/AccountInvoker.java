@@ -1,7 +1,7 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
-import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 
 import javax.websocket.EncodeException;
 import java.io.IOException;
@@ -14,19 +14,19 @@ public interface AccountInvoker {
      * account register and login
      * @param accountObject
      */
-    Message registerAndLogin(AccountObject accountObject) throws IOException, EncodeException;
+    SocketMessage registerAndLogin(AccountObject accountObject) throws IOException, EncodeException;
 
     /**
      * account login
      * @param accountObject
      */
-    Message login(AccountObject accountObject) throws IOException, EncodeException;
+    SocketMessage login(AccountObject accountObject) throws IOException, EncodeException;
 
     /**
      * account logout
      * @param accountObject
      */
-    Message logout(AccountObject accountObject) throws IOException, EncodeException;
-    Message remove(AccountObject accountObject) throws IOException, EncodeException;
-    Message updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException;
+    SocketMessage logout(AccountObject accountObject) throws IOException, EncodeException;
+    SocketMessage remove(AccountObject accountObject) throws IOException, EncodeException;
+    SocketMessage updateAccountObjectStubList(AccountObject accountObject) throws IOException, EncodeException;
 }

@@ -19,7 +19,6 @@ public class AniServiceRegisterDto implements Serializable {
     private static final long serialVersionUID = -1271450263429504186L;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @NotNull
     @Size(max = 100)
     public String aniServiceId;
     //public Long objectId;
@@ -57,11 +56,27 @@ public class AniServiceRegisterDto implements Serializable {
      * key is stub group id, value is stub id list
      */
     private Map<Long, List<Integer>> stubMap;
-
     private String stubMapStr;
 
     public AniServiceRegisterDto() {
         this.stubMap = new HashMap<>();
+    }
+
+    public AniServiceRegisterDto(String aniServiceId, String serviceName, String version,
+                                 String webServerRedirectUri, Long accountId,
+                                 List<AniServiceEntranceDto> entranceList,
+                                 AniServiceInfoDto aniServiceInfo,
+                                 Map<Long, List<Integer>> stubMap) {
+        this.aniServiceId = aniServiceId;
+        this.serviceName = serviceName;
+        this.version = version;
+        this.webServerRedirectUri = webServerRedirectUri;
+        this.accountId = accountId;
+        this.entranceList = entranceList;
+        this.aniServiceInfo = aniServiceInfo;
+        this.stubMap = stubMap;
+
+        setStubMapStr();
     }
 
     public AniServiceRegisterDto(String serviceName, String version,
@@ -78,6 +93,14 @@ public class AniServiceRegisterDto implements Serializable {
         this.stubMap = stubMap;
 
         setStubMapStr();
+    }
+
+    public String getAniServiceId() {
+        return aniServiceId;
+    }
+
+    public void setAniServiceId(String aniServiceId) {
+        this.aniServiceId = aniServiceId;
     }
 
     private void setStubMapStr() {

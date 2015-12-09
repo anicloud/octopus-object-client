@@ -1,7 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket.account;
 
-import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,7 +24,7 @@ public class AccountObject implements Serializable {
     private String stubMapStr;
     private AniObjectState objectState;
 
-    private Message result;
+    private SocketMessage resultMsg;
 
     public AccountObject() {
         this.keyId = generateKeyId();
@@ -109,12 +108,12 @@ public class AccountObject implements Serializable {
         return keyId;
     }
 
-    public Message getResult() {
-        return result;
+    public SocketMessage getResultMsg() {
+        return resultMsg;
     }
 
-    public void setResult(Message result) {
-        this.result = result;
+    public void setResultMsg(SocketMessage resultMsg) {
+        this.resultMsg = resultMsg;
     }
 
     @Override

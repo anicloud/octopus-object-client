@@ -1,16 +1,25 @@
 package com.ani.octopus.service.agent.service.oauth.dto;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by zhaoyu on 15-10-31.
  */
 public class PasswordParameter extends AniOAuthParameter {
     private static final long serialVersionUID = 430833401426197508L;
+
+    @NotNull
     private String clientId;
+    @NotNull
     private String clientSecret;
+    @NotNull
     private GrantType grantType;
+    @NotNull
     private Scope scope;
 
+    @NotNull
     private String userName;
+    @NotNull
     private String password;
 
     public PasswordParameter() {

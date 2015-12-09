@@ -1,16 +1,14 @@
 package com.ani.octopus.service.agent.service.websocket;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
-import com.ani.octopus.service.agent.service.websocket.dto.AniStubConnType;
 import com.ani.octopus.service.agent.service.websocket.dto.Argument;
 import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 import org.junit.Ignore;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;

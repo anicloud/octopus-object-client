@@ -1,24 +1,14 @@
 package com.ani.octopus.service.agent.service.aniservice;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
-import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceDto;
-import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceEntranceDto;
-import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceInfoDto;
-import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceRegisterDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ani.octopus.service.agent.service.aniservice.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by zhaoyu on 15-11-13.
@@ -43,15 +33,19 @@ public class AniServiceManagerTest {
     private AniServiceRegisterDto createRegisterDto() {
         Set<String> tagSet = new HashSet<>();
         tagSet.add("life");
+
+
         AniServiceInfoDto serviceInfoDto = new AniServiceInfoDto(
-                "http://localhost:8080/sunny",
+                "http://localhost:8080/xinwo",
                 "https://raw.githubusercontent.com/anicloud/anicloud.github.io/master/images/logo/ani_logo.png",
                 null,
                 tagSet,
                 0.0,
                 new Date(),
-                ""
+                "xinmo app"
         );
+        serviceInfoDto.addTag("life");
+        serviceInfoDto.addLanguage(LanguageEnum.ZH_CN);
 
         AniServiceRegisterDto registerDto = new AniServiceRegisterDto(
                 "xinwo-app",
@@ -63,8 +57,14 @@ public class AniServiceManagerTest {
                 null
         );
 
-        AniServiceEntranceDto serviceEntranceDto
-                = new AniServiceEntranceDto(null, "entrance", null, null, null, null);
+        AniServiceEntranceDto serviceEntranceDto = new AniServiceEntranceDto(
+                "xinwo entrance",
+                "http://localhost:8080/xinwo",
+                "https://raw.githubusercontent.com/anicloud/anicloud.github.io/master/images/logo/ani_logo.png",
+                null,
+                "description"
+        );
+        serviceEntranceDto.addTag("life");
 
         registerDto.addStub(1L, 1);
         registerDto.addAniServiceEntrance(serviceEntranceDto);

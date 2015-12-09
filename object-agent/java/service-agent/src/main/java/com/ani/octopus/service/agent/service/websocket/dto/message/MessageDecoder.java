@@ -1,18 +1,18 @@
 package com.ani.octopus.service.agent.service.websocket.dto.message;
 
-import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
+import com.ani.octopus.service.agent.core.message.MessageType;
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by zhaoyu on 15-10-29.
  */
-public class MessageDecoder implements Decoder.Text<Message> {
+public class MessageDecoder implements Decoder.Text<SocketMessage> {
 
     private ObjectMapper objectMapper;
 
@@ -21,9 +21,9 @@ public class MessageDecoder implements Decoder.Text<Message> {
     }
 
     @Override
-    public Message decode(String s) throws DecodeException {
+    public SocketMessage decode(String s) throws DecodeException {
         // determine from s to the Message kind
-        Message message = null;
+        SocketMessage message = null;
         try {
             if (s != null && s.contains(MessageType.CALL_ANI_OBJECT.toString())) {
                 message = objectMapper.readValue(s, AniObjectCallMessage.class);

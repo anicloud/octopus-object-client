@@ -1,13 +1,13 @@
 package com.ani.octopus.service.agent.service.websocket;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
 import com.ani.octopus.service.agent.service.websocket.dto.Argument;
-import com.ani.octopus.service.agent.service.websocket.dto.message.Message;
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
 import org.junit.Before;
@@ -78,11 +78,11 @@ public class AniInvokerImplTest {
         accountObject.addStub(2L, 2);
         accountObject.addStub(1L, 1);
         accountObject.addStub(1L, 2);
-        Message message = accountInvoker.registerAndLogin(accountObject);
+        SocketMessage message = accountInvoker.registerAndLogin(accountObject);
         System.out.println(message);
 
         accountObject = new AccountObject(1707593791689932096L);
-        Message message2 = accountInvoker.logout(accountObject);
+        SocketMessage message2 = accountInvoker.logout(accountObject);
         System.out.println(message2);
     }
 
@@ -91,13 +91,13 @@ public class AniInvokerImplTest {
         // use AniInvokerImpl service to call platform
         AccountInvoker accountInvoker = new AniInvokerImpl(serviceSession);
         AccountObject accountObject = new AccountObject(1707593791689932096L);
-        Message message = accountInvoker.login(accountObject);
+        SocketMessage message = accountInvoker.login(accountObject);
         System.out.println(message);
 
         Thread.sleep(1000000);
 
         accountObject = new AccountObject(1707593791689932096L);
-        Message message2 = accountInvoker.logout(accountObject);
+        SocketMessage message2 = accountInvoker.logout(accountObject);
         System.out.println(message2);
     }
 
@@ -112,7 +112,7 @@ public class AniInvokerImplTest {
         AccountInvoker accountInvoker = new AniInvokerImpl(serviceSession);
         AccountObject accountObject = new AccountObject(1707593791689932096L);
         accountObject.addStub(2L, 1);
-        Message message = accountInvoker.remove(accountObject);
+        SocketMessage message = accountInvoker.remove(accountObject);
         System.out.println(message);
     }
 
@@ -122,7 +122,7 @@ public class AniInvokerImplTest {
         AniInvokable aniInvokable = new AniInvokerImpl(serviceSession);
         AccountObject accountObject = new AccountObject(1707593791689932096L);
 
-        Message message = aniInvokable.login(accountObject);
+        SocketMessage message = aniInvokable.login(accountObject);
         System.out.println(message);
 
         AccountObject accountObject2 = new AccountObject(1707593791689932096L);

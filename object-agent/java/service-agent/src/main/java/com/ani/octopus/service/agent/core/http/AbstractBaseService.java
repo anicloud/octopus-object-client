@@ -1,7 +1,6 @@
 package com.ani.octopus.service.agent.core.http;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
-import org.springframework.web.client.RestTemplate;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 
 /**
  * Created by zhaoyu on 15-11-11.

@@ -1,8 +1,9 @@
 package com.ani.octopus.service.agent.service.oauth;
 
-import com.ani.octopus.service.agent.core.AnicelMeta;
+import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.service.oauth.dto.AniOAuthAccessToken;
 import com.ani.octopus.service.agent.service.oauth.dto.AuthorizationCodeParameter;
 import com.ani.octopus.service.agent.service.oauth.dto.ImplicitParameter;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.ValidationException;
 import java.util.Collections;
 
 /**
@@ -33,6 +35,10 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
 
     @Override
     public AniOAuthAccessToken getOAuth2AccessToken(String code, AuthorizationCodeParameter authorizationCodeParameter) {
+        if (!DomainObjectValidator.isDomainObjectValid(authorizationCodeParameter)) {
+            throw new ValidationException("Invalid AuthorizationCodeParameter Instance.");
+        }
+
         MultiValueMap<String, String> valueMap = authorizationCodeParameter.convertParameterToMapForAccessToken();
         UriComponentsBuilder componentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountOAuthTokenUrl())
@@ -52,12 +58,20 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
 
     @Override
     public AniOAuthAccessToken getOAuth2AccessToken(PasswordParameter passwordParameter) {
+        if (!DomainObjectValidator.isDomainObjectValid(passwordParameter)) {
+            throw new ValidationException("Invalid PasswordParameter Instance.");
+        }
+
         // TODO
         return null;
     }
 
     @Override
     public AniOAuthAccessToken getOAuth2AccessToken(ImplicitParameter implicitParameter) {
+        if (!DomainObjectValidator.isDomainObjectValid(implicitParameter)) {
+            throw new ValidationException("Invalid ImplicitParameter Instance.");
+        }
+
         // TODO
         return null;
     }

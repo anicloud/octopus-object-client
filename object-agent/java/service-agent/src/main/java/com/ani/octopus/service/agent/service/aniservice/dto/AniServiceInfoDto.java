@@ -45,6 +45,47 @@ public class AniServiceInfoDto implements Serializable {
         this.description = description;
     }
 
+    public void setLanguageSet(Set<LanguageEnum> languageSet) {
+        if (this.languageSet == null) {
+            this.languageSet = new HashSet<>();
+        }
+        this.languageSet.addAll(languageSet);
+    }
+
+    public void addLanguage(LanguageEnum languageEnum) {
+        if (this.languageSet == null) {
+            this.languageSet = new HashSet<>();
+        }
+        this.languageSet.add(languageEnum);
+    }
+
+    public void setTagSet(Set<String> tagSet) {
+        if (this.tagSet == null) {
+            this.tagSet = new HashSet<>();
+        }
+        this.tagSet.addAll(tagSet);
+    }
+
+    public void addTag(String tag) {
+        if (this.tagSet == null) {
+            this.tagSet = new HashSet<>();
+        }
+        this.tagSet.add(tag);
+    }
+
+    @Override
+    public String toString() {
+        return "AniServiceInfoDto{" +
+                "serviceServerUrl='" + serviceServerUrl + '\'' +
+                ", logoPath='" + logoPath + '\'' +
+                ", languageSet=" + languageSet +
+                ", tagSet=" + tagSet +
+                ", price=" + price +
+                ", onShelf=" + onShelf +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public static Set<String> toStringSet(Set<LanguageEnum> languageSet) {
         if (languageSet == null) {
             return null;

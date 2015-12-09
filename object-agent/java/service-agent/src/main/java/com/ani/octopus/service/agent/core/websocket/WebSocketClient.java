@@ -1,5 +1,7 @@
 package com.ani.octopus.service.agent.core.websocket;
 
+import com.ani.octopus.service.agent.core.message.MessageType;
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 import com.ani.octopus.service.agent.service.websocket.ClientInvokable;
 import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
 import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
@@ -41,7 +43,7 @@ public class WebSocketClient extends MessageObservable {
     }
 
     @OnMessage
-    public void onMessage(Session session, Message message) {
+    public void onMessage(Session session, SocketMessage message) {
         LOGGER.info("onMessage, session id {}, message {}", session.getId(), message);
         if (message instanceof AniObjectCallMessage) {
             AniObjectCallMessage msg = (AniObjectCallMessage) message;
@@ -66,7 +68,7 @@ public class WebSocketClient extends MessageObservable {
             if (accountObject == null) {
                 throw new NullPointerException("AniStub is Null.");
             }
-            accountObject.setResult(msg);
+            accountObject.setResultMsg(msg);
             synchronized (accountObject) {
                 accountObject.notify();
             }

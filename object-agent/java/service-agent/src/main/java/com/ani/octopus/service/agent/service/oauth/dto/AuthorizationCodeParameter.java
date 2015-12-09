@@ -3,17 +3,25 @@ package com.ani.octopus.service.agent.service.oauth.dto;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by zhaoyu on 15-10-31.
  */
 public class AuthorizationCodeParameter extends AniOAuthParameter {
     private static final long serialVersionUID = 3448535996883214446L;
 
+    @NotNull
     private String clientId;
+    @NotNull
     private String clientSecret;
+    @NotNull
     private GrantType grantType;
+    @NotNull
     private String redirectUri;
+    @NotNull
     private ResponseType responseType;
+    @NotNull
     private Scope scope;
 
     public AuthorizationCodeParameter() {

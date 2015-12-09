@@ -1,5 +1,6 @@
 package com.ani.octopus.service.agent.service.websocket.dto.message;
 
+import com.ani.octopus.service.agent.core.message.SocketMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,7 +11,7 @@ import javax.websocket.EndpointConfig;
 /**
  * Created by zhaoyu on 15-10-29.
  */
-public class MessageEncoder implements Encoder.Text<Message> {
+public class MessageEncoder implements Encoder.Text<SocketMessage> {
 
     private ObjectMapper objectMapper;
 
@@ -19,7 +20,7 @@ public class MessageEncoder implements Encoder.Text<Message> {
     }
 
     @Override
-    public String encode(Message commandMessage) throws EncodeException {
+    public String encode(SocketMessage commandMessage) throws EncodeException {
         String result = null;
         try {
             result = objectMapper.writeValueAsString(commandMessage);
