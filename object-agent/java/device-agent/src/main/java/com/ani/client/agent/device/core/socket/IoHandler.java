@@ -1,8 +1,8 @@
 package com.ani.client.agent.device.core.socket;
 
-import com.ani.client.agent.device.core.message.Message;
-import com.ani.client.agent.device.core.message.MessageHandler;
-import com.ani.client.agent.device.core.message.MessageUtils;
+import com.ani.bus.device.core.domain.message.Message;
+import com.ani.bus.device.core.domain.message.MessageHandler;
+import com.ani.bus.device.core.domain.message.MessageUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

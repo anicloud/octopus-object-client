@@ -23,6 +23,12 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!-- device bus -->
+            <dependency>
+                <groupId>com.ani.bus.device</groupId>
+                <artifactId>device-bus</artifactId>
+                <version>1.0</version>
+            </dependency>
             <!-- service bus core-->
             <dependency>
                 <groupId>com.ani.service.bus</groupId>
