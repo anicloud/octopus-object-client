@@ -23,7 +23,17 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-
+            <!-- service bus core-->
+            <dependency>
+                <groupId>com.ani.service.bus</groupId>
+                <artifactId>bus-core</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ani.octopus.account</groupId>
+                <artifactId>account-manager</artifactId>
+                <version>1.0</version>
+            </dependency>
             <!-- webscoket -->
             <dependency>
                 <groupId>javax</groupId>
