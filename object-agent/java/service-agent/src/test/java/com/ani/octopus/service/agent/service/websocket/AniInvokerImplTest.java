@@ -3,11 +3,12 @@ package com.ani.octopus.service.agent.service.websocket;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
+import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
 import com.ani.service.bus.core.application.agent.dto.accountobject.AccountObject;
 import com.ani.service.bus.core.application.agent.dto.anistub.AniStub;
 import com.ani.service.bus.core.application.agent.dto.anistub.Argument;
+import com.ani.service.bus.core.application.agent.dto.anistub.ArgumentType;
 import com.ani.service.bus.core.application.agent.message.SocketMessage;
-import com.ani.service.bus.core.application.agent.observer.AniObjectCallMessageObserver;
 import com.ani.service.bus.core.application.agent.observer.MessageObserver;
 import com.ani.service.bus.core.application.session.AniServiceSession;
 import org.junit.Before;
@@ -53,6 +54,11 @@ public class AniInvokerImplTest {
         AniInvokable aniInvokable = new AniInvokerImpl(serviceSession);
 
         List<Argument> inputValues = new ArrayList<>();
+
+        List<Object> val = new ArrayList<>();
+        val.add(1);
+
+        inputValues.add(new Argument("arg1", ArgumentType.INTEGER, val));
         AniStub aniStub = new AniStub(
                 6233851390026698963L,
                 1707593791689932096L,
@@ -62,6 +68,7 @@ public class AniInvokerImplTest {
         );
         List<Argument> result = aniInvokable.invokeAniObjectSync(aniStub);
         System.out.println(result);
+        System.out.println("finished");
     }
 
     @Test

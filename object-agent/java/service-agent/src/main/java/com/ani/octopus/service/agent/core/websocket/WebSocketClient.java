@@ -53,7 +53,7 @@ public class WebSocketClient extends MessageObservable {
         if (message instanceof AniObjectCallMessage) {
             AniObjectCallMessage msg = (AniObjectCallMessage) message;
             if (msg.getConnType() == AniStubConnType.ASYNC) {
-                notifyObservers(msg, MessageType.CALL_ANI_OBJECT);
+                notifyObservers(msg);
             }
             if (msg.getConnType() == AniStubConnType.SYNC) {
                 AniStub aniStub = aniServiceSession.getAniStub(msg.getAniStub().getKeyId());
