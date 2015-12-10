@@ -1,8 +1,9 @@
 package com.ani.octopus.service.agent.service.account;
 
-import com.ani.octopus.service.agent.service.account.dto.AccountDto;
-import com.ani.octopus.service.agent.service.account.dto.AccountModifyDto;
-import com.ani.octopus.service.agent.service.account.dto.AccountRegisterDto;
+
+import com.ani.octopus.account.application.dto.account.AccountDto;
+import com.ani.octopus.account.application.dto.account.AccountModifyDto;
+import com.ani.octopus.account.application.dto.account.AccountRegisterDto;
 
 import javax.xml.bind.ValidationException;
 

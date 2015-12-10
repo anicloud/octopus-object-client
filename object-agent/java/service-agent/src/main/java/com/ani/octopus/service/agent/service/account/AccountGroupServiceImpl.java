@@ -1,15 +1,14 @@
 package com.ani.octopus.service.agent.service.account;
 
+import com.ani.octopus.account.application.dto.account.AccountDto;
+import com.ani.octopus.account.application.dto.account.AccountGroupDto;
+import com.ani.octopus.account.application.dto.account.GroupFormDto;
+import com.ani.octopus.account.domain.model.enums.GroupType;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
-import com.ani.octopus.service.agent.core.message.HttpMessage;
-import com.ani.octopus.service.agent.core.message.Message;
+import com.ani.octopus.service.agent.core.message.*;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
-import com.ani.octopus.service.agent.service.account.dto.GroupType;
-import com.ani.octopus.service.agent.service.account.dto.AccountDto;
-import com.ani.octopus.service.agent.service.account.dto.AccountGroupDto;
-import com.ani.octopus.service.agent.service.account.dto.GroupFormDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,8 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
 
 /**
  * Created by zhaoyu on 15-10-31.
@@ -50,10 +47,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
 
         HttpEntity<GroupFormDto> requestEntity = new HttpEntity<>(accountGroup, httpHeaders);
 
-        HttpMessage<AccountGroupDto> result= restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).postForObject(
+        AccountGroupHttpMessage result= restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).postForObject(
                 uriComponentsBuilder.toUriString(),
                 requestEntity,
-                HttpMessage.class
+                AccountGroupHttpMessage.class
         );
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
@@ -82,10 +79,10 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
 
         HttpEntity<GroupFormDto> requestEntity = new HttpEntity<>(accountGroup, httpHeaders);
-        HttpMessage<AccountGroupDto> result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).postForObject(
+        AccountGroupHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).postForObject(
                 uriComponentsBuilder.toUriString(),
                 requestEntity,
-                HttpMessage.class
+                AccountGroupHttpMessage.class
         );
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
             return result.getReturnObj();
@@ -115,9 +112,9 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
-        Message message = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).getForObject(
+        HttpMessage message = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).getForObject(
                 uriComponentsBuilder.build().toUriString(),
-                Message.class
+                HttpMessage.class
         );
         return message;
     }
@@ -137,8 +134,8 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
-        HttpMessage<AccountGroupDto> result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+        AccountGroupHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
+                .getForObject(uriComponentsBuilder.build().toUriString(), AccountGroupHttpMessage.class);
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
             return result.getReturnObj();
@@ -169,8 +166,8 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
-        HttpMessage<List> result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+        AccountGroupsHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
+                .getForObject(uriComponentsBuilder.build().toUriString(), AccountGroupsHttpMessage.class);
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
             return result.getReturnObj();
@@ -198,8 +195,8 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
-        HttpMessage<List> result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
-                .getForObject(uriComponentsBuilder.build().toUriString(), HttpMessage.class);
+        AccountsHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
+                .getForObject(uriComponentsBuilder.build().toUriString(), AccountsHttpMessage.class);
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
             return result.getReturnObj();

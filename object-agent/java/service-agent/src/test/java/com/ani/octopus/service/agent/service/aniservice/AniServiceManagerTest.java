@@ -26,8 +26,13 @@ public class AniServiceManagerTest {
 
         AniServiceRegisterDto registerDto = createRegisterDto();
         System.out.println(registerDto);
-        AniServiceDto serviceDto = aniServiceManager.register(registerDto);
-        System.out.println(serviceDto);
+        AniServiceDto serviceDto = null;
+        try {
+            serviceDto = aniServiceManager.register(registerDto);
+            System.out.println(serviceDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private AniServiceRegisterDto createRegisterDto() {
@@ -48,6 +53,7 @@ public class AniServiceManagerTest {
         serviceInfoDto.addLanguage(LanguageEnum.ZH_CN);
 
         AniServiceRegisterDto registerDto = new AniServiceRegisterDto(
+                //"8283192837934897468",
                 "xinwo-app",
                 "1.0",
                 "http://localhost:8080/xinwo/redirect",

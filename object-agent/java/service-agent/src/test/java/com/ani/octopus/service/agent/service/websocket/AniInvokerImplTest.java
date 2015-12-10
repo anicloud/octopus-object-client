@@ -116,7 +116,7 @@ public class AniInvokerImplTest {
         System.out.println(message);
     }
 
-    @Ignore
+    @Test
     public void testUpdateAccountObjectStubList() throws Exception {
         // use AniInvokerImpl service to call platform
         AniInvokable aniInvokable = new AniInvokerImpl(serviceSession);
@@ -127,9 +127,9 @@ public class AniInvokerImplTest {
 
         AccountObject accountObject2 = new AccountObject(1707593791689932096L);
         accountObject2.addStub(2L, 1);
-        accountObject2.addStub(2L, 2);
+        /*accountObject2.addStub(2L, 2);
         accountObject2.addStub(1L, 1);
-        accountObject2.addStub(1L, 2);
+        accountObject2.addStub(1L, 2);*/
         message = aniInvokable.updateAccountObjectStubList(accountObject2);
         System.out.println(message);
     }

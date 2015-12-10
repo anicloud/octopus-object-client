@@ -3,9 +3,11 @@ package com.ani.octopus.service.agent.service.aniservice;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import com.ani.octopus.service.agent.core.message.AniServiceHttpMessage;
+import com.ani.octopus.service.agent.core.message.Message;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
-import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceDto;
-import com.ani.octopus.service.agent.service.aniservice.dto.AniServiceRegisterDto;
+import com.ani.service.bus.core.application.dto.AniServiceDto;
+import com.ani.service.bus.core.application.dto.AniServiceRegisterDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -30,7 +32,7 @@ public class AniServiceManagerImpl extends AbstractBaseService implements AniSer
     }
 
     @Override
-    public AniServiceDto register(AniServiceRegisterDto registerDto) {
+    public AniServiceDto register(AniServiceRegisterDto registerDto) throws Exception {
         if (!DomainObjectValidator.isDomainObjectValid(registerDto)) {
             throw new ValidationException("Invalid AniServiceRegisterDto Instance.");
         }
@@ -45,8 +47,17 @@ public class AniServiceManagerImpl extends AbstractBaseService implements AniSer
 
         LOGGER.info("post url : {}.", uriComponentsBuilder.toUriString());
 
-        AniServiceDto aniServiceDto = restTemplateFactory.getRestTemplate(new Class[]{AniServiceDto.class})
-                .postForObject(uriComponentsBuilder.toUriString(), requestEntity, AniServiceDto.class);
-        return aniServiceDto;
+        AniServiceHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{AniServiceDto.class})
+                .postForObject(uriComponentsBuilder.toUriString(), requestEntity, AniServiceHttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new Exception(builder.toString());
+        }
     }
 }

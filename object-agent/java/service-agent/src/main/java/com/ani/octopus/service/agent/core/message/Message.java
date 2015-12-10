@@ -45,6 +45,7 @@ public abstract class Message implements Serializable {
         AUTH_ERROR(2001),
         RULE_ERROR(2002),
         DATA_ERROR(2003),
+        IO_ERROR(2004),
 
         OBJECT_CALL_ERROR(3001),
         SERVICE_CALL_ERROR(3002);
