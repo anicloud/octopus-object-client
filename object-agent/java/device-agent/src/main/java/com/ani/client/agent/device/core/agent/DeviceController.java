@@ -1,9 +1,8 @@
 package com.ani.client.agent.device.core.agent;
 
 
-import com.ani.client.agent.device.core.device.DeviceMaster;
-import com.ani.client.agent.device.core.device.Invokable;
-import com.ani.client.agent.device.core.device.InvokeCallback;
+import com.ani.bus.device.core.domain.device.Invokable;
+import com.ani.bus.device.core.domain.device.InvokeCallback;
 
 /**
  * Created by huangbin on 10/25/15.

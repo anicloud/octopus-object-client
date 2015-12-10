@@ -1,18 +1,17 @@
 package com.ani.client.agent.device.core.agent;
 
 
-import com.ani.client.agent.device.core.account.Account;
-import com.ani.client.agent.device.core.device.*;
-import com.ani.client.agent.device.core.message.*;
+import com.ani.bus.device.core.domain.account.Account;
+import com.ani.bus.device.core.domain.device.*;
+import com.ani.bus.device.core.domain.message.*;
+
 import com.ani.client.agent.device.core.socket.IoHandler;
 import com.ani.client.agent.device.core.socket.TcpClient;
 import org.apache.log4j.Logger;
-import sun.security.provider.MD5;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -161,7 +160,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
      */
     private class MessageHandlerImpl implements MessageHandler {
 
-        public void onMessage(Message message) {
+        public void onMessage(Message message) throws IOException {
             switch (message.type) {
                 case REGISTER_RESPONSE:
                     if (state == State.STATE_REGISTERING) {
@@ -189,15 +188,20 @@ public class DeviceAgent implements Invokable, InvokeCallback {
             }
         }
 
-        public void onConnect() {
+        public void onConnect() throws IOException {
             state = State.STATE_CONNECTED;
             onStateChanged();
         }
 
-        public void onClose() {
+        public void onClose() throws IOException {
             clear();
             state = State.STATE_CLOSED;
             onStateChanged();
+        }
+
+        @Override
+        public void onTimeout() throws IOException {
+
         }
     }
 
