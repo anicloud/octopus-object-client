@@ -1,15 +1,15 @@
 package com.ani.octopus.service.agent.service.websocket;
 
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
-import com.ani.octopus.service.agent.core.websocket.AniServiceSession;
 import com.ani.octopus.service.agent.core.websocket.WebSocketClient;
 import com.ani.octopus.service.agent.core.websocket.WebSocketSessionFactory;
-import com.ani.octopus.service.agent.service.websocket.account.AccountObject;
-import com.ani.octopus.service.agent.service.websocket.dto.AniStub;
-import com.ani.octopus.service.agent.service.websocket.dto.Argument;
-import com.ani.octopus.service.agent.core.message.SocketMessage;
-import com.ani.octopus.service.agent.service.websocket.observer.AniObjectCallMessageObserver;
-import com.ani.octopus.service.agent.service.websocket.observer.MessageObserver;
+import com.ani.service.bus.core.application.agent.dto.accountobject.AccountObject;
+import com.ani.service.bus.core.application.agent.dto.anistub.AniStub;
+import com.ani.service.bus.core.application.agent.dto.anistub.Argument;
+import com.ani.service.bus.core.application.agent.message.SocketMessage;
+import com.ani.service.bus.core.application.agent.observer.AniObjectCallMessageObserver;
+import com.ani.service.bus.core.application.agent.observer.MessageObserver;
+import com.ani.service.bus.core.application.session.AniServiceSession;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class AniInvokerImplTest {
         // with anicloud platform
         AnicelMeta anicelMeta = new AnicelMeta();
         WebSocketSessionFactory sessionFactory =
-                new WebSocketSessionFactory(socketClient, anicelMeta, "926168327152741609", "f818a4974030cad047b64b01629a02dc");
+                new WebSocketSessionFactory(socketClient, anicelMeta, "7605099955253876787", "f43a261962f7acc6e79052f9380ec966");
         serviceSession = sessionFactory.getAniServiceSession();
     }
 
@@ -69,15 +69,15 @@ public class AniInvokerImplTest {
 
     }
 
-    @Ignore
+    @Test
     public void testRegisterAndLogin() throws Exception {
         // use AniInvokerImpl service to call platform
         AccountInvoker accountInvoker = new AniInvokerImpl(serviceSession);
         AccountObject accountObject = new AccountObject(1707593791689932096L);
         accountObject.addStub(2L, 1);
-        accountObject.addStub(2L, 2);
-        accountObject.addStub(1L, 1);
-        accountObject.addStub(1L, 2);
+        //accountObject.addStub(2L, 2);
+        //accountObject.addStub(1L, 1);
+        //accountObject.addStub(1L, 2);
         SocketMessage message = accountInvoker.registerAndLogin(accountObject);
         System.out.println(message);
 

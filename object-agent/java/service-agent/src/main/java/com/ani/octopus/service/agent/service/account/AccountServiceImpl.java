@@ -1,15 +1,14 @@
 package com.ani.octopus.service.agent.service.account;
 
+import com.ani.octopus.account.application.agent.callmessage.AccountHttpMessage;
+import com.ani.octopus.account.application.agent.callmessage.Message;
 import com.ani.octopus.account.application.dto.account.AccountDto;
 import com.ani.octopus.account.application.dto.account.AccountModifyDto;
 import com.ani.octopus.account.application.dto.account.AccountRegisterDto;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
-import com.ani.octopus.service.agent.core.message.AccountHttpMessage;
-import com.ani.octopus.service.agent.core.message.Message;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
-import com.ani.octopus.service.agent.core.message.HttpMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

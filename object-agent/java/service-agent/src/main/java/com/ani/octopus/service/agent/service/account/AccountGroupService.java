@@ -1,10 +1,10 @@
 package com.ani.octopus.service.agent.service.account;
 
+import com.ani.octopus.account.application.agent.callmessage.Message;
 import com.ani.octopus.account.application.dto.account.AccountDto;
 import com.ani.octopus.account.application.dto.account.AccountGroupDto;
 import com.ani.octopus.account.application.dto.account.GroupFormDto;
 import com.ani.octopus.account.domain.model.enums.GroupType;
-import com.ani.octopus.service.agent.core.message.Message;
 
 import java.util.Collection;
 

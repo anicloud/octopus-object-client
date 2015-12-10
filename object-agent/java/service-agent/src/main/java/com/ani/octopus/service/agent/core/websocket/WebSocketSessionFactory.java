@@ -1,6 +1,7 @@
 package com.ani.octopus.service.agent.core.websocket;
 
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
+import com.ani.service.bus.core.application.session.AniServiceSession;
 
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;

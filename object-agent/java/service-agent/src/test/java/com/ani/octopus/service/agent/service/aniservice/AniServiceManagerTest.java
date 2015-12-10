@@ -2,7 +2,11 @@ package com.ani.octopus.service.agent.service.aniservice;
 
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
-import com.ani.octopus.service.agent.service.aniservice.dto.*;
+import com.ani.service.bus.core.application.dto.AniServiceDto;
+import com.ani.service.bus.core.application.dto.AniServiceEntranceDto;
+import com.ani.service.bus.core.application.dto.AniServiceInfoDto;
+import com.ani.service.bus.core.application.dto.AniServiceRegisterDto;
+import com.ani.service.bus.core.domain.enums.LanguageEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -53,6 +57,7 @@ public class AniServiceManagerTest {
         serviceInfoDto.addLanguage(LanguageEnum.ZH_CN);
 
         AniServiceRegisterDto registerDto = new AniServiceRegisterDto(
+                null,
                 //"8283192837934897468",
                 "xinwo-app",
                 "1.0",
@@ -64,6 +69,7 @@ public class AniServiceManagerTest {
         );
 
         AniServiceEntranceDto serviceEntranceDto = new AniServiceEntranceDto(
+                null,
                 "xinwo entrance",
                 "http://localhost:8080/xinwo",
                 "https://raw.githubusercontent.com/anicloud/anicloud.github.io/master/images/logo/ani_logo.png",

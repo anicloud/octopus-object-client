@@ -19,6 +19,24 @@
         <dependency>
             <groupId>com.ani.service.bus</groupId>
             <artifactId>bus-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.ani.utils</groupId>
+                    <artifactId>ani-utils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.ani.octopus.object</groupId>
+                    <artifactId>object-master</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.ani.octopus.stub</groupId>
+                    <artifactId>stub-meta</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.ani.octopus.antenna</groupId>
+                    <artifactId>octopus-antenna</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.ani.octopus.account</groupId>
