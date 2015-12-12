@@ -8,6 +8,7 @@ import com.ani.service.bus.core.application.dto.AniServiceInfoDto;
 import com.ani.service.bus.core.application.dto.AniServiceRegisterDto;
 import com.ani.service.bus.core.domain.enums.LanguageEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -19,24 +20,58 @@ import java.util.*;
  */
 public class AniServiceManagerTest {
 
-    @Test
-    public void testAniServiceRegister() {
+    private ObjectMapper objectMapper;
+    private AniServiceManager aniServiceManager;
+
+    @Before
+    public void before() {
+        objectMapper = new ObjectMapper();
+
         AnicelMeta anicelMeta = new AnicelMeta();
         RestTemplateFactory templateFactory = new RestTemplateFactory();
-        AniServiceManager aniServiceManager = new AniServiceManagerImpl(
+        aniServiceManager = new AniServiceManagerImpl(
                 anicelMeta,
                 templateFactory
         );
+    }
 
+    @Test
+    public void testAniServiceRegister() {
         AniServiceRegisterDto registerDto = createRegisterDto();
         System.out.println(registerDto);
         AniServiceDto serviceDto = null;
         try {
             serviceDto = aniServiceManager.register(registerDto);
-            System.out.println(serviceDto);
+            System.out.println(objectMapper.writeValueAsString(serviceDto));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testGetAniService() throws Exception {
+        String aniServiceId = "7605099955253876787";
+        String clientSecret = "f43a261962f7acc6e79052f9380ec966";
+        AniServiceDto aniServiceDto = aniServiceManager.getByAniService(aniServiceId, clientSecret);
+        System.out.println(objectMapper.writeValueAsString(aniServiceDto));
+    }
+
+    @Test
+    public void testModifyAniService() throws Exception {
+        String aniServiceId = "7605099955253876787";
+        String clientSecret = "f43a261962f7acc6e79052f9380ec966";
+        AniServiceDto aniServiceDto = aniServiceManager.getByAniService(aniServiceId, clientSecret);
+
+        System.out.println(objectMapper.writeValueAsString(aniServiceDto));
+        AniServiceRegisterDto registerDto = createRegisterDto();
+        registerDto.aniServiceId = aniServiceDto.aniServiceId;
+        registerDto.aniServiceInfo = aniServiceDto.aniServiceInfo;
+        registerDto.aniServiceInfo.addTag("good app");
+        registerDto.entranceList = aniServiceDto.entranceList;
+
+        aniServiceDto = aniServiceManager.register(registerDto);
+        System.out.println(objectMapper.writeValueAsString(aniServiceDto));
+
     }
 
     private AniServiceRegisterDto createRegisterDto() {
@@ -57,8 +92,6 @@ public class AniServiceManagerTest {
         serviceInfoDto.addLanguage(LanguageEnum.ZH_CN);
 
         AniServiceRegisterDto registerDto = new AniServiceRegisterDto(
-                null,
-                //"8283192837934897468",
                 "xinwo-app",
                 "1.0",
                 "http://localhost:8080/xinwo/redirect",

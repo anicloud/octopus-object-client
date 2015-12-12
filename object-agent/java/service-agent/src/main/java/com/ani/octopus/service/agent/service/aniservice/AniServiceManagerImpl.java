@@ -8,6 +8,7 @@ import com.ani.service.bus.core.application.agent.message.AniServiceHttpMessage;
 import com.ani.service.bus.core.application.agent.message.Message;
 import com.ani.service.bus.core.application.dto.AniServiceDto;
 import com.ani.service.bus.core.application.dto.AniServiceRegisterDto;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -49,6 +50,37 @@ public class AniServiceManagerImpl extends AbstractBaseService implements AniSer
 
         AniServiceHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{AniServiceDto.class})
                 .postForObject(uriComponentsBuilder.toUriString(), requestEntity, AniServiceHttpMessage.class);
+
+        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new Exception(builder.toString());
+        }
+    }
+
+    @Override
+    public AniServiceDto getByAniService(String aniServiceId, String clientSecret) throws Exception {
+        if (StringUtils.isEmpty(aniServiceId) || StringUtils.isEmpty(clientSecret)) {
+            throw new Exception("AniServiceId or ClientSecret is null.");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(anicelMeta.getAniServiceBusUrl())
+                .append(anicelMeta.getServiceBusGetByUrl())
+                .append("/")
+                .append(aniServiceId)
+                .append("/")
+                .append(clientSecret);
+
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+                .fromHttpUrl(stringBuilder.toString());
+
+        AniServiceHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{AniServiceDto.class})
+                .getForObject(uriComponentsBuilder.toUriString(), AniServiceHttpMessage.class);
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
             return result.getReturnObj();

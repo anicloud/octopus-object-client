@@ -29,6 +29,9 @@ public class AniInvokerImplTest {
 
     @Before
     public void before() {
+        String aniServiceId = "1058595963104900977";
+        String clientSecret = "34d54214721d6077ae021ab5d8215258";
+
         // you need to implement the Invokable interface and register on
         // WebSocketClient for anicloud platform to callback
         ClientInvokable invokable = new ClientInvokerImpl();
@@ -44,8 +47,12 @@ public class AniInvokerImplTest {
         // and use factory to get the session, than you can use the session to communicate
         // with anicloud platform
         AnicelMeta anicelMeta = new AnicelMeta();
-        WebSocketSessionFactory sessionFactory =
-                new WebSocketSessionFactory(socketClient, anicelMeta, "7605099955253876787", "f43a261962f7acc6e79052f9380ec966");
+        WebSocketSessionFactory sessionFactory = new WebSocketSessionFactory(
+                socketClient,
+                anicelMeta,
+                aniServiceId,
+                clientSecret
+        );
         serviceSession = sessionFactory.getAniServiceSession();
     }
 
