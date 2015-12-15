@@ -32,8 +32,11 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
     }
 
     @Override
-    public AccountGroupDto save(GroupFormDto accountGroup) {
-        if (!DomainObjectValidator.isDomainObjectValid(accountGroup)) {
+    public AccountGroupDto save(GroupFormDto groupFormDto) {
+        if (groupFormDto.groupType == GroupType.SYSTEM) {
+            throw new ValidationException("Group Type cannot be System");
+        }
+        if (!DomainObjectValidator.isDomainObjectValid(groupFormDto)) {
             throw new ValidationException("Invalid GroupFormDto Instance.");
         }
 
@@ -45,7 +48,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
                 .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getGroupAddUrl())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
 
-        HttpEntity<GroupFormDto> requestEntity = new HttpEntity<>(accountGroup, httpHeaders);
+        HttpEntity<GroupFormDto> requestEntity = new HttpEntity<>(groupFormDto, httpHeaders);
 
         AccountGroupHttpMessage result= restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).postForObject(
                 uriComponentsBuilder.toUriString(),
@@ -65,8 +68,12 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
     }
 
     @Override
-    public AccountGroupDto modify(GroupFormDto accountGroup) {
-        if (!DomainObjectValidator.isDomainObjectValid(accountGroup)) {
+    public AccountGroupDto modify(GroupFormDto groupFormDto) {
+        if (groupFormDto.groupType == GroupType.SYSTEM) {
+            throw new ValidationException("Group Type cannot be System");
+        }
+
+        if (!DomainObjectValidator.isDomainObjectValid(groupFormDto)) {
             throw new ValidationException("Invalid GroupFormDto Instance.");
         }
 
@@ -78,7 +85,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
                 .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getGroupModifyUrl())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
 
-        HttpEntity<GroupFormDto> requestEntity = new HttpEntity<>(accountGroup, httpHeaders);
+        HttpEntity<GroupFormDto> requestEntity = new HttpEntity<>(groupFormDto, httpHeaders);
         AccountGroupHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).postForObject(
                 uriComponentsBuilder.toUriString(),
                 requestEntity,

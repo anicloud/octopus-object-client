@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.ani.service.bus</groupId>
             <artifactId>bus-core</artifactId>
-            <exclusions>
+           <!-- <exclusions>
                 <exclusion>
                     <groupId>com.ani.utils</groupId>
                     <artifactId>ani-utils</artifactId>
@@ -36,7 +36,7 @@
                     <groupId>com.ani.octopus.antenna</groupId>
                     <artifactId>octopus-antenna</artifactId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>com.ani.octopus.account</groupId>
@@ -70,6 +70,14 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>javax.el</artifactId>
         </dependency>
 
         <!-- Spring -->

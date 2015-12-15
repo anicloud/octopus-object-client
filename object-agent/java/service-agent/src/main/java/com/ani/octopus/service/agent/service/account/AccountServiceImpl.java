@@ -5,6 +5,7 @@ import com.ani.octopus.account.application.agent.callmessage.Message;
 import com.ani.octopus.account.application.dto.account.AccountDto;
 import com.ani.octopus.account.application.dto.account.AccountModifyDto;
 import com.ani.octopus.account.application.dto.account.AccountRegisterDto;
+import com.ani.octopus.account.domain.model.enums.AccountType;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
@@ -15,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.xml.bind.ValidationException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collections;
 
 /**
@@ -28,8 +31,11 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
     @Override
     public AccountDto register(AccountRegisterDto account) throws ValidationException {
+        if (account.accountType == AccountType.ROOT) {
+            throw new ValidationException("Account Type cannot be Root");
+        }
         if (!DomainObjectValidator.isDomainObjectValid(account)) {
-            throw new ValidationException("Invalid AccountRegisterDto Instance.");
+            throw new ValidationException("Invalid AccountRegisterDto Instance");
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -59,6 +65,9 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
     @Override
     public AccountDto modify(AccountModifyDto account) throws ValidationException {
+        if (account.accountType == AccountType.ROOT) {
+            throw new ValidationException("Account Type cannot be Root");
+        }
         if (!DomainObjectValidator.isDomainObjectValid(account)) {
             throw new ValidationException("Invalid AccountModifyDto Instance.");
         }
@@ -125,12 +134,11 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
-                .append(anicelMeta.getAccountByAccountIdUrl())
-                .append("/")
-                .append(email);
+                .append(anicelMeta.getAccountByEmailUrl());
 
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
+                .queryParam("email", email)
                 .queryParam("access_token", accessToken);
         AccountHttpMessage result = restTemplateFactory
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
@@ -155,7 +163,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
-                .append(anicelMeta.getAccountByAccountIdUrl())
+                .append(anicelMeta.getAccountByPhoneUrl())
                 .append("/")
                 .append(phoneNumber);
 
@@ -184,7 +192,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getOctopusServiceUrl())
-                .append(anicelMeta.getAccountByAccountIdUrl())
+                .append(anicelMeta.getAccountAddInGroupUrl())
                 .append("/")
                 .append(accountId)
                 .append("/")
