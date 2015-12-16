@@ -1,5 +1,8 @@
 package com.ani.octopus.service.agent.service.oauth.dto;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -81,6 +84,17 @@ public class PasswordParameter extends AniOAuthParameter {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public MultiValueMap<String, String> convertParameter() {
+        MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
+        valueMap.add("client_id", this.clientId);
+        valueMap.add("client_secret", this.clientSecret);
+        valueMap.add("grant_type", this.grantType.getVal());
+        valueMap.add("scope", this.scope.getVal());
+        valueMap.add("username", this.userName);
+        valueMap.add("password", this.password);
+        return valueMap;
     }
 
     @Override

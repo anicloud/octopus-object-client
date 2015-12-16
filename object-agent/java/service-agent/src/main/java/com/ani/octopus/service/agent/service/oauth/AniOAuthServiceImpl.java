@@ -61,9 +61,20 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
         if (!DomainObjectValidator.isDomainObjectValid(passwordParameter)) {
             throw new ValidationException("Invalid PasswordParameter Instance.");
         }
+        MultiValueMap<String, String> valueMap = passwordParameter.convertParameter();
+        UriComponentsBuilder componentsBuilder = UriComponentsBuilder
+                .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountOAuthTokenUrl())
+                .queryParams(valueMap);
 
-        // TODO
-        return null;
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<AniOAuthAccessToken> requestEntity = new HttpEntity<>(httpHeaders);
+
+        AniOAuthAccessToken result = this.restTemplateFactory.getRestTemplate(new Class[]{AniOAuthAccessToken.class})
+                .postForObject(componentsBuilder.toUriString(), requestEntity, AniOAuthAccessToken.class);
+        LOGGER.info("access-token is {}.", result);
+        return result;
     }
 
     @Override
