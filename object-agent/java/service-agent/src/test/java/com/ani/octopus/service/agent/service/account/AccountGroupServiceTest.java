@@ -1,13 +1,12 @@
 package com.ani.octopus.service.agent.service.account;
 
-import com.ani.octopus.account.application.agent.callmessage.Message;
-import com.ani.octopus.account.application.dto.account.AccountDto;
-import com.ani.octopus.account.application.dto.account.AccountGroupDto;
-import com.ani.octopus.account.application.dto.account.GroupFormDto;
-import com.ani.octopus.account.domain.model.enums.GroupType;
-import com.ani.octopus.account.infrastructure.persistence.domain.account.AccountDao;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import com.anicel.commons.account.dto.AccountDto;
+import com.anicel.commons.account.dto.AccountGroupDto;
+import com.anicel.commons.account.dto.GroupFormDto;
+import com.anicel.commons.account.dto.GroupType;
+import com.anicel.commons.message.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;

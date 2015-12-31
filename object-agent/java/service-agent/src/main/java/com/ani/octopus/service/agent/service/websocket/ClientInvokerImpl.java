@@ -1,7 +1,7 @@
 package com.ani.octopus.service.agent.service.websocket;
 
-import com.ani.service.bus.core.application.agent.dto.anistub.AniStub;
-import com.ani.service.bus.core.application.agent.dto.anistub.Argument;
+import com.anicel.commons.service.bus.dto.anistub.AniStub;
+import com.anicel.commons.service.bus.dto.anistub.Argument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

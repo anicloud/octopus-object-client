@@ -1,14 +1,18 @@
 package com.ani.octopus.service.agent.service.account;
 
-import com.ani.octopus.account.application.agent.callmessage.*;
-import com.ani.octopus.account.application.dto.account.AccountDto;
-import com.ani.octopus.account.application.dto.account.AccountGroupDto;
-import com.ani.octopus.account.application.dto.account.GroupFormDto;
-import com.ani.octopus.account.domain.model.enums.GroupType;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
+import com.anicel.commons.account.dto.AccountDto;
+import com.anicel.commons.account.dto.AccountGroupDto;
+import com.anicel.commons.account.dto.GroupFormDto;
+import com.anicel.commons.account.dto.GroupType;
+import com.anicel.commons.account.message.AccountGroupHttpMessage;
+import com.anicel.commons.account.message.AccountGroupsHttpMessage;
+import com.anicel.commons.account.message.AccountsHttpMessage;
+import com.anicel.commons.message.HttpMessage;
+import com.anicel.commons.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;

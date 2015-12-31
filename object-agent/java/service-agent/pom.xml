@@ -15,32 +15,10 @@
     <name>service-agent</name>
 
     <dependencies>
-        <!-- service bus core-->
+        <!-- anicel commons -->
         <dependency>
-            <groupId>com.ani.service.bus</groupId>
-            <artifactId>bus-core</artifactId>
-           <!-- <exclusions>
-                <exclusion>
-                    <groupId>com.ani.utils</groupId>
-                    <artifactId>ani-utils</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.ani.octopus.object</groupId>
-                    <artifactId>object-master</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.ani.octopus.stub</groupId>
-                    <artifactId>stub-meta</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.ani.octopus.antenna</groupId>
-                    <artifactId>octopus-antenna</artifactId>
-                </exclusion>
-            </exclusions>-->
-        </dependency>
-        <dependency>
-            <groupId>com.ani.octopus.account</groupId>
-            <artifactId>account-manager</artifactId>
+            <groupId>com.anicel.anicel-commons</groupId>
+            <artifactId>anicel-commons</artifactId>
         </dependency>
         <!-- webscoket -->
         <dependency>
@@ -91,34 +69,22 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <artifactId>spring-expression</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>aspectjweaver</artifactId>
-                    <groupId>org.aspectj</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${org.springframework-version}</version>
+            <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
-            <version>${org.springframework-version}</version>
         </dependency>
-
+        <!-- xml -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.8</version>
+        </dependency>
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -152,21 +118,35 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>

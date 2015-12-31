@@ -2,11 +2,7 @@ package com.ani.octopus.service.agent.service.aniservice;
 
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
-import com.ani.service.bus.core.application.dto.AniServiceDto;
-import com.ani.service.bus.core.application.dto.AniServiceEntranceDto;
-import com.ani.service.bus.core.application.dto.AniServiceInfoDto;
-import com.ani.service.bus.core.application.dto.AniServiceRegisterDto;
-import com.ani.service.bus.core.domain.enums.LanguageEnum;
+import com.anicel.commons.service.bus.dto.aniservice.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Ignore;

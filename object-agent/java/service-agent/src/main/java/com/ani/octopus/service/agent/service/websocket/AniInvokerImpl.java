@@ -2,15 +2,15 @@ package com.ani.octopus.service.agent.service.websocket;
 
 
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
-import com.ani.service.bus.core.application.agent.dto.accountobject.AccountObject;
-import com.ani.service.bus.core.application.agent.dto.accountobject.AccountObjectCallType;
-import com.ani.service.bus.core.application.agent.dto.anistub.AniStub;
-import com.ani.service.bus.core.application.agent.dto.anistub.AniStubConnType;
-import com.ani.service.bus.core.application.agent.dto.anistub.Argument;
-import com.ani.service.bus.core.application.agent.message.SocketMessage;
-import com.ani.service.bus.core.application.agent.message.callmessage.AniAccountCallMessage;
-import com.ani.service.bus.core.application.agent.message.callmessage.AniObjectCallMessage;
-import com.ani.service.bus.core.application.session.AniServiceSession;
+import com.anicel.commons.service.bus.dto.accountobject.AccountObject;
+import com.anicel.commons.service.bus.dto.accountobject.AccountObjectCallType;
+import com.anicel.commons.service.bus.dto.anistub.AniStub;
+import com.anicel.commons.service.bus.dto.anistub.AniStubConnType;
+import com.anicel.commons.service.bus.dto.anistub.Argument;
+import com.anicel.commons.service.bus.message.SocketMessage;
+import com.anicel.commons.service.bus.message.callmessage.AniAccountCallMessage;
+import com.anicel.commons.service.bus.message.callmessage.AniObjectCallMessage;
+import com.anicel.commons.service.bus.session.AniServiceSession;
 
 import javax.validation.ValidationException;
 import javax.websocket.EncodeException;
