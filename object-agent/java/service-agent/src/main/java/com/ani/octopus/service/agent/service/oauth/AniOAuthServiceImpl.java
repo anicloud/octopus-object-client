@@ -20,6 +20,26 @@ import javax.validation.ValidationException;
 import java.util.Collections;
 
 /**
+ * The implementation of the AniOAuthService and extends from AbstractBaseService. <br><br>
+ * This class provides Authorization Code Mode and Password Mode for OAuth2. And also provides the
+ * token refresh method.
+ * <br><br>
+ * <strong>Use Example:</strong><br>
+ * <pre>
+ *     AnicelMeta anicelMeta = new AnicelMeta();
+ *     // create the RestTemplateFactory
+ *     RestTemplateFactory templateFactory = new RestTemplateFactory();
+ *     // create AccountGroupService instance
+ *     AniOAuthService aniOAuthService = new AniOAuthServiceImpl(
+ *          anicelMeta,
+ *          templateFactory
+ *     );
+ *     // get access token
+ *     AniOAuthAccessToken accessToken = aniOAuthService.getOAuth2AccessToken(code, authorizationCodeParameter);
+ *     // refresh token
+ *     AniOAuthAccessToken refreshToken = aniOAuthService.refreshAccessToken(.., ..);
+ *     ......
+ * </pre>
  * Created by zhaoyu on 15-10-31.
  */
 public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuthService {
@@ -29,8 +49,8 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
         super();
     }
 
-    public AniOAuthServiceImpl(AnicelMeta anicelMeta, RestTemplateFactory restTemplateFactory, String accessToken) {
-        super(anicelMeta, restTemplateFactory, accessToken);
+    public AniOAuthServiceImpl(AnicelMeta anicelMeta, RestTemplateFactory restTemplateFactory) {
+        super(anicelMeta, restTemplateFactory, null);
     }
 
     @Override
@@ -82,7 +102,8 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
         if (!DomainObjectValidator.isDomainObjectValid(implicitParameter)) {
             throw new ValidationException("Invalid ImplicitParameter Instance.");
         }
-
+        if (true)
+            throw new RuntimeException("DO NOT SUPPORT NOW.");
         // TODO
         return null;
     }

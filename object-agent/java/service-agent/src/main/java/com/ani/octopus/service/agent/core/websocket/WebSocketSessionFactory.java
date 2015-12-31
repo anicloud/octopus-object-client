@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * The web socket session factory.
+ * The web socket session factory.\
+ * <br><br>
  * Created by zhaoyu on 15-10-29.
  */
 public class WebSocketSessionFactory {
@@ -41,7 +42,7 @@ public class WebSocketSessionFactory {
 
     /**
      * get the singleton web socket session instance.
-     * @return
+     * @return AniServiceSession instance
      */
     public synchronized  AniServiceSession getAniServiceSession() {
         if (this.webSocketClient == null || aniServiceId == null || clientSecret == null) {

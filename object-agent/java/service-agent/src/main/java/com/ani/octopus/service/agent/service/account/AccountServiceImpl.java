@@ -10,6 +10,8 @@ import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,9 +23,33 @@ import java.net.URLEncoder;
 import java.util.Collections;
 
 /**
+ * The implementation of the AccountService and extends from AbstractBaseService. <br><br>
+ * <strong>Use Example:</strong><br>
+ * <pre>
+ *     AnicelMeta anicelMeta = new AnicelMeta();
+ *     // create the RestTemplateFactory
+ *     RestTemplateFactory templateFactory = new RestTemplateFactory();
+ *     // create AccountServiceImpl instance
+ *     AccountService accountService = new AccountServiceImpl(
+ *          anicelMeta,
+ *          templateFactory,
+ *          accessToken
+ *     );
+ *     // call the methods
+ *     AccountRegisterDto accountDto = new AccountRegisterDto();
+ *     accountGroupService.save(accountDto);
+ *     ......
+ * </pre>
+ * <Strong>Notice:</Strong><br>
+ *  When you want to register an account, you don't need the accessToken value, you just can set it <b>NULL</b>.
+ * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
 public class AccountServiceImpl extends AbstractBaseService implements AccountService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
+
+    public AccountServiceImpl() {
+    }
 
     public AccountServiceImpl(AnicelMeta anicelMeta, RestTemplateFactory restTemplateFactory, String accessToken) {
         super(anicelMeta, restTemplateFactory, accessToken);
@@ -45,6 +71,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountRegisterUrl());
 
+        LOGGER.info(uriComponentsBuilder.toUriString());
         HttpEntity<AccountRegisterDto> requestEntity = new HttpEntity<>(account, httpHeaders);
         AccountHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class}).postForObject(
                 uriComponentsBuilder.toUriString(),

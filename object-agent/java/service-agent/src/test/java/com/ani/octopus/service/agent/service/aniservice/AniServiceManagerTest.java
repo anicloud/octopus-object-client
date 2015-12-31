@@ -50,16 +50,16 @@ public class AniServiceManagerTest {
 
     @Test
     public void testGetAniService() throws Exception {
-        String aniServiceId = "7605099955253876787";
-        String clientSecret = "f43a261962f7acc6e79052f9380ec966";
+        String aniServiceId = "1058595963104900977";
+        String clientSecret = "34d54214721d6077ae021ab5d8215258";
         AniServiceDto aniServiceDto = aniServiceManager.getByAniService(aniServiceId, clientSecret);
         System.out.println(objectMapper.writeValueAsString(aniServiceDto));
     }
 
     @Test
     public void testModifyAniService() throws Exception {
-        String aniServiceId = "7605099955253876787";
-        String clientSecret = "f43a261962f7acc6e79052f9380ec966";
+        String aniServiceId = "1058595963104900977";
+        String clientSecret = "34d54214721d6077ae021ab5d8215258";
         AniServiceDto aniServiceDto = aniServiceManager.getByAniService(aniServiceId, clientSecret);
 
         System.out.println(objectMapper.writeValueAsString(aniServiceDto));

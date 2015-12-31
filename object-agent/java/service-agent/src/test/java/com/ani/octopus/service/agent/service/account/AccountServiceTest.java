@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class AccountServiceTest {
     private ObjectMapper objectMapper;
     private AccountService accountService;
-    private String accessToken = "aa0c7b13-f3d1-4f64-bd1b-bd472f4aaa6f";
+    private String accessToken = "1a014ee8-8122-44e7-83d3-640704fbe014";
 
     @Before
     public void before() {

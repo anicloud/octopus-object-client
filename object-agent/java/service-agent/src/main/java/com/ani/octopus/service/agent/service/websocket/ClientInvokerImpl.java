@@ -11,8 +11,36 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * the example implementation of Invokable, your third party service need to implement
- * what to do.
+ * the example implementation of ClientInvokable, the third party service need to implement
+ * what you want to do.<br><br>
+ * <strong>Use Example:</strong><br>
+ * <pre>
+ *      // you need to implement the ClientInvokable interface and register on
+ *      // WebSocketClient for anicloud platform to callback
+ *      ClientInvokable invokable = new ClientInvokerImpl();
+ *      WebSocketClient socketClient = new WebSocketClient(invokable);
+ *      // you need to implement your own observer and register on socketClient
+ *      // to receive the message for the asynchronous call result from anicloud platform
+ *      Vector&lt;MessageObserver&gt; messageObservers = new Vector&lt;&gt;();
+ *      messageObservers.add(new AniObjectCallMessageObserver());
+ *      socketClient.setObs(messageObservers);
+ *
+ *      // inject your WebSocketClient instance and anicloud socket destination url to factory
+ *      // and use factory to get the session, than you can use the session to communicate
+ *      // with anicloud platform
+ *      AnicelMeta anicelMeta = new AnicelMeta();
+ *      WebSocketSessionFactory sessionFactory = new WebSocketSessionFactory(
+ *          socketClient,
+ *          anicelMeta,
+ *          aniServiceId,
+ *          clientSecret
+ *      );
+ *      // get AniServiceSession instance
+ *      serviceSession = sessionFactory.getAniServiceSession();
+ *
+ *      ......
+ * </pre>
+ * <br>
  * Created by zhaoyu on 15-10-30.
  */
 public class ClientInvokerImpl implements ClientInvokable {

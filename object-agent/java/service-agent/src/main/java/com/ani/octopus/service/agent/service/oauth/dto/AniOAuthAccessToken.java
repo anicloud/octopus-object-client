@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
+ * This class provides the result for OAuth2.
+ * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
 public class AniOAuthAccessToken implements Serializable {

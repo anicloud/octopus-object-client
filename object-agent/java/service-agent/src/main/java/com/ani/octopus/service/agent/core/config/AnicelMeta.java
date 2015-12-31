@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * This class provides URIs for agent to get resources from Anicloud Platform. Including OAuth2 resources,
+ * Account related resources and webSocket resources. <br>
  * Created by zhaoyu on 15-11-11.
  */
 public class AnicelMeta {

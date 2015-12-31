@@ -6,6 +6,8 @@ import com.ani.octopus.service.agent.service.oauth.dto.ImplicitParameter;
 import com.ani.octopus.service.agent.service.oauth.dto.PasswordParameter;
 
 /**
+ * This interface provides the basic methods for OAuth2.
+ * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
 public interface AniOAuthService {

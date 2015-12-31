@@ -9,6 +9,8 @@ import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,9 +21,27 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * The implementation of the AccountGroupService and extends from AbstractBaseService. <br><br>
+ * <strong>Use Example:</strong><br>
+ * <pre>
+ *     AnicelMeta anicelMeta = new AnicelMeta();
+ *     // create the RestTemplateFactory
+ *     RestTemplateFactory templateFactory = new RestTemplateFactory();
+ *     // create AccountGroupService instance
+ *     AccountGroupService accountGroupService = new AccountGroupServiceImpl(
+ *          anicelMeta,
+ *          templateFactory,
+ *          accessToken
+ *     );
+ *     // call the methods
+ *     GroupFormDto formDto = new GroupFormDto();
+ *     accountGroupService.save(formDto);
+ *     ......
+ * </pre>
  * Created by zhaoyu on 15-10-31.
  */
 public class AccountGroupServiceImpl extends AbstractBaseService implements AccountGroupService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountGroupServiceImpl.class);
 
     public AccountGroupServiceImpl() {
         super();
@@ -141,6 +161,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
+        LOGGER.info(uriComponentsBuilder.toUriString());
         AccountGroupHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountGroupHttpMessage.class);
 

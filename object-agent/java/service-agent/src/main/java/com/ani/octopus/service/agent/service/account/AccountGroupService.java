@@ -9,7 +9,8 @@ import com.ani.octopus.account.domain.model.enums.GroupType;
 import java.util.Collection;
 
 /**
- * The account group manager service.
+ * This is the interface for account group management which is used by the third party service to operate account group related information.
+ * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
 public interface AccountGroupService {
@@ -31,6 +32,11 @@ public interface AccountGroupService {
      * remove an account group.
      * @param accountId account id.
      * @param groupId group id.
+    /**
+     * remove an account group.
+     * @param accountId account id.
+     * @param groupId group id.
+     * @return result message
      */
     Message remove(Long accountId, Long groupId);
 

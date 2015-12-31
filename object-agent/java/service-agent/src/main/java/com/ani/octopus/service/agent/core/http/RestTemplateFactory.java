@@ -11,6 +11,7 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * This class provides the singleton http RestTemplate instance based on <strong>Spring RestTemplate</strong>.<br><br>
  * Created by zhaoyu on 15-11-11.
  */
 public class RestTemplateFactory {
@@ -24,6 +25,11 @@ public class RestTemplateFactory {
         this.restTemplate = new RestTemplate();
     }
 
+    /**
+     * Get the singleton instance of Spring RestTemplate.
+     * @param classes for the XStream annotation
+     * @return Spring RestTemplate instance
+     */
     public RestTemplate getRestTemplate(Class[] classes) {
         XStreamMarshaller xStreamMarshaller = new XStreamMarshaller();
         xStreamMarshaller.setStreamDriver(new StaxDriver());

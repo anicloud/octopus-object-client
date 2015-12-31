@@ -62,10 +62,9 @@ public class AniInvokerImplTest {
 
         List<Argument> inputValues = new ArrayList<>();
 
-        List<Object> val = new ArrayList<>();
-        val.add(1);
+        ArgumentType type = new ArgumentType(ArgumentType.Type.INTEGER);
 
-        inputValues.add(new Argument("arg1", ArgumentType.INTEGER, val));
+        inputValues.add(new Argument("arg1", type, new Integer(1)));
         AniStub aniStub = new AniStub(
                 6233851390026698963L,
                 1707593791689932096L,

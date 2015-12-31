@@ -18,8 +18,39 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * The implementation of AniInvoker for the third party service to call.
+ * The implementation of AniInvoker for the third party service to call. We provides <b>Async</b> and <b>Sync</b> methods.
+ * If you want to use <b>Async</b> methods, you need to register your own <b>Observer</b> which implements the MessageObserver interface
+ * to accept the result from Anicloud Platform.
+ * <br><br>
+ * <strong>Use Example:</strong><br>
+ * <pre>
+ *      // you need to implement the ClientInvokable interface and register on
+ *      // WebSocketClient for anicloud platform to callback
+ *      ClientInvokable invokable = new ClientInvokerImpl();
+ *      WebSocketClient socketClient = new WebSocketClient(invokable);
+ *      // you need to implement your own observer and register on socketClient
+ *      // to receive the message for the asynchronous call result from anicloud platform
+ *      Vector&lt;MessageObserver&gt; messageObservers = new Vector&lt;MessageObserver&gt;();
+ *      messageObservers.add(new AniObjectCallMessageObserver());
+ *      socketClient.setObs(messageObservers);
  *
+ *      // inject your WebSocketClient instance and anicloud socket destination url to factory
+ *      // and use factory to get the session, than you can use the session to communicate
+ *      // with anicloud platform
+ *      AnicelMeta anicelMeta = new AnicelMeta();
+ *      WebSocketSessionFactory sessionFactory = new WebSocketSessionFactory(
+ *          socketClient,
+ *          anicelMeta,
+ *          aniServiceId,
+ *          clientSecret
+ *      );
+ *      // get AniServiceSession instance
+ *      AniServiceSession serviceSession = sessionFactory.getAniServiceSession();
+ *      // AniInvokable instance
+ *      AniInvokable aniInvokable = new AniInvokerImpl(serviceSession);
+ *      // call the methods
+ *      ......
+ * </pre>
  * Created by zhaoyu on 15-10-30.
  */
 public class AniInvokerImpl implements AniInvokable {

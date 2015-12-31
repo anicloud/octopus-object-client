@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class AccountGroupServiceTest {
     private ObjectMapper objectMapper;
     private AccountGroupService accountGroupService;
-    private String accessToken = "aa0c7b13-f3d1-4f64-bd1b-bd472f4aaa6f";
+    private String accessToken = "1a014ee8-8122-44e7-83d3-640704fbe014";
 
     @Before
     public void before() {
@@ -76,7 +76,7 @@ public class AccountGroupServiceTest {
 
     @Test
     public void testGetById() throws Exception {
-        Long groupId = 4L;
+        Long groupId = 2L;
         AccountGroupDto accountGroupDto = accountGroupService.getById(groupId);
         System.out.println(accountGroupDto);
         Assert.assertNotNull(accountGroupDto);

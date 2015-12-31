@@ -6,6 +6,9 @@ import org.springframework.util.MultiValueMap;
 import javax.validation.constraints.NotNull;
 
 /**
+ * This class provides the parameters for <b>OAuth2 Authorization Code model</b>.
+ * See <a href="https://github.com/jeansfish/RFC6749.zh-cn/blob/master/Section04/4.1.md" target="_blank" >Authorization Code</a> details.
+ * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
 public class AuthorizationCodeParameter extends AniOAuthParameter {
