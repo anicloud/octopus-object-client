@@ -4,7 +4,7 @@ import com.ani.octopus.commons.accout.dto.AccountDto;
 import com.ani.octopus.commons.accout.dto.AccountGroupDto;
 import com.ani.octopus.commons.accout.dto.GroupFormDto;
 import com.ani.octopus.commons.accout.dto.GroupType;
-import com.ani.octopus.commons.core.message.Message;
+import com.ani.octopus.commons.core.message.OctopusMessage;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +69,7 @@ public class AccountGroupServiceTest {
         //Long accountId = 5171261575755046940L;
         Long groupId = 3L;
 
-        Message message = accountGroupService.remove(accountId, groupId);
+        OctopusMessage message = accountGroupService.remove(accountId, groupId);
         System.out.println(message);
     }
 

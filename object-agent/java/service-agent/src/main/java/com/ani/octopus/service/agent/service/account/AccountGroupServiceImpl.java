@@ -1,5 +1,6 @@
 package com.ani.octopus.service.agent.service.account;
 
+import com.ani.bus.service.commons.core.message.HttpMessage;
 import com.ani.octopus.commons.accout.dto.AccountDto;
 import com.ani.octopus.commons.accout.dto.AccountGroupDto;
 import com.ani.octopus.commons.accout.dto.GroupFormDto;
@@ -7,8 +8,8 @@ import com.ani.octopus.commons.accout.dto.GroupType;
 import com.ani.octopus.commons.accout.message.AccountGroupHttpMessage;
 import com.ani.octopus.commons.accout.message.AccountGroupsHttpMessage;
 import com.ani.octopus.commons.accout.message.AccountsHttpMessage;
-import com.ani.octopus.commons.core.message.HttpMessage;
-import com.ani.octopus.commons.core.message.Message;
+import com.ani.octopus.commons.core.message.OctopusHttpMessage;
+import com.ani.octopus.commons.core.message.OctopusMessage;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
@@ -80,7 +81,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
                 AccountGroupHttpMessage.class
         );
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -115,7 +116,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
                 requestEntity,
                 AccountGroupHttpMessage.class
         );
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -127,7 +128,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
     }
 
     @Override
-    public Message remove(Long accountId, Long groupId) {
+    public OctopusMessage remove(Long accountId, Long groupId) {
         if (accountId == null || groupId == null) {
             throw new NullPointerException("AccountId or GroupId is Null.");
         }
@@ -143,9 +144,9 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString())
                 .queryParam(RestTemplateFactory.ACCESS_TOKEN, accessToken);
-        HttpMessage message = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).getForObject(
+        OctopusHttpMessage message = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class}).getForObject(
                 uriComponentsBuilder.build().toUriString(),
-                HttpMessage.class
+                OctopusHttpMessage.class
         );
         return message;
     }
@@ -169,7 +170,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         AccountGroupHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountGroupHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -201,7 +202,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         AccountGroupsHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountGroupsHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -230,7 +231,7 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
         AccountsHttpMessage result = restTemplateFactory.getRestTemplate(new Class[] {GroupFormDto.class, AccountGroupDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountsHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")

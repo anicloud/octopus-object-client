@@ -4,7 +4,7 @@ import com.ani.octopus.commons.accout.dto.AccountDto;
 import com.ani.octopus.commons.accout.dto.AccountGroupDto;
 import com.ani.octopus.commons.accout.dto.GroupFormDto;
 import com.ani.octopus.commons.accout.dto.GroupType;
-import com.ani.octopus.commons.core.message.Message;
+import com.ani.octopus.commons.core.message.OctopusMessage;
 
 import java.util.Collection;
 
@@ -38,7 +38,7 @@ public interface AccountGroupService {
      * @param groupId group id.
      * @return result message
      */
-    Message remove(Long accountId, Long groupId);
+    OctopusMessage remove(Long accountId, Long groupId);
 
     /**
      * find an account group by group id.

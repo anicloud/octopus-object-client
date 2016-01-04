@@ -5,7 +5,7 @@ import com.ani.octopus.commons.accout.dto.AccountModifyDto;
 import com.ani.octopus.commons.accout.dto.AccountRegisterDto;
 import com.ani.octopus.commons.accout.dto.AccountType;
 import com.ani.octopus.commons.accout.message.AccountHttpMessage;
-import com.ani.octopus.commons.core.message.Message;
+import com.ani.octopus.commons.core.message.OctopusMessage;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
@@ -78,7 +78,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
                 requestEntity,
                 AccountHttpMessage.class
         );
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -112,7 +112,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
                 .postForObject(uriComponentsBuilder.toUriString(), requestEntity, AccountHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -142,7 +142,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -171,7 +171,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
                 .getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -200,7 +200,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         AccountHttpMessage result  = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
@@ -231,7 +231,7 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
         AccountHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
                 .getForObject(uriComponentsBuilder.build().toUriString(), AccountHttpMessage.class);
 
-        if (result.getResultCode() == Message.ResultCode.SUCCESS) {
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
             return result.getReturnObj();
         } else {
             StringBuilder builder = new StringBuilder("message: ")
