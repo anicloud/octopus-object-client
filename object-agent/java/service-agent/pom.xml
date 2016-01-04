@@ -15,10 +15,14 @@
     <name>service-agent</name>
 
     <dependencies>
-        <!-- anicel commons -->
+        <!-- octopus commons -->
         <dependency>
-            <groupId>com.anicel.anicel-commons</groupId>
-            <artifactId>anicel-commons</artifactId>
+            <groupId>com.ani.octopus</groupId>
+            <artifactId>octopus-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ani.bus.commons</groupId>
+            <artifactId>service-bus-commons</artifactId>
         </dependency>
         <!-- webscoket -->
         <dependency>
@@ -83,7 +87,6 @@
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.8</version>
         </dependency>
         <!-- jackson -->
         <dependency>
@@ -97,12 +100,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-        </dependency>
-
-        <!-- xml -->
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
         </dependency>
 
         <!-- log4j -->

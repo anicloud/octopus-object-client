@@ -29,10 +29,15 @@
                 <artifactId>device-bus</artifactId>
                 <version>1.0</version>
             </dependency>
-            <!-- anicel commons -->
+            <!-- octopus commons -->
             <dependency>
-                <groupId>com.anicel.anicel-commons</groupId>
-                <artifactId>anicel-commons</artifactId>
+                <groupId>com.ani.octopus</groupId>
+                <artifactId>octopus-commons</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ani.bus.commons</groupId>
+                <artifactId>service-bus-commons</artifactId>
                 <version>1.0</version>
             </dependency>
             <!-- webscoket -->

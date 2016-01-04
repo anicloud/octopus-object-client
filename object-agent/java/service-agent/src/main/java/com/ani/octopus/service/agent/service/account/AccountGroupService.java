@@ -1,10 +1,10 @@
 package com.ani.octopus.service.agent.service.account;
 
-import com.anicel.commons.account.dto.AccountDto;
-import com.anicel.commons.account.dto.AccountGroupDto;
-import com.anicel.commons.account.dto.GroupFormDto;
-import com.anicel.commons.account.dto.GroupType;
-import com.anicel.commons.message.Message;
+import com.ani.octopus.commons.accout.dto.AccountDto;
+import com.ani.octopus.commons.accout.dto.AccountGroupDto;
+import com.ani.octopus.commons.accout.dto.GroupFormDto;
+import com.ani.octopus.commons.accout.dto.GroupType;
+import com.ani.octopus.commons.core.message.Message;
 
 import java.util.Collection;
 

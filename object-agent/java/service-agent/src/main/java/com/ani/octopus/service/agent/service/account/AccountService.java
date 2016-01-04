@@ -1,9 +1,9 @@
 package com.ani.octopus.service.agent.service.account;
 
 
-import com.anicel.commons.account.dto.AccountDto;
-import com.anicel.commons.account.dto.AccountModifyDto;
-import com.anicel.commons.account.dto.AccountRegisterDto;
+import com.ani.octopus.commons.accout.dto.AccountDto;
+import com.ani.octopus.commons.accout.dto.AccountModifyDto;
+import com.ani.octopus.commons.accout.dto.AccountRegisterDto;
 
 import javax.xml.bind.ValidationException;
 import java.io.UnsupportedEncodingException;

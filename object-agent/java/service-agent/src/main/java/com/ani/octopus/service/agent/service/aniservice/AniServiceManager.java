@@ -1,7 +1,7 @@
 package com.ani.octopus.service.agent.service.aniservice;
 
-import com.anicel.commons.service.bus.dto.aniservice.AniServiceDto;
-import com.anicel.commons.service.bus.dto.aniservice.AniServiceRegisterDto;
+import com.ani.bus.service.commons.dto.aniservice.AniServiceDto;
+import com.ani.bus.service.commons.dto.aniservice.AniServiceRegisterDto;
 
 /**
  * The interface of third party service to register their client on Anicloud Platform.

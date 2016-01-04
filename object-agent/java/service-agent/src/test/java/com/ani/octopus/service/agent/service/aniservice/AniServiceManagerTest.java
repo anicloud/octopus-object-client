@@ -1,8 +1,8 @@
 package com.ani.octopus.service.agent.service.aniservice;
 
+import com.ani.bus.service.commons.dto.aniservice.*;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
-import com.anicel.commons.service.bus.dto.aniservice.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Ignore;

@@ -1,13 +1,13 @@
 package com.ani.octopus.service.agent.service.aniservice;
 
+import com.ani.bus.service.commons.core.message.Message;
+import com.ani.bus.service.commons.dto.aniservice.AniServiceDto;
+import com.ani.bus.service.commons.dto.aniservice.AniServiceRegisterDto;
+import com.ani.bus.service.commons.message.AniServiceHttpMessage;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
 import com.ani.octopus.service.agent.core.http.RestTemplateFactory;
 import com.ani.octopus.service.agent.core.validate.DomainObjectValidator;
-import com.anicel.commons.message.Message;
-import com.anicel.commons.service.bus.dto.aniservice.AniServiceDto;
-import com.anicel.commons.service.bus.dto.aniservice.AniServiceRegisterDto;
-import com.anicel.commons.service.bus.message.AniServiceHttpMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

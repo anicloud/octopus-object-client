@@ -1,7 +1,8 @@
 package com.ani.octopus.service.agent.service.websocket;
 
-import com.anicel.commons.service.bus.dto.anistub.AniStub;
-import com.anicel.commons.service.bus.dto.anistub.Argument;
+
+import com.ani.bus.service.commons.dto.anistub.AniStub;
+import com.ani.bus.service.commons.dto.anistub.Argument;
 
 import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
