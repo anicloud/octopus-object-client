@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public interface AccountInvoker {
     /**
-     * account object register and login
+     * account object register and login, than update object related Stub list
      * @param accountObject account object which is used to keep state of Account on Anicloud Platform.
      * @return SocketMessage
      * @throws IOException IOException
