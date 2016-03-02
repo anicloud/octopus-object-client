@@ -51,6 +51,11 @@ public class AnicelMeta {
     private String serviceBusWebSocketUrl;
     private String serviceBusRegisterUrl;
     private String serviceBusGetByUrl;
+
+    //device Obj info
+    private String deviceObjUrl;
+    private String deviceObjsUrl;
+
     // oauth
     private String accountOAuthAuthorizeUrl;
     private String accountOAuthTokenUrl;
@@ -80,6 +85,9 @@ public class AnicelMeta {
         this.serviceBusGetByUrl = properties.getProperty("ani.bus.service.bus.aniservice.get");
         this.aniServiceBusUrl = properties.getProperty("ani.bus.service.bus");
         this.serviceBusWebSocketUrl = properties.getProperty("ani.bus.service.bus.websocket");
+
+        this.deviceObjUrl = properties.getProperty("ani.bus.service.bus.deviceObj");
+        this.deviceObjsUrl = properties.getProperty("ani.bus.service.bus.deviceObjs");
     }
 
     public String getOctopusServiceUrl() {
@@ -158,6 +166,14 @@ public class AnicelMeta {
         return serviceBusGetByUrl;
     }
 
+    public String getDeviceObjUrl() {
+        return deviceObjUrl;
+    }
+
+    public String getDeviceObjsUrl() {
+        return deviceObjsUrl;
+    }
+
     @Override
     public String toString() {
         return "AnicelMeta{" +
@@ -178,6 +194,8 @@ public class AnicelMeta {
                 ", serviceBusWebSocketUrl='" + serviceBusWebSocketUrl + '\'' +
                 ", serviceBusRegisterUrl='" + serviceBusRegisterUrl + '\'' +
                 ", serviceBusGetByUrl='" + serviceBusGetByUrl + '\'' +
+                ", deviceObjUrl='" + deviceObjUrl + '\'' +
+                ", deviceObjsUrl='" + deviceObjsUrl + '\'' +
                 ", accountOAuthAuthorizeUrl='" + accountOAuthAuthorizeUrl + '\'' +
                 ", accountOAuthTokenUrl='" + accountOAuthTokenUrl + '\'' +
                 '}';
