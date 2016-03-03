@@ -22,9 +22,7 @@ public class AuthorizationCodeParameter extends AniOAuthParameter {
     private GrantType grantType;
     @NotNull
     private String redirectUri;
-    @NotNull
     private ResponseType responseType;
-    @NotNull
     private Scope scope;
 
     public AuthorizationCodeParameter() {
