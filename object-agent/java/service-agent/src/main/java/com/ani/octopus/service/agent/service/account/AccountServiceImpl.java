@@ -212,6 +212,33 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
     }
 
     @Override
+    public AccountDto getByAccessToken() {
+        if (accessToken == null) {
+            throw new NullPointerException("accessToken is Null.");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(anicelMeta.getOctopusServiceUrl())
+                .append(anicelMeta.getAccountByTokenUrl());
+
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+                .fromHttpUrl(stringBuilder.toString())
+                .queryParam("access_token", accessToken);
+        AccountHttpMessage result  = restTemplateFactory.getRestTemplate(new Class[]{AccountRegisterDto.class, AccountDto.class})
+                .getForObject(uriComponentsBuilder.build().toUriString(), AccountHttpMessage.class);
+
+        if (result.getResultCode() == OctopusMessage.ResultCode.SUCCESS) {
+            return result.getReturnObj();
+        } else {
+            StringBuilder builder = new StringBuilder("message: ")
+                    .append(result.getMsg())
+                    .append(", error code:")
+                    .append(result.getResultCode());
+            throw new RuntimeException(builder.toString());
+        }
+    }
+
+    @Override
     public AccountDto addAccountInGroup(Long accountId, Long groupId) {
         if (accountId == null || groupId == null) {
             throw new NullPointerException("AccountId or GroupId is Null.");

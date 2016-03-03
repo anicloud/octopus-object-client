@@ -38,6 +38,7 @@ public class AnicelMeta {
     private String accountByAccountIdUrl;
     private String accountByEmailUrl;
     private String accountByPhoneUrl;
+    private String accountByTokenUrl;
 
     private String groupAddUrl;
     private String groupModifyUrl;
@@ -68,7 +69,7 @@ public class AnicelMeta {
         this.accountByAccountIdUrl = properties.getProperty("octopus.account.service.account.accountId");
         this.accountByEmailUrl = properties.getProperty("octopus.account.service.account.email");
         this.accountByPhoneUrl = properties.getProperty("octopus.account.service.account.phone");
-
+        this.accountByTokenUrl = properties.getProperty("octopus.account.service.account.token");
 
         this.groupAddUrl = properties.getProperty("octopus.account.service.group.add");
         this.groupModifyUrl = properties.getProperty("octopus.account.service.group.modify");
@@ -174,6 +175,10 @@ public class AnicelMeta {
         return deviceObjsUrl;
     }
 
+    public String getAccountByTokenUrl() {
+        return accountByTokenUrl;
+    }
+
     @Override
     public String toString() {
         return "AnicelMeta{" +
@@ -184,6 +189,7 @@ public class AnicelMeta {
                 ", accountByAccountIdUrl='" + accountByAccountIdUrl + '\'' +
                 ", accountByEmailUrl='" + accountByEmailUrl + '\'' +
                 ", accountByPhoneUrl='" + accountByPhoneUrl + '\'' +
+                ", accountByTokenUrl='" + accountByTokenUrl + '\'' +
                 ", groupAddUrl='" + groupAddUrl + '\'' +
                 ", groupModifyUrl='" + groupModifyUrl + '\'' +
                 ", groupDeleteUrl='" + groupDeleteUrl + '\'' +

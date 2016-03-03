@@ -53,6 +53,12 @@ public interface AccountService {
     AccountDto getByPhoneNumber(String phoneNumber);
 
     /**
+     * get an Account information by access token
+     * @return account details
+     */
+    AccountDto getByAccessToken();
+
+    /**
      * add an account to a group.
      * @param accountId account id.
      * @param groupId group id.
