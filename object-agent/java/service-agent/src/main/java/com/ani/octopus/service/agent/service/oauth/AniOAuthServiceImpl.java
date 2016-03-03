@@ -61,7 +61,7 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
 
         MultiValueMap<String, String> valueMap = authorizationCodeParameter.convertParameterToMapForAccessToken();
         UriComponentsBuilder componentsBuilder = UriComponentsBuilder
-                .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountOAuthTokenUrl())
+                .fromHttpUrl(anicelMeta.getAniServiceBusUrl() + anicelMeta.getAccountOAuthTokenUrl())
                 .queryParams(valueMap)
                 .queryParam(RestTemplateFactory.CODE, code);
 
@@ -83,7 +83,7 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
         }
         MultiValueMap<String, String> valueMap = passwordParameter.convertParameter();
         UriComponentsBuilder componentsBuilder = UriComponentsBuilder
-                .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountOAuthTokenUrl())
+                .fromHttpUrl(anicelMeta.getAniServiceBusUrl() + anicelMeta.getAccountOAuthTokenUrl())
                 .queryParams(valueMap);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -112,7 +112,7 @@ public class AniOAuthServiceImpl extends AbstractBaseService implements AniOAuth
     public AniOAuthAccessToken refreshAccessToken(String refreshToken, AuthorizationCodeParameter authorizationCodeParameter) {
         MultiValueMap<String, String> valueMap = authorizationCodeParameter.convertParameterToMapForRefreshToken();
         UriComponentsBuilder componentsBuilder = UriComponentsBuilder
-                .fromHttpUrl(anicelMeta.getOctopusServiceUrl() + anicelMeta.getAccountOAuthTokenUrl())
+                .fromHttpUrl(anicelMeta.getAniServiceBusUrl() + anicelMeta.getAccountOAuthTokenUrl())
                 .queryParams(valueMap)
                 .queryParam(restTemplateFactory.REFRESH_TOKEN, refreshToken);
 
