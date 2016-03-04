@@ -26,8 +26,8 @@ import static org.junit.Assert.*;
 public class AccountServiceTest {
     private ObjectMapper objectMapper;
     private AccountService accountService;
-    private String accessToken = "1a014ee8-8122-44e7-83d3-640704fbe014";
-
+    private String accessToken = "2e92ddce-a236-426e-affe-0b78c06a46c3";
+    private Long accountId = 3888396496254000114L;
     @Before
     public void before() {
         objectMapper = new ObjectMapper();
@@ -65,7 +65,6 @@ public class AccountServiceTest {
 
     @Test
     public void testGetByAccountId() throws JsonProcessingException {
-        Long accountId = 4655394565573078056L;
         AccountDto accountDto = accountService.getByAccountId(accountId);
         System.out.println(objectMapper.writeValueAsString(accountDto));
     }
@@ -85,8 +84,13 @@ public class AccountServiceTest {
     }
 
     @Test
+    public void testGetByAccessToken() {
+        AccountDto accountDto = accountService.getByAccessToken();
+        System.out.println(accountDto.toString());
+    }
+
+    @Test
     public void testAddAccountInGroup() {
-        Long accountId = 4655394565573078056L;
         Long groupId = 2L;
         AccountDto accountDto = accountService.addAccountInGroup(accountId, groupId);
         System.out.println(accountDto);
