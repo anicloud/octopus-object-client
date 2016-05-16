@@ -1,18 +1,24 @@
 package com.ani.client.agent.device.core.agent;
 
 
-import com.ani.bus.device.commons.dto.device.*;
+import com.ani.bus.device.commons.dto.device.ArgumentDto;
+import com.ani.bus.device.commons.dto.device.FunctionDto;
+import com.ani.bus.device.commons.dto.device.FunctionInstance;
 import com.ani.bus.device.commons.dto.message.*;
 import com.ani.client.agent.device.core.device.DeviceMaster;
+import com.ani.client.agent.device.core.device.DeviceSlave;
+import com.ani.client.agent.device.core.socket.DeviceMessageHandler;
 import com.ani.client.agent.device.core.socket.IoHandler;
-import com.ani.client.agent.device.core.socket.MessageHandler;
 import com.ani.client.agent.device.core.socket.TcpClient;
 import org.apache.log4j.Logger;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -43,7 +49,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     private DeviceController controller;
     private final DeviceMaster deviceMaster;
 
-    private MessageHandler messageHandler;
+    private DeviceMessageHandler messageHandler;
     private IoHandler ioHandler;
 
     private State state;
@@ -68,14 +74,12 @@ public class DeviceAgent implements Invokable, InvokeCallback {
         STATE_REGISTERED,
         STATE_AUTHING,
         STATE_AUTHED,
-//        STATE_UPDATING,
-//        STATE_UPDATED,
         STATE_CLOSING,
         STATE_CLOSED
     }
 
     public DeviceAgent(DeviceController controller, DeviceMaster deviceMaster) {
-        this.messageHandler = new MessageHandlerImpl();
+        this.messageHandler = new DeviceMessageHandlerImpl();
         this.ioHandler = new IoHandler(new TcpClient());
         this.ioHandler.setMessageHandler(this.messageHandler);
         this.controller = controller;
@@ -99,7 +103,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
         if (state == State.STATE_INIT || state == State.STATE_CLOSED) {
             state = State.STATE_CONNECTING;
             error = Error.ERROR_NONE;
-            String host = "localhost";
+            String host = "cn-bj-yatsen.anicel.cn";
             Integer port = 1222;
             try {
                 ioHandler.getClient().connect(host, port);
@@ -107,7 +111,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
                 state = State.STATE_CLOSED;
                 error = Error.ERROR_CONNECT;
                 controller.onError(Error.ERROR_CONNECT);
-                controller.onClose();;
+//                controller.onClose();
                 LOG.info(e);
             }
         }
@@ -119,19 +123,22 @@ public class DeviceAgent implements Invokable, InvokeCallback {
      *   otherwise: DeviceController::onError(ERROR_REGISTER)
      */
     public void register() {
-        LOG.info("device register start");
         if (deviceMaster.getDeviceId() != -1l && deviceMaster.getToken() != null) {
-            LOG.info("device register ok, already registered");
+            LOG.info("device state: already registered");
             state = State.STATE_REGISTERED;
             controller.onRegister();
         } else {
+            LOG.info("device state: registering");
             state = State.STATE_REGISTERING;
-            MessageContent content = new ContentRegisterRequest(
+            DeviceMessageContent content = new RegisterRequestContent(
                     deviceMaster.getPhysicalId(),
                     deviceMaster.getPhysicalAddress(),
                     deviceMaster.getName(),
-                    deviceMaster.getDescription());
-            Message message = new Message(MessageType.REGISTER_REQUEST, content);
+                    deviceMaster.getDescription(),
+                    deviceMaster.getAvatarUrl(),
+                    deviceMaster.getTags(),
+                    deviceMaster.getVersionId());
+            DeviceMessage message = new DeviceMessage(DeviceMessageType.REGISTER_REQUEST, content);
             sendMessage(message);
         }
     }
@@ -142,12 +149,12 @@ public class DeviceAgent implements Invokable, InvokeCallback {
      *   otherwise: DeviceController::onError(ERROR_AUTH)
      */
     public void auth() {
-        LOG.info("device auth start");
+        LOG.info("device state: authing");
         state = State.STATE_AUTHING;
         Long timestamp = System.currentTimeMillis();
         byte[] sign = signature(timestamp, deviceMaster.getToken());
-        MessageContent content = new ContentAuthRequest(deviceMaster.getDeviceId(), timestamp, sign);
-        Message message = new Message(MessageType.AUTH_REQUEST, content);
+        DeviceMessageContent content = new AuthRequestContent(deviceMaster.getDeviceId(), timestamp, sign);
+        DeviceMessage message = new DeviceMessage(DeviceMessageType.AUTH_REQUEST, content);
         sendMessage(message);
     }
 
@@ -180,8 +187,8 @@ public class DeviceAgent implements Invokable, InvokeCallback {
      */
     public void update() {
         LOG.info("device update start");
-        MessageContent content = new ContentUpdateRequest(deviceMaster.toDto());
-        Message message = new Message(MessageType.UPDATE_REQUEST, content);
+        DeviceMessageContent content = new UpdateRequestContent(deviceMaster.toDto());
+        DeviceMessage message = new DeviceMessage(DeviceMessageType.UPDATE_REQUEST, content);
         sendMessage(message);
     }
 
@@ -211,8 +218,8 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     public void invokeSync(FunctionInstance instance, Long timeout) {
         try {
             instance.startTime = System.currentTimeMillis();
-            ContentInvokeRequest content = new ContentInvokeRequest(instance);
-            Message message = new Message(MessageType.INVOKE_REQUEST, content);
+            InvokeRequestContent content = new InvokeRequestContent(instance);
+            DeviceMessage message = new DeviceMessage(DeviceMessageType.INVOKE_REQUEST, content);
             sendMessage(message);
             instanceMap.put(instance.instanceId, instance);
             synchronized (instance.lock) {
@@ -231,8 +238,8 @@ public class DeviceAgent implements Invokable, InvokeCallback {
         instance.startTime = System.currentTimeMillis();
         instanceMap.put(instance.instanceId, instance);
         callbackMap.put(instance.instanceId, callback);
-        ContentInvokeRequest content = new ContentInvokeRequest(instance);
-        Message message = new Message(MessageType.INVOKE_REQUEST, content);
+        InvokeRequestContent content = new InvokeRequestContent(instance);
+        DeviceMessage message = new DeviceMessage(DeviceMessageType.INVOKE_REQUEST, content);
         sendMessage(message);
     }
 
@@ -240,17 +247,17 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     * Implement of InvokeHandler
     */
     public void onInvokeDone(FunctionInstance instance) {
-        ContentInvokeResponse contentResponse = new ContentInvokeResponse(instance.result, instance);
-        Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
+        InvokeResponseContent contentResponse = new InvokeResponseContent(instance.result, instance);
+        DeviceMessage messageResponse = new DeviceMessage(DeviceMessageType.INVOKE_RESPONSE, contentResponse);
         sendMessage(messageResponse);
     }
 
     /**
-     * Implement of MessageHandler
+     * Implement of DeviceMessageHandler
      */
-    private class MessageHandlerImpl implements MessageHandler {
+    private class DeviceMessageHandlerImpl implements DeviceMessageHandler {
 
-        public void onMessage(Message message) throws IOException {
+        public void onMessage(DeviceMessage message) throws IOException {
             switch (message.type) {
                 case REGISTER_RESPONSE:
                     if (state == State.STATE_REGISTERING) {
@@ -304,7 +311,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     *   Local helper functions
     *
     */
-    private void sendMessage(Message message) {
+    private void sendMessage(DeviceMessage message) {
         try {
             ioHandler.sendMessage(message);
         } catch (Exception e) {
@@ -313,14 +320,14 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     }
 
 
-    private void onRegisterResponse(Message message) {
-        ContentRegisterResponse content = (ContentRegisterResponse) message.content;
+    private void onRegisterResponse(DeviceMessage message) {
+        RegisterResponseContent content = (RegisterResponseContent) message.content;
         if (!content.result) {
             LOG.info("device register error");
             error = Error.ERROR_REGISTER;
             controller.onError(Error.ERROR_REGISTER);
         } else {
-            LOG.info("device register ok");
+            LOG.info("device state: registered");
             deviceMaster.setDeviceId(content.deviceId);
             deviceMaster.setToken(content.token);
             controller.onRegister();
@@ -329,29 +336,17 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     }
 
     private byte[] signature(Long timestamp, byte[] token) {
-        // String sign = null;
         byte[] sign = null;
         byte[] key = new byte[8];
-//        LOG.info("timestamp: " + timestamp);
         for (int i = 0; i < key.length; i++) {
             key[i] = (byte) ((timestamp >> (7 - i) * 8) & 0xff);
-//            LOG.info("\t[" + i + "]" + key[i]);
         }
-//        LOG.info("token: ");
-//        for (int i=0; i<token.length; i++) {
-//            LOG.info("\t[" + i + "]" + token[i]);
-//        }
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "HmacMD5");
         try {
             Mac mac = Mac.getInstance(secretKeySpec.getAlgorithm());
             mac.init(secretKeySpec);
             byte[] rawHmac = mac.doFinal(token);
             sign = rawHmac;
-//            StringBuffer strHmac = new StringBuffer();
-//            for (int i = 0; i < rawHmac.length; i++) {
-//                strHmac.append(Integer.toHexString(rawHmac[i]));
-//            }
-//            sign = strHmac.toString();
         } catch (Exception e) {
             LOG.info(e);
         } finally {
@@ -360,68 +355,81 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     }
 
 
-    private void onAuthResponse(Message message) {
-        ContentAuthResponse content = (ContentAuthResponse) message.content;
-        if (!content.result) {
+    private void onAuthResponse(DeviceMessage message) {
+        AuthResponseContent content = (AuthResponseContent) message.content;
+        if (content.result) {
+            LOG.info("device state: authed");
+            state = State.STATE_AUTHED;
+            mergeDeviceMaster(new DeviceMaster(content.dto));
+            controller.onAuth();
+        } else {
             LOG.info("device auth error");
             error = Error.ERROR_AUTH;
             controller.onError(Error.ERROR_AUTH);
-        } else {
-            LOG.info("device auth ok");
-            state = State.STATE_AUTHED;
-            controller.onAuth();
         }
     }
 
     private void mergeDeviceMaster(DeviceMaster deviceMasterRemote) {
-        // update name
-        deviceMaster.setName(deviceMasterRemote.getName());
-        // update description
-        deviceMaster.setDescription(deviceMasterRemote.getDescription());
-        // update owner
-        deviceMaster.setOwner(deviceMasterRemote.getOwner());
-        // update accounts
-        deviceMaster.setAccountGroups(deviceMasterRemote.getAccountGroups());
-        // update slaves
-        deviceMaster.setSlaves(deviceMasterRemote.getSlaves());
-    }
-
-    private void onUpdateResponse(Message message) {
-        ContentUpdateResponse content = (ContentUpdateResponse) message.content;
-        if (!content.result) {
-            LOG.warn("device update error");
-            error = Error.ERROR_UPDATE;
-        } else {
-            LOG.info("device update ok");
-            mergeDeviceMaster(new DeviceMaster(content.dto));
-            controller.onUpdate();
+        if (deviceMasterRemote.getLastModifiedTime() > deviceMaster.getLastModifiedTime()) {
+            deviceMaster.setName(deviceMasterRemote.getName());
+            deviceMaster.setDescription(deviceMasterRemote.getDescription());
+            deviceMaster.setOwner(deviceMasterRemote.getOwner());
+            deviceMaster.setAccountGroups(deviceMasterRemote.getAccountGroups());
+            deviceMaster.setAvatarUrl(deviceMasterRemote.getAvatarUrl());
+            deviceMaster.setTags(deviceMasterRemote.getTags());
+            if (deviceMasterRemote.getSlaves() != null && deviceMaster.getSlaves() != null) {
+                for (DeviceSlave deviceSlaveRemote : deviceMasterRemote.getSlaves()) {
+                    for (DeviceSlave deviceSlave : deviceMaster.getSlaves()) {
+                        if (deviceSlave.getDeviceId() == deviceSlaveRemote.getDeviceId()) {
+                            deviceSlave.setName(deviceSlaveRemote.getName());
+                            deviceSlave.setDescription(deviceSlaveRemote.getName());
+                            deviceSlave.setAvatarUrl(deviceSlaveRemote.getAvatarUrl());
+                            deviceSlave.setTags(deviceSlaveRemote.getTags());
+                            break;
+                        }
+                    }
+                }
+            }
+            deviceMaster.setLastModifiedTime(deviceMasterRemote.getLastModifiedTime());
         }
     }
 
-    private void onInvokeRequest(Message message) {
+    private void onUpdateResponse(DeviceMessage message) {
+        UpdateResponseContent content = (UpdateResponseContent) message.content;
+        if (content.result) {
+            LOG.info("device update ok");
+            deviceMaster.setLastModifiedTime(content.dto.lastModifiedTime);
+            controller.onUpdate();
+        } else {
+            LOG.warn("device update error");
+            error = Error.ERROR_UPDATE;
+        }
+    }
+
+    private void onInvokeRequest(DeviceMessage message) {
         LOG.info("invoke request");
-        ContentInvokeRequest content = (ContentInvokeRequest) message.content;
+        InvokeRequestContent content = (InvokeRequestContent) message.content;
         FunctionInstance instance = content.instance;
         try {
             if (instance.async) {
                 controller.invokeAsync(instance, this);
             } else {
                 controller.invokeSync(instance, (long) 5000);
-                ContentInvokeResponse contentResponse = new ContentInvokeResponse(instance.result, instance);
-                Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
+                InvokeResponseContent contentResponse = new InvokeResponseContent(instance.result, instance);
+                DeviceMessage messageResponse = new DeviceMessage(DeviceMessageType.INVOKE_RESPONSE, contentResponse);
                 sendMessage(messageResponse);
             }
         } catch (Exception e) {
             LOG.info("invoke request failed", e);
-            ContentInvokeResponse contentResponse = new ContentInvokeResponse(false, instance);
-            Message messageResponse = new Message(MessageType.INVOKE_RESPONSE, contentResponse);
+            InvokeResponseContent contentResponse = new InvokeResponseContent(false, instance);
+            DeviceMessage messageResponse = new DeviceMessage(DeviceMessageType.INVOKE_RESPONSE, contentResponse);
             sendMessage(messageResponse);
         }
     }
 
-    private void onInvokeResponse(Message message) {
+    private void onInvokeResponse(DeviceMessage message) {
         LOG.info("invoke response");
-        ContentInvokeResponse content = (ContentInvokeResponse) message.content;
+        InvokeResponseContent content = (InvokeResponseContent) message.content;
         FunctionInstance instanceResponse = content.instance;
         try {
             if (instanceMap.containsKey(instanceResponse.instanceId)) {
@@ -468,7 +476,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
                 }
             }
         } catch (Exception e) {
-            LOG.warn("clear session " + deviceMaster.getDeviceId() + " context failed", e);
+            LOG.warn("clear device session context of " + deviceMaster.getDeviceId() + " failed", e);
         }
     }
 

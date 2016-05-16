@@ -1,7 +1,7 @@
 package com.ani.client.agent.device.core.socket;
 
 
-import com.ani.bus.device.commons.dto.message.Message;
+import com.ani.bus.device.commons.dto.message.DeviceMessage;
 import com.ani.bus.device.commons.dto.message.MessageUtils;
 import org.apache.log4j.Logger;
 
@@ -20,7 +20,7 @@ public class IoHandler implements SocketEventHandler {
     private ByteBuffer inBuffer;
     private ByteBuffer outBuffer;
 
-    private MessageHandler messageHandler;
+    private DeviceMessageHandler messageHandler;
 
     private TcpClient client;
 
@@ -93,11 +93,11 @@ public class IoHandler implements SocketEventHandler {
         client.onWriteRequest();
     }
 
-    public void sendMessage(Message message) throws IOException {
+    public void sendMessage(DeviceMessage message) throws IOException {
         write(MessageUtils.encodeMessage(message));
     }
 
-    public void setMessageHandler(MessageHandler messageHandler) {
+    public void setMessageHandler(DeviceMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
     }
 

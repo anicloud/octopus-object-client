@@ -33,15 +33,21 @@ public class Device {
      */
     protected List<Function> functions;
 
+    protected String avatarUrl;
+
+    protected List<String> tags;
+
     public Device() {
     }
 
-    public Device(String physicalId, String physicalAddress, String name, String description, List<Function> functions) {
+    public Device(String physicalId, String physicalAddress, String name, String description, List<Function> functions, String avatarUrl, List<String> tags) {
         this.physicalId = physicalId;
         this.physicalAddress = physicalAddress;
         this.name = name;
         this.description = description;
         this.functions = functions;
+        this.avatarUrl = avatarUrl;
+        this.tags = tags;
     }
 
     public List<Function> getFunctions() {
@@ -84,4 +90,19 @@ public class Device {
         this.functions = functions;
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 }
