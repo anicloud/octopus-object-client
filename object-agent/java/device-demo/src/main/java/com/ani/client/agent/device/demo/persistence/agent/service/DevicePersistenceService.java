@@ -1,7 +1,7 @@
 package com.ani.client.agent.device.demo.persistence.agent.service;
 
 
-import com.ani.client.agent.device.demo.persistence.agent.domain.DeviceMasterDao;
+import com.ani.client.agent.device.demo.persistence.agent.dao.DeviceMasterDao;
 
 /**
  * Created by huangbin on 11/10/15.

@@ -1,6 +1,6 @@
 package com.ani.client.agent.device.demo.persistence.agent.service;
 
-import com.ani.client.agent.device.demo.persistence.agent.domain.DeviceMasterDao;
+import com.ani.client.agent.device.demo.persistence.agent.dao.DeviceMasterDao;
 import com.google.gson.Gson;
 
 import java.io.*;

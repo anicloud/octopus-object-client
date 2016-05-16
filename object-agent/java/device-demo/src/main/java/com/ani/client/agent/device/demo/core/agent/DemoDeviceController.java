@@ -8,9 +8,9 @@ import com.ani.client.agent.device.core.device.DeviceMaster;
 import com.ani.client.agent.device.core.device.DeviceSlave;
 import com.ani.client.agent.device.core.device.Function;
 
-import com.ani.client.agent.device.demo.persistence.agent.domain.DeviceMasterDao;
-import com.ani.client.agent.device.demo.persistence.agent.domain.DeviceSlaveDao;
-import com.ani.client.agent.device.demo.persistence.agent.domain.FunctionDao;
+import com.ani.client.agent.device.demo.persistence.agent.dao.DeviceMasterDao;
+import com.ani.client.agent.device.demo.persistence.agent.dao.DeviceSlaveDao;
+import com.ani.client.agent.device.demo.persistence.agent.dao.FunctionDao;
 import com.ani.client.agent.device.demo.persistence.agent.service.DevicePersistenceService;
 import com.ani.client.agent.device.demo.persistence.agent.service.DevicePersistenceServiceImpl;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -56,7 +56,7 @@ public class DemoDeviceController extends DeviceController {
             switch (error) {
                 case ERROR_CONNECT:
                     LOG.info("connect error");
-                    Thread.sleep(1500);
+                    Thread.sleep(3000);
                     agent.connect();
                     break;
                 case ERROR_REGISTER:
@@ -114,7 +114,7 @@ public class DemoDeviceController extends DeviceController {
     public void onUpdate() {
         LOG.info("Device updated");
         try {
-            serializeDeviceMaster(this.deviceMaster);
+            serializeDeviceMaster(deviceMaster);
         } catch (Exception e) {
             LOG.info(e);
         }
@@ -201,10 +201,14 @@ public class DemoDeviceController extends DeviceController {
                 deviceMaster.getName(),
                 deviceMaster.getDescription(),
                 null,
+                deviceMaster.getAvatarUrl(),
+                deviceMaster.getTags(),
                 null,
                 deviceMaster.getDeviceId(),
                 deviceMaster.getOwner(),
                 deviceMaster.getAccountGroups(),
+                deviceMaster.getVersionId(),
+                deviceMaster.getLastModifiedTime(),
                 Base64.encode(deviceMaster.getToken())
         );
 
@@ -227,6 +231,8 @@ public class DemoDeviceController extends DeviceController {
                         slave.getName(),
                         slave.getDescription(),
                         null,
+                        slave.getAvatarUrl(),
+                        slave.getTags(),
                         slave.getDeviceId(),
                         slave.getMasterId()
                 );
@@ -279,8 +285,10 @@ public class DemoDeviceController extends DeviceController {
                         slaveDao.name,
                         slaveDao.description,
                         slaveFunctions,
-                        slaveDao.masterId,
-                        slaveDao.deviceId);
+                        slaveDao.avatarUrl,
+                        slaveDao.tags,
+                        slaveDao.deviceId,
+                        slaveDao.masterId);
                 slaves.add(slave);
             }
         }
@@ -294,10 +302,14 @@ public class DemoDeviceController extends DeviceController {
                 deviceMasterDao.name,
                 deviceMasterDao.description,
                 functions,
+                deviceMasterDao.avatarUrl,
+                deviceMasterDao.tags,
                 deviceMasterDao.deviceId,
                 slaves,
                 deviceMasterDao.owner,
                 deviceMasterDao.accountGroups,
+                deviceMasterDao.versionId,
+                deviceMasterDao.lastModifiedTime,
                 Base64.decode(deviceMasterDao.token));
         return deviceMaster;
     }

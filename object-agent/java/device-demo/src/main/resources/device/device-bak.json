@@ -1,11 +1,31 @@
 {
+  "physicalId": "m0002",
+  "physicalAddress": "E0-01-6C-06-C8-CE",
+  "name": "公司控制中心",
+  "description": "公司控制中心",
+  "avatarUrl": "images/router.png",
+  "tags": ["控制中心"],
   "deviceId": -1,
+  "owner": -1,
+  "token": "",
+  "functions": [
+    {
+      "functionId": 1,
+      "groupId": 1
+    },
+    {
+      "functionId": 2,
+      "groupId": 1
+    }
+  ],
   "slaves": [
     {
-      "physicalId": "demo id 2",
+      "physicalId": "s001",
       "physicalAddress": "",
-      "name": "demo device name",
-      "description": "demo device description",
+      "name": "东侧中央空调",
+      "description": "东侧中央空调",
+      "avatarUrl": "",
+      "tags": ["空调"],
       "functions": [
         {
           "functionId": 1,
@@ -18,23 +38,26 @@
       ],
       "deviceId": -1,
       "masterId": -1
-    }
-  ],
-  "owner": -1,
-  "accountGroups": [],
-  "token": "",
-  "physicalId": "center controller 1",
-  "physicalAddress": "00-01-6C-06-A6-29",
-  "name": "demo controller name",
-  "description": "demo controller description",
-  "functions": [
-    {
-      "functionId": 1,
-      "groupId": 1
     },
     {
-      "functionId": 2,
-      "groupId": 1
+      "physicalId": "s002",
+      "physicalAddress": "",
+      "name": "西侧中央空调",
+      "description": "西侧中央空调",
+      "avatarUrl": "",
+      "tags": ["空调"],
+      "functions": [
+        {
+          "functionId": 1,
+          "groupId": 1
+        },
+        {
+          "functionId": 2,
+          "groupId": 1
+        }
+      ],
+      "deviceId": -1,
+      "masterId": -1
     }
   ]
 }
