@@ -5,6 +5,7 @@ import com.ani.octopus.commons.accout.dto.AccountGroupDto;
 import com.ani.octopus.commons.accout.dto.GroupFormDto;
 import com.ani.octopus.commons.accout.dto.GroupType;
 import com.ani.octopus.commons.core.message.OctopusMessage;
+import com.ani.octopus.service.agent.core.http.AccessTokenService;
 
 import java.util.Collection;
 
@@ -13,7 +14,7 @@ import java.util.Collection;
  * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
-public interface AccountGroupService {
+public interface AccountGroupService extends AccessTokenService {
     /**
      * add an account group.
      * @param accountGroup the basic information of an account group.

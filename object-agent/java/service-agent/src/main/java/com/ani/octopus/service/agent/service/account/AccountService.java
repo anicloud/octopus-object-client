@@ -4,6 +4,7 @@ package com.ani.octopus.service.agent.service.account;
 import com.ani.octopus.commons.accout.dto.AccountDto;
 import com.ani.octopus.commons.accout.dto.AccountModifyDto;
 import com.ani.octopus.commons.accout.dto.AccountRegisterDto;
+import com.ani.octopus.service.agent.core.http.AccessTokenService;
 
 import javax.xml.bind.ValidationException;
 import java.io.UnsupportedEncodingException;
@@ -13,7 +14,7 @@ import java.io.UnsupportedEncodingException;
  * <br><br>
  * Created by zhaoyu on 15-10-31.
  */
-public interface AccountService {
+public interface AccountService extends AccessTokenService {
 
     /**
      * register an account. but you need to know when you want to register an account, you don't need the access token.

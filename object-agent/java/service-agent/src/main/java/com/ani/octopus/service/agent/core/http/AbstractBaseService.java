@@ -38,8 +38,4 @@ public abstract class AbstractBaseService {
     public void setRestTemplateFactory(RestTemplateFactory restTemplateFactory) {
         this.restTemplateFactory = restTemplateFactory;
     }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 }

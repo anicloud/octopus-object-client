@@ -268,4 +268,9 @@ public class AccountServiceImpl extends AbstractBaseService implements AccountSe
             throw new RuntimeException(builder.toString());
         }
     }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        super.accessToken = accessToken;
+    }
 }

@@ -1,7 +1,7 @@
 package com.ani.octopus.service.agent.service.deviceobj;
 
 import com.ani.bus.service.commons.core.message.Message;
-import com.ani.bus.service.commons.dto.anidevice.DeviceObjInfoDto;
+import com.ani.bus.service.commons.dto.anidevice.DeviceMasterObjInfoDto;
 import com.ani.bus.service.commons.message.DeviceObjInfoHttpMessage;
 import com.ani.octopus.service.agent.core.config.AnicelMeta;
 import com.ani.octopus.service.agent.core.http.AbstractBaseService;
@@ -25,7 +25,7 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
     }
 
     @Override
-    public List<DeviceObjInfoDto> getDeviceObjInfo(Long accountId, boolean withSlave) throws Exception {
+    public List<DeviceMasterObjInfoDto> getDeviceObjInfo(Long accountId, boolean withSlave) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getAniServiceBusUrl())
                 .append(anicelMeta.getServiceBusGetByUrl())
@@ -37,7 +37,7 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString());
 
-        DeviceObjInfoHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{DeviceObjInfoDto.class})
+        DeviceObjInfoHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{DeviceMasterObjInfoDto.class})
                 .getForObject(uriComponentsBuilder.toUriString(), DeviceObjInfoHttpMessage.class);
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
@@ -52,7 +52,7 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
     }
 
     @Override
-    public DeviceObjInfoDto getDeviceObjInfo(Long accountId, Long mainObjId, boolean withSlave) throws Exception {
+    public DeviceMasterObjInfoDto getDeviceObjInfo(Long accountId, Long mainObjId, boolean withSlave) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getAniServiceBusUrl())
                 .append(anicelMeta.getServiceBusGetByUrl())
@@ -66,7 +66,7 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
                 .fromHttpUrl(stringBuilder.toString());
 
-        DeviceObjInfoHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{DeviceObjInfoDto.class})
+        DeviceObjInfoHttpMessage result = restTemplateFactory.getRestTemplate(new Class[]{DeviceMasterObjInfoDto.class})
                 .getForObject(uriComponentsBuilder.toUriString(), DeviceObjInfoHttpMessage.class);
 
         if (result.getResultCode() == Message.ResultCode.SUCCESS) {
@@ -78,5 +78,10 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
                     .append(result.getResultCode());
             throw new Exception(builder.toString());
         }
+    }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        super.accessToken = accessToken;
     }
 }

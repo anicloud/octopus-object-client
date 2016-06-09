@@ -241,4 +241,9 @@ public class AccountGroupServiceImpl extends AbstractBaseService implements Acco
             throw new RuntimeException(builder.toString());
         }
     }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        super.accessToken = accessToken;
+    }
 }
