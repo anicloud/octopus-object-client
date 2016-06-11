@@ -31,23 +31,70 @@ anicel_meta.properties 文件是**Servuce-Agent**的核心配置文件。主要�
 ### 核心类
 * __AnicelMeta__ 提供对anicel_meta.properties 文件的读取操作，并作为**Service-Agent**的核心配置类存在。Http和Websocket的实现都依赖于该类。
 * __DomainObjectValidator__ 提供对Bean Valication的实现。采用的是Hibernate Validation 实现。
-
+* __AccountObject__ 该类提供对用户状态的维护功能，同时第三方应用通过该类，为用户对象绑定Stub列表。以便实现对用户Stub的调用。
 ### 核心业务类
-* __AccountService__
-* __AccountGroupService__
-* __AniServiceManager__
-* __DeviceObjService__
-* __AniOAuthService__
-* __AccountInvoker__
-* __AniInvokable__
-* __ClientInvokable__
-* __AgentTemplate__
+* __AccountService__ 该接口提供对用户的基本操作。需要注意的是注册用户时，不需要提供token。
+  * register(AccountRegisterDto account) 
+  * modify(AccountModifyDto account)
+  * getByAccountId(Long accountId)
+  * getByEmail(String email)
+  * getByPhoneNumber(String phoneNumber)
+  * getByAccessToken()
+  * addAccountInGroup(Long accountId, Long groupId) 添加用户到用户组
+  
+* __AccountGroupService__ 该接口提供对用组的基本操作。
+  * save(GroupFormDto accountGroup)
+  * modify(GroupFormDto accountGroup)
+  * remove(Long accountId, Long groupId)
+  * getByAccountAndGroupType(Long accountId, GroupType groupType)
+  * getAccountsInGroup(Long groupId)
+
+* __AniServiceManager__ 该接口提供第三方开发者注册应用的操作。注册应用时不需要提供token。
+  * register(AniServiceRegisterDto registerDto)
+  * getByAniService(String aniServiceId, String clientSecret)
+
+* __DeviceObjService__ 该接口提供对设备对象的获取操作。
+  * getDeviceObjInfo(Long accountId, boolean withSlave)
+  * getDeviceObjInfo(Long accountId, Long mainObjId, boolean withSlave)
+  
+* __AniOAuthService__ 该接口实现了OAuth2.0 的相关流程。
+  * getOAuth2AccessToken(String code, AuthorizationCodeParameter authorizationCodeParameter)
+  * getOAuth2AccessToken(PasswordParameter passwordParameter)
+  * getOAuth2AccessToken(ImplicitParameter implicitParameter) 暂未实现
+  * refreshAccessToken(String refreshToken, AuthorizationCodeParameter authorizationCodeParameter)
+
+* __AccountInvoker__ 该接口是第三方应用维护用户对象状态（AccoutObject）的接口。Anicloud 平台需要维护Account-App-ServiceBus的状态信息。需要第三方应用在适当的地方调用该接口的实现类，向平台汇报用户状态。
+  * registerAndLogin(AccountObject accountObject)
+  * login(AccountObject accountObject)
+  * logout(AccountObject accountObject) 
+  * remove(AccountObject accountObject)
+  * updateAccountObjectStubList(AccountObject accountObject)
+  
+* __AniInvokable__ 该接口提供对对象Stub的同步和异步调用。当调用为异步调用时，需要注册实现**MessageObserver**接口的消息处理观察者到WebsocketClient 对象中。
+  * invokeAniObjectAsyn(AniStub stub) 
+  * invokeAniObjectSync(AniStub stub) 
+  
+* __ClientInvokable__ 该接口是为实现平台对应用的调用而设计的。需要第三方开发者显示地实现该接口，并注入到WeboSocketClient 中。
+  * invokeAniObjectSync(AniStub stub)
+  * sessionOnClose(String sessionId, CloseReason closeReason) session监听接口
+  * sessionOnError(String sessionId, Throwable throwable) session监听接口
+  
+* __AgentTemplate__ 该接口是对**Service-Agent**提供的基于Http协议的业务类的单例封装模板类。利用该模板类可以方便地在应用全局以单例的方式实现对AccountService、AccountGroupService、ServiceManager、DeviceObjService和AniOAuthService的构造。
 
 ### 外部接口
-* __MessageObserver__
+* __MessageObserver__ 该接口是当对对象Stub异步调用结果的获取及处理时需要实现并注入到WebSocketClient中的。需要由第三方开发者实现。
+  * void update(MessageObservable o, Object arg);
 
 ### 开发者文档
+**Service-Agent**的使用都在核心类的上部利用**javadoc**进行了标注。具体的使用请参见文档。[ServiceAgent文档地址](http://bj-yatsen.anicel.cn:8080/service-agent/apidocs/)
 
 ## 部署要求
+* JDK 1.7 以上
+* Hibernate Valication 包
+* Spring RestTeplate 包
+* anicel-commons 包
 
 ## 参考
+* [Spring Document](http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/)
+* [Hibernate Validation](http://hibernate.org/validator/)
+* [OAuth2.0 规范](https://github.com/jeansfish/RFC6749.zh-cn/blob/master/TableofContents.md)
