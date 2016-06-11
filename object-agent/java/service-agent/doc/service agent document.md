@@ -21,14 +21,30 @@
 ## 设计实现
 
 ### 技术选择
+* 协议WebSocket、Http、OAuth2.0
+* 设计模式：观察者、工厂、单例
+* Spring RestTemplate 提供对Http 接口的访问
 
-### 系统设计
+### 系统配置
+anicel_meta.properties 文件是**Servuce-Agent**的核心配置文件。主要包括**ServiceBus**的各类资源地址。当**ServiceBus**的地址发生改变时，可以对该文件进行编辑。
 
-### 核心接口
+### 核心类
+* __AnicelMeta__ 提供对anicel_meta.properties 文件的读取操作，并作为**Service-Agent**的核心配置类存在。Http和Websocket的实现都依赖于该类。
+* __DomainObjectValidator__ 提供对Bean Valication的实现。采用的是Hibernate Validation 实现。
 
 ### 核心业务类
+* __AccountService__
+* __AccountGroupService__
+* __AniServiceManager__
+* __DeviceObjService__
+* __AniOAuthService__
+* __AccountInvoker__
+* __AniInvokable__
+* __ClientInvokable__
+* __AgentTemplate__
 
 ### 外部接口
+* __MessageObserver__
 
 ### 开发者文档
 
