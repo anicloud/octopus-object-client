@@ -83,7 +83,7 @@ anicel_meta.properties 文件是**Servuce-Agent**的核心配置文件。主要�
 
 ### 外部接口
 * __MessageObserver__ 该接口是当对对象Stub异步调用结果的获取及处理时需要实现并注入到WebSocketClient中的。需要由第三方开发者实现。
-  * void update(MessageObservable o, Object arg);
+  * void update(MessageObservable o, Object arg)
 
 ### 开发者文档
 **Service-Agent**的使用都在核心类的上部利用**javadoc**进行了标注。具体的使用请参见文档。[ServiceAgent文档地址](http://bj-yatsen.anicel.cn:8080/service-agent/apidocs/)。
