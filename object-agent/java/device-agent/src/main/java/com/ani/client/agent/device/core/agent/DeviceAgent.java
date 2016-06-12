@@ -103,7 +103,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
         if (state == State.STATE_INIT || state == State.STATE_CLOSED) {
             state = State.STATE_CONNECTING;
             error = Error.ERROR_NONE;
-            String host = "cn-bj-yatsen.anicel.cn";
+            String host = "bj-yatsen.anicel.cn";
             Integer port = 1222;
             try {
                 ioHandler.getClient().connect(host, port);
