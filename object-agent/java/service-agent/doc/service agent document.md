@@ -32,6 +32,7 @@ anicel_meta.properties 文件是**Servuce-Agent**的核心配置文件。主要�
 * __AnicelMeta__ 提供对anicel_meta.properties 文件的读取操作，并作为**Service-Agent**的核心配置类存在。Http和Websocket的实现都依赖于该类。
 * __DomainObjectValidator__ 提供对Bean Valication的实现。采用的是Hibernate Validation 实现。
 * __AccountObject__ 该类提供对用户状态的维护功能，同时第三方应用通过该类，为用户对象绑定Stub列表。以便实现对用户Stub的调用。
+
 ### 核心业务类
 * __AccountService__ 该接口提供对用户的基本操作。需要注意的是注册用户时，不需要提供token。
   * register(AccountRegisterDto account) 
