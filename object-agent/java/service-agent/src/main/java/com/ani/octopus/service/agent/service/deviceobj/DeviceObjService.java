@@ -6,9 +6,7 @@ import com.ani.octopus.service.agent.core.http.AccessTokenService;
 import java.util.List;
 
 /**
- * @autor zhaoyu
- * @date 16-3-2
- * @since JDK 1.7
+ * Created by zhaoyu on 16-04-12.
  */
 public interface DeviceObjService extends AccessTokenService {
     /**
@@ -16,6 +14,7 @@ public interface DeviceObjService extends AccessTokenService {
      * @param accountId account unique id
      * @param withSlave if true, return slave devices; else do not
      * @return list of device obj
+     * @throws Exception io Exception
      */
     List<DeviceMasterObjInfoDto> getDeviceObjInfo(Long accountId, boolean withSlave) throws Exception;
 
@@ -23,7 +22,9 @@ public interface DeviceObjService extends AccessTokenService {
      * get device obj info
      * @param accountId account unique id
      * @param mainObjId main device obj id
+     * @param withSlave if true, return slave devices; else do not
      * @return device obj
+     * @throws Exception io Exception
      */
     DeviceMasterObjInfoDto getDeviceObjInfo(Long accountId, Long mainObjId, boolean withSlave) throws Exception;
 }

@@ -11,9 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 /**
- * @autor zhaoyu
- * @date 16-3-2
- * @since JDK 1.7
+ * Created by zhaoyu on 16-03-22.
  */
 public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceObjService {
 

@@ -13,9 +13,7 @@ import com.ani.octopus.service.agent.service.oauth.AniOAuthServiceImpl;
 
 /**
  * AgentTemplate provides the singleton instances of the agent service method.
- * @autor zhaoyu
- * @date 16-4-13
- * @since JDK 1.7
+ * Created by zhaoyu on 16-04-12.
  */
 public class AgentTemplate {
 
