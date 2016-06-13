@@ -25,9 +25,6 @@ public class AgentTemplate {
     private AnicelMeta anicelMeta;
     private RestTemplateFactory restTemplateFactory;
 
-    public AgentTemplate() {
-    }
-
     public AgentTemplate(AnicelMeta anicelMeta, RestTemplateFactory restTemplateFactory) {
         this.anicelMeta = anicelMeta;
         this.restTemplateFactory = restTemplateFactory;
