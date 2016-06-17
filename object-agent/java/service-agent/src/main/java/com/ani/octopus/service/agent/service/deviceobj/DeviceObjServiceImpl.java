@@ -26,7 +26,7 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
     public List<DeviceMasterObjInfoDto> getDeviceObjInfo(Long accountId, boolean withSlave) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getAniServiceBusUrl())
-                .append(anicelMeta.getServiceBusGetByUrl())
+                .append(anicelMeta.getDeviceObjUrl())
                 .append("/")
                 .append(accountId)
                 .append("/")
@@ -53,7 +53,7 @@ public class DeviceObjServiceImpl extends AbstractBaseService implements DeviceO
     public DeviceMasterObjInfoDto getDeviceObjInfo(Long accountId, Long mainObjId, boolean withSlave) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(anicelMeta.getAniServiceBusUrl())
-                .append(anicelMeta.getServiceBusGetByUrl())
+                .append(anicelMeta.getDeviceObjsUrl())
                 .append("/")
                 .append(accountId)
                 .append("/")
