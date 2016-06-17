@@ -11,19 +11,21 @@ import java.io.*;
 public class DevicePersistenceServiceImpl implements DevicePersistenceService {
     private static DevicePersistenceServiceImpl instance = new DevicePersistenceServiceImpl();
 
-    private static final String DATA_FILE = "/home/huangbin/src/octopus-object-client/object-agent/java/device-demo/src/main/resources/device/device.json";
+//    private static final String DATA_FILE = "/home/huangbin/src/octopus-object-client/object-agent/java/device-demo/src/main/resources/device/device.json";
+    private static final String DATA_FILE = "./device-demo/src/main/resources/device/device.json";
 
     public static DevicePersistenceServiceImpl getInstance() {
         return instance;
     }
 
     private DevicePersistenceServiceImpl() {
+
     }
 
 
     @Override
     public DeviceMasterDao getDeviceMasterDao() throws Exception {
-        //InputStream inputStream = this.getClass().getResourceAsStream("/device/device.json");
+//        InputStream inputStream = this.getClass().getResourceAsStream("/device/device.json");
 
         InputStream inputStream = new FileInputStream(new File(DATA_FILE));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
