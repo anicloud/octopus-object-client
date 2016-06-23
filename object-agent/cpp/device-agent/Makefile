@@ -27,13 +27,16 @@ debug:	$(OBJS_DEBUG)
 	$(CXX) $^ $(LIBS) -o  $(BIN_DIR)/device-agent
 	
 
-TARGET =	$(TARGET_DIR)/libdevice-agent.so $(TARGET_DIR)/libdevice-agent.a
-$(TARGET_DIR)/libdevice-agent.so:	$(OBJS)
-	$(CXX) $^ $(LIBS) -o $@
-$(TARGET_DIR)/libdevice-agent.a:	$(OBJS)
+TARGET_A =	$(TARGET_DIR)/libdevice-agent.a
+$(TARGET_A):	$(OBJS)
 	ar -r $@ $^ $(LIBS) 
 
-build:	$(TARGET)
+TARGET_SO=	$(TARGET_DIR)/libdevice-agent.so
+$(TARGET_SO):	$(OBJS)
+	$(CXX) $(BUILDFLAGS) $^ $(LIBS) -o $@
+
+
+build:	$(TARGET_A) $(TARGET_SO)
 
 clean:
-	rm -f  $(OBJS) $(OBJS_DEBUG) $(TARGET) $(BIN_DIR)/*
+	rm -f  $(OBJS) $(OBJS_DEBUG) $(TARGET_A) $(TARGET_SO) $(BIN_DIR)/*

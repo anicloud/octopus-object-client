@@ -29,10 +29,10 @@ Status test(bool flag) {
 	}
 }
 
-int main(void) {
-	int a = 1;
-	int b = 2;
-	int c = a + b;
-	puts("Hello World!!!");
-	return EXIT_SUCCESS;
-}
+//int main(void) {
+//	int a = 1;
+//	int b = 2;
+//	int c = a + b;
+//	puts("Hello World!!!");
+//	return EXIT_SUCCESS;
+//}
