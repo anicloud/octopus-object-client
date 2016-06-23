@@ -9,9 +9,10 @@
 #define DEVICE_AGENT_H_
 
 #include <string>
+using namespace std;
+
 
 #include "include/device.h"
-using namespace std;
 
 /**
  * 调用接口返回的状态
