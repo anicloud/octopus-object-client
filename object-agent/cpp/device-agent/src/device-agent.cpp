@@ -1,25 +1,33 @@
-//============================================================================
-// Name        : device-agent.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C, Ansi-style
-//============================================================================
+/*
+ * device-agent.cpp
+ *
+ *  Created on: 2016/6/21
+ *      Author: ben
+ */
 
-//#include "../include/device-agent.h"
+#include "../include/device-agent.h"
 //#include "socket.h"
 
 #include <cstdio>
 #include <cstdlib>
 using namespace std;
 
-//State connect() {
+//Status connect() {
 //	/**
 //	 * 服务器域名及端口号,一般不会改变
 //	 */
 //	const char *host = "bj-yatsen.anicel.cn";
 //	int port = 1222;
 //}
+
+Status test(bool flag) {
+	puts("excute the test function!");
+	if (flag) {
+		return SUCCESSFULLY;
+	} else {
+		return UNKNOWN_ERROR;
+	}
+}
 
 int main(void) {
 	int a = 1;

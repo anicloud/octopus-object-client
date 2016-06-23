@@ -1,12 +1,11 @@
 /*
  * device.h
  *
- *  Created on: 2016年6月21日
+ *  Created on: 2016/6/21
  *      Author: ben
  */
 
-#ifndef ANIDEVICE_H_
-#define ANIDEVICE_H_
+#pragma once
 
 #include <cstring>
 #include <cstdio>
@@ -15,14 +14,12 @@
 #include <string>
 using namespace std;
 
-
 //TODO	字段长度是否提前固定好,确定数值
 
 //
 const int MAX_PHYSICAL_ID_LEN = 100;
 
 //const int
-
 
 typedef struct Device {
 	string physicalId;
@@ -31,7 +28,7 @@ typedef struct Device {
 	string description;
 	string avatarUrl;
 	string tags[];
-};
+} Device;
 
 typedef struct DeviceMaster {
 	string physicalId;
@@ -46,7 +43,7 @@ typedef struct DeviceMaster {
 	long lastModifiedTime;
 	char token[];
 	long slaveId[];
-};
+} DeviceMaster;
 
 typedef struct DeviceSlave {
 	string physicalId;
@@ -61,11 +58,9 @@ typedef struct DeviceSlave {
 	long lastModifiedTime;
 	char token[];
 	long masterId;
-};
+} DeviceSlave;
 
 typedef struct Function {
 	int functionId;
 	long groupId;
-};
-
-#endif /* ANIDEVICE_H_ */
+} Funcion;

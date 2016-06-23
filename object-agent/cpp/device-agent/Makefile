@@ -5,6 +5,8 @@ SRC_DIR		=	./src
 BIN_DIR		=	./bin
 TARGET_DIR	=	./lib
 
+CXX			=	g++
+
 # 编译参数
 DEBUGFLAGS	=	-g -Wall -fmessage-length=0
 BUILDFLAGS	=	-O2	-shared -fPIC
@@ -23,10 +25,13 @@ LIBS =
 
 debug:	$(OBJS_DEBUG)
 	$(CXX) $^ $(LIBS) -o  $(BIN_DIR)/device-agent
+	
 
-TARGET =	$(TARGET_DIR)/device-agent.so
-$(TARGET):	$(OBJS)
-	$(CXX) $^ $(LIBS) -o $(TARGET)
+TARGET =	$(TARGET_DIR)/libdevice-agent.so $(TARGET_DIR)/libdevice-agent.a
+$(TARGET_DIR)/libdevice-agent.so:	$(OBJS)
+	$(CXX) $^ $(LIBS) -o $@
+$(TARGET_DIR)/libdevice-agent.a:	$(OBJS)
+	ar -r $@ $^ $(LIBS) 
 
 build:	$(TARGET)
 

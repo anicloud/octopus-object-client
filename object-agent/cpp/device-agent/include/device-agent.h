@@ -1,23 +1,27 @@
 /*
- * device-agent.h
- *
- *  Created on: 2016年6月21日
- *      Author: ben
+ * ============================================================================
+ * Name        : device-agent.h
+ * Version     : 0.0.1
+ * Author      : ben
+ * Created on  : 2016/6/21
+ * Copyright   : anicloud
+ * Description :
+ * ============================================================================
  */
 
-#ifndef DEVICE_AGENT_H_
-#define DEVICE_AGENT_H_
+#pragma once
+
+#include "device.h"
+
+// TODO 考虑C语言调用的问题,用extern "C"等处理
 
 #include <string>
 using namespace std;
 
-
-#include "include/device.h"
-
 /**
  * 调用接口返回的状态
  */
-typedef enum State {
+typedef enum Status {
 	//调用接口函数成功
 	SUCCESSFULLY,
 
@@ -44,16 +48,16 @@ typedef enum State {
 
 	//未知错误
 	UNKNOWN_ERROR
-} State;
+} Status;
 
-State connect();
+Status test(bool flag);
 
-State _register(DeviceMaster dm);
+Status connect();
 
-State auth();
+Status _register(DeviceMaster dm);
 
-State close();
+Status auth();
 
-State update();
+Status close();
 
-#endif /* DEVICE_AGENT_H_ */
+Status update();
