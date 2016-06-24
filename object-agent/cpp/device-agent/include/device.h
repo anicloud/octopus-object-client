@@ -1,4 +1,14 @@
 /*
+ * ============================================================================
+ * Name        : device.h
+ * Version     : 0.0.1
+ * Author      : ben
+ * Created on  : 2016/6/21
+ * Copyright   : Anicloud Limited ©2016
+ * Description :
+ * ============================================================================
+ */
+/*
  * device.h
  *
  *  Created on: 2016/6/21
@@ -16,8 +26,13 @@ using namespace std;
 
 //TODO	字段长度是否提前固定好,确定数值
 
-//
-const int MAX_PHYSICAL_ID_LEN = 100;
+const int MAX_PHYSICAL_ID_SIZE = 100;
+const int MAX_PHYSICAL_ADDRESS_SIZE = 100;
+const int MAX_NAME_SIZE = 100;
+const int MAX_DESCRIPTION_SIZE = 100;
+const int MAX_AVATAR_URL_SIZE = 256;
+const int MAX_TAGS_NUM = 100;
+
 
 //const int
 
