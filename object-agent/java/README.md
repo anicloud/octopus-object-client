@@ -9,5 +9,22 @@
 3.  If you use __maven__ to manage and build your project, you can copy the dependencies on the **pom.xml** into your pom.xml file
 
 ### API Doc Links
-- service agent project [api docs](http://cn-bj-yatsen.anicel.cn:8080/service-agent/apidocs/ "service-agent api docs")
+- service agent project [api docs](http://bj-yatsen.anicel.cn:8080/service-agent/apidocs/ "service-agent api docs")
 - also, you can download the api docs from binary-publish directory
+
+##Device Agent(Java Version) Notice
+### How To
+1.  Add device-agent-1.0.jar to your project's classpath
+2.  Copy jars in lib into your project's classpath which is dependent on by service-agent
+3.  If you use __maven__ to manage and build your project, you can copy the dependencies on the **pom.xml** into your pom.xml file
+
+### API Doc Links
+
+##Device Agent(C Version) Notice
+### How To
+1.  Add device-agent-1.0.so to your 
+2.  
+3.  
+
+### API Doc Links
+
