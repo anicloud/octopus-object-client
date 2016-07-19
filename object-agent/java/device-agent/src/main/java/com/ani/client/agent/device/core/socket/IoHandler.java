@@ -94,6 +94,7 @@ public class IoHandler implements SocketEventHandler {
     }
 
     public void sendMessage(DeviceMessage message) throws IOException {
+        LOG.info("send message to server.");
         write(MessageUtils.encodeMessage(message));
     }
 

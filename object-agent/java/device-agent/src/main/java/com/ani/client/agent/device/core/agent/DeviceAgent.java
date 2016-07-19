@@ -313,6 +313,7 @@ public class DeviceAgent implements Invokable, InvokeCallback {
     */
     private void sendMessage(DeviceMessage message) {
         try {
+            LOG.info("send message to server.");
             ioHandler.sendMessage(message);
         } catch (Exception e) {
             e.printStackTrace();

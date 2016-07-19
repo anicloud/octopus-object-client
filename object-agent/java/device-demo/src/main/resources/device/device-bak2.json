@@ -1,6 +1,6 @@
 {
-  "physicalId": "m0002",
-  "physicalAddress": "E0-01-6C-06-C8-CE",
+  "physicalId": "m0003",
+  "physicalAddress": "E0-01-6C-06-C8-CF",
   "name": "公司控制中心",
   "description": "公司控制中心",
   "avatarUrl": "images/router.png",
@@ -57,7 +57,7 @@
           "groupId": 1
         }
       ],
-      "deviceId": -1,
+     "deviceId": -1,
       "masterId": -1
     }
   ]
